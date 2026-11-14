@@ -1320,14 +1320,15 @@ function buildSiya(pad){
   const starTex=canvasTex(64,64,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#ffe08a'; x.shadowColor='#ffcf4a'; x.shadowBlur=8; x.beginPath(); const c=32,o=26,i=5; for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rr=k%2?i:o; x.lineTo(c+Math.cos(a)*rr,c+Math.sin(a)*rr); } x.closePath(); x.fill(); });
   const glowTexL=canvasTex(128,128,(x,w,h)=>{ const gr=x.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2); gr.addColorStop(0,'rgba(255,224,150,.9)'); gr.addColorStop(1,'rgba(255,200,100,0)'); x.fillStyle=gr; x.fillRect(0,0,w,h); });
 
-  const g=new THREE.Group(); g.position.set(-1.7,0,2.25); g.rotation.y=.28; g.scale.setScalar(2.15); pad.add(g);
-  blob(g,0,.02,.6,.4); blob(g,-.46,.2,.4,.3); blob(g,.5,.1,.62,.42);
+  const G=new THREE.Group(); G.position.set(-1.7,0,2.25); G.rotation.y=.28; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
+  const g=new THREE.Group(); g.position.y=.16; G.add(g); // upper body sits on longer legs
+  blob(G,0,.02,.6,.4); blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42);
 
   // ---------- body ----------
   [-1,1].forEach(sx=>{
-    rbox(.135,.075,.225,.03,shoe,g,sx*.088,.0375,.04); rbox(.13,.025,.2,.01,mat(0xdcd3c8),g,sx*.088,.012,.04);
-    cyl(.085,.108,.34,8,camo,g,sx*.088,.245,0); cyl(.11,.112,.04,8,camoD,g,sx*.088,.095,0);
-    rbox(.045,.115,.1,.02,camoL,g,sx*.135,.25,.03); rbox(.05,.04,.105,.015,camoD,g,sx*.138,.31,.03); });
+    rbox(.135,.075,.225,.03,shoe,G,sx*.088,.0375,.04); rbox(.13,.025,.2,.01,mat(0xdcd3c8),G,sx*.088,.012,.04);
+    cyl(.082,.108,.49,8,camo,G,sx*.088,.32,0); cyl(.11,.112,.04,8,camoD,G,sx*.088,.095,0);
+    rbox(.045,.115,.1,.02,camoL,G,sx*.135,.34,.03); rbox(.05,.04,.105,.015,camoD,G,sx*.138,.42,.03); });
   rbox(.33,.09,.19,.03,camo,g,0,.43,0);
   // belt chain + blue tag on her left hip (screen right)
   for(let i=0;i<7;i++){ const t=i/6; sph(.009,silver,g,.04+t*.11,.44-Math.sin(t*Math.PI)*-.03-t*.07,.108,6,5,false); }
@@ -1345,11 +1346,11 @@ function buildSiya(pad){
   [[.065,.8],[.095,.8],[.13,.8]].forEach(([r,y],i)=>{ const nk=torus(r,.0045,i==1?silver:cream,g,0,y,.108,Math.PI,24); nk.rotation.z=Math.PI; });
   sph(.024,gold,g,0,.655,.112,8,6,false); const ring=torus(.044,.006,gold,g,0,.655,.112,null,18); ring.rotation.set(1.15,0,.25);
   // arms. hanging arm (screen right)
-  const armR=new THREE.Group(); armR.position.set(.22,.71,0); armR.rotation.z=.07; g.add(armR);
+  const armR=new THREE.Group(); armR.position.set(.22,.71,0); armR.rotation.z=.07; armR.scale.setScalar(.88); g.add(armR);
   rbox(.15,.15,.15,.04,black,armR,.005,-.05,0); rbox(.076,.27,.08,.03,skin,armR,0,-.25,0); rbox(.082,.085,.088,.035,skin,armR,0,-.41,.005);
   cyl(.045,.045,.03,8,mat(0x2b2b33),armR,0,-.34,0); rbox(.03,.03,.012,.006,silver,armR,0,-.34,.044,false);
   // waving arm (screen left): fist + bracelets
-  const wave=new THREE.Group(); wave.position.set(-.22,.71,0); wave.rotation.z=-2.1; g.add(wave);
+  const wave=new THREE.Group(); wave.position.set(-.22,.71,0); wave.rotation.z=-2.1; wave.scale.setScalar(.78); g.add(wave);
   rbox(.15,.15,.15,.04,black,wave,-.005,-.05,0); rbox(.076,.19,.08,.03,skin,wave,0,-.17,0);
   const elbow=new THREE.Group(); elbow.position.y=-.26; wave.add(elbow);
   rbox(.072,.24,.076,.028,skin,elbow,0,-.1,0);
@@ -1357,16 +1358,14 @@ function buildSiya(pad){
   sph(.066,skin,elbow,0,-.29,0,8,6); rbox(.1,.04,.09,.015,skin,elbow,0,-.255,.01); sph(.028,skin,elbow,.055,-.27,.03,6,5,false);
 
   // ---------- head ----------
-  const head=new THREE.Group(); head.position.set(0,.94,0); head.scale.setScalar(1.1); g.add(head);
+  const head=new THREE.Group(); head.position.set(0,.94,0); head.scale.setScalar(.84); g.add(head);
   sph(.2,skin,head,0,0,0,14,11).scale.set(1.02,1.04,.96);
   // eyes, glasses, brows, lashes, blush, nose, smile
   [-1,1].forEach(sx=>{
     sph(.05,eyeW,head,sx*.083,.014,.17,10,8,false).scale.z=.5; sph(.036,ink,head,sx*.083,.014,.19,9,7,false); sph(.013,eyeW,head,sx*.083+.012,.03,.208,6,5,false); sph(.007,eyeW,head,sx*.083-.012,.0,.208,5,4,false);
-    torus(.08,.009,frame,head,sx*.083,.014,.186,null,24); rot(rbox(.01,.01,.16,.004,frame,head,sx*.192,.03,.1,false),0,sx*-.06,0);
     rot(rbox(.1,.024,.02,.009,ink,head,sx*.083,.108,.188,false),0,0,sx*-.12);
     rot(rbox(.03,.008,.01,.003,ink,head,sx*.14,.05,.19,false),0,0,sx*-.55);
     const bl=sph(.042,pink,head,sx*.125,-.05,.148,8,6,false); bl.scale.z=.3; });
-  rbox(.03,.012,.012,.005,frame,head,0,.018,.19,false);
   sph(.016,skinD,head,0,-.03,.19,7,5,false);
   const sm=torus(.05,.011,mat(0xc4283e,{flatShading:false}),head,0,-.07,.172,Math.PI,14); sm.rotation.z=Math.PI;
   // ---------- hair ----------
@@ -1389,7 +1388,7 @@ function buildSiya(pad){
   for(let i=0;i<5;i++){ const a=i/5*Math.PI*2; sph(.016,eyeW,head,.21,-.125+Math.cos(a)*.022,.03+Math.sin(a)*.022,6,5,false); } sph(.011,gold,head,.222,-.125,.03,5,4,false);
 
   // ---------- her dog (screen left) ----------
-  const d=new THREE.Group(); d.position.set(-.5,0,.2); d.rotation.y=.5; g.add(d);
+  const d=new THREE.Group(); d.position.set(-.5,0,.2); d.rotation.y=.5; G.add(d);
   const dc=mat(0xf6ead9,{roughness:.8}), dt=mat(0xd9a066,{roughness:.8}), dtd=mat(0xc58a50,{roughness:.8});
   rbox(.21,.15,.22,.05,dc,d,0,.075,-.02); rbox(.11,.09,.12,.03,dt,d,.07,.125,-.04);
   rot(rbox(.15,.25,.14,.05,dc,d,0,.2,.05),-.1,0,0);
@@ -1403,7 +1402,7 @@ function buildSiya(pad){
   const tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
 
   // ---------- books + UFO lamp + plant (screen right) ----------
-  const b=new THREE.Group(); b.position.set(.52,0,.08); g.add(b);
+  const b=new THREE.Group(); b.position.set(.52,0,.08); G.add(b);
   const book=(w,h,dp,c,y,ry)=>{ const k=new THREE.Group(); k.position.y=y; k.rotation.y=ry; b.add(k); rbox(w,h,dp,.012,mat(c,{roughness:.7}),k,0,0,0); rbox(.03,h-.02,dp-.025,.006,mat(0xeadcc4),k,w/2-.004,0,0,false); return k; };
   book(.35,.06,.23,0xe0c9a0,.03,.08);
   const k2=book(.33,.075,.22,0x252b57,.0975,-.07); const em=sph(.016,gold,k2,0,0,.112,8,6,false); const er=torus(.034,.0045,gold,k2,0,0,.112,null,18); er.scale.y=.32; er.rotation.z=-.3;
@@ -1420,22 +1419,22 @@ function buildSiya(pad){
   cyl(.004,.004,.2,4,mat(0x4d7a3a),b,-.08,.13,.12,false).rotation.z=.25;
 
   // ---------- sparkles ----------
-  const sparks=[[-.56,.98,.18,.2],[-.62,.6,.12,.14]].map(([x,y,z,s])=>{ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:starTex,transparent:true,depthWrite:false})); sp.scale.set(s,s,1); sp.position.set(x,y,z); sp.userData.s=s; g.add(sp); return sp; });
+  const sparks=[[-.56,.98,.18,.2],[-.62,.6,.12,.14]].map(([x,y,z,s])=>{ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:starTex,transparent:true,depthWrite:false})); sp.scale.set(s,s,1); sp.position.set(x,y,z); sp.userData.s=s; G.add(sp); return sp; });
 
   // speech bubble: compact, with golden ticks
   const tex=canvasTex(320,170,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#fbf8ee'; x.strokeStyle='#1d2547'; x.lineWidth=5; x.lineJoin='round';
     x.beginPath(); x.moveTo(40,10); x.lineTo(w-40,10); x.quadraticCurveTo(w-8,10,w-8,42); x.lineTo(w-8,92); x.quadraticCurveTo(w-8,124,w-40,124); x.lineTo(108,124); x.lineTo(70,160); x.lineTo(78,124); x.lineTo(40,124); x.quadraticCurveTo(8,124,8,92); x.lineTo(8,42); x.quadraticCurveTo(8,10,40,10); x.closePath(); x.fill(); x.stroke();
     x.strokeStyle='#f3b92f'; x.lineWidth=5; x.lineCap='round'; x.beginPath(); x.moveTo(w-44,6); x.lineTo(w-34,-2); x.moveTo(w-24,10); x.lineTo(w-12,6); x.stroke();
     x.fillStyle='#1d2547'; x.textAlign='center'; x.textBaseline='middle'; x.font='800 44px Syne, "Avenir Next", sans-serif'; x.fillText('Hello!',w/2,68); });
-  const bub=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false})); bub.scale.set(1.35,.72,1); bub.position.set(-1.35,3.5,2.25); pad.add(bub);
+  const bub=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false})); bub.scale.set(.85,.45,1); bub.position.set(-1.45,1.9,2.25); pad.add(bub);
 
   anim.push(t=>{ const k=reduceMotion?0:1;
     wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
-    head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); g.position.y=k*.012*Math.sin(t*2.4);
+    head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); g.position.y=.16+k*.008*Math.sin(t*2.4);
     tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
     lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
     sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); });
-    bub.position.y=3.5+k*.06*Math.sin(t*2); });
+    bub.position.y=1.9+k*.04*Math.sin(t*2); });
 }
 
 /* rockets */
