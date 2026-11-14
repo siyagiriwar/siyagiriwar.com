@@ -559,7 +559,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 </style>
 </head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="gl-outline" x="-2%" y="-5%" width="104%" height="110%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="erode" radius="1.1" result="in"/><feComposite in="SourceGraphic" in2="in" operator="out"/></filter></svg>
-<canvas id="scene" tabindex="-1" aria-label="An illustrated space station. Four modules hold Siya’s about, work, off frame and contact sections. Use the buttons at the bottom to open them."></canvas>
+<canvas id="scene" tabindex="-1" aria-label="An illustrated space station. Four modules hold Siya’s about, work, off the clock and contact sections. Use the buttons at the bottom to open them."></canvas>
 <div id="labels" aria-hidden="true"></div>
 
 <header class="brand">
@@ -600,7 +600,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 <nav class="dock" aria-label="Station modules">
   <button type="button" data-go="about">About</button>
   <button type="button" data-go="work">Work</button>
-  <button type="button" data-go="experiments">Off frame</button>
+  <button type="button" data-go="experiments">Off the clock</button>
   <button type="button" data-go="contact">Contact</button>
 </nav>
 
@@ -629,7 +629,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 
 <div class="classic" id="classic" hidden>
   <div class="classic-bar"><strong>SIYA GIRIWAR</strong>
-    <nav aria-label="Classic portfolio sections"><a href="#c-about">About</a><a href="#c-work">Work</a><a href="#c-experiments">Off frame</a><a href="#c-contact">Contact</a></nav>
+    <nav aria-label="Classic portfolio sections"><a href="#c-about">About</a><a href="#c-work">Work</a><a href="#c-experiments">Off the clock</a><a href="#c-contact">Contact</a></nav>
     <button class="btn-sun" id="backToStation" type="button">Back to the station</button></div>
   <div class="classic-hero"><p>An unusual perspective on the familiar. Communication designer exploring the intersection of human behaviour, visual culture, digital experiences and imagination.</p></div>
   <section id="c-about" class="c"></section>
@@ -688,7 +688,7 @@ const TOOLS = ['Figma','Adobe Creative Suite','Framer','Procreate','Blender','Au
 const MODULES = [
   {id:'about', label:'ABOUT', title:'About', pos:[-14,0,0], rot:0, door:1, blurb:'Who Siya is, how she sees the world, and what she works with.'},
   {id:'work', label:'WORK', title:'Work', pos:[0,0,-14], rot:Math.PI/2, door:-1, blurb:'Field expeditions: case studies, campaigns, films and the places she has worked.'},
-  {id:'experiments', label:'OFF FRAME', title:'Off frame', pos:[0,0,14], rot:Math.PI/2, door:1, blurb:'Beyond the frame: photography, illustration, prints and favourite lines.'},
+  {id:'experiments', label:'OFF THE CLOCK', title:'Off the clock', pos:[0,0,14], rot:Math.PI/2, door:1, blurb:'Beyond the frame: photography, illustration, prints and favourite lines.'},
   {id:'contact', label:'CONTACT', title:'Contact', pos:[14,0,0], rot:0, door:-1, blurb:'The channel is open for design roles, freelance projects and the occasional shoot.'}
 ];
 const PAD={x:10.4, y:-2.6, z:10.4, r:14.7};
@@ -794,10 +794,7 @@ const OFFFRAME = [
 ];
 const SND_ICON = '<i class="snd" aria-hidden="true"><svg class="s-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/></svg><svg class="s-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></i>';
 function renderReel(){
-  return `<section class="reel" aria-labelledby="reelT">
-  <p class="tale-eyebrow">Off the clock</p>
-  <h3 id="reelT" class="tale-title">Raw frames</h3>
-  <p class="tale-intro">Unedited moments from outside the work. Hover over a clip to hear it, or tap it on a phone.</p>
+  return `<section class="reel" aria-label="Off the clock">
   <div class="collage">${OFFFRAME.map(o=> o.type==='video'
     ? `<button type="button" class="gt" data-v aria-pressed="false" aria-label="${esc(o.cap)}, video. Press to turn the sound on or off."><video muted loop playsinline preload="none" poster="${o.poster}" data-src="${o.src}" width="${o.w}" height="${o.h}" style="aspect-ratio:${o.w}/${o.h}"></video><span class="cap">${esc(o.cap)}</span>${SND_ICON}</button>`
     : `<figure class="gt"><img src="${o.src}" width="${o.w}" height="${o.h}" alt="${esc(o.cap)}" loading="lazy" decoding="async"><span class="cap">${esc(o.cap)}</span></figure>`).join('')}</div>
@@ -836,7 +833,7 @@ function renderStory(){
   </section>`;
 }
 function renderExperiments(h='h2'){
-  return `<${h} ${h==='h2'?'id="panelTitle"':''}>Off frame</${h}>
+  return `<${h} ${h==='h2'?'id="panelTitle"':''}>Off the clock</${h}>
   <p class="lead">What there is to me, beyond the frame and beyond my work.</p>
   ${renderReel()}
   ${renderStory()}
@@ -972,8 +969,8 @@ function signTex(text){
   return canvasTex(1024,192,(x,w,h)=>{
     x.fillStyle='#1d2547'; x.fillRect(0,0,w,h);
     x.strokeStyle='rgba(255,255,255,.12)'; x.lineWidth=6; x.strokeRect(10,10,w-20,h-20);
-    x.fillStyle='#fbf8ee'; x.font=`800 ${text.length>8?96:110}px Syne, "Avenir Next", sans-serif`; x.textBaseline='middle';
-    spaced(x, text, w/2, h/2+6, text.length>8?10:22);
+    x.fillStyle='#fbf8ee'; x.font=`800 ${text.length>11?72:text.length>8?96:110}px Syne, "Avenir Next", sans-serif`; x.textBaseline='middle';
+    spaced(x, text, w/2, h/2+6, text.length>11?8:text.length>8?10:22);
   });
 }
 function bandTex(){
@@ -1337,10 +1334,10 @@ const ORIGINS = {alien:'visiting from Kepler-442b', human:'commuting up from New
 const CHATTER = {
   alien:['I came for the Layers smartwatch faces.','Earth design is so… earthy. I love it.','She wants to start an intergalactic friendship club. I’m member number one.','Have you tried the BreakLoop app? My doomscroll is cured.'],
   human:['The Haute Couture documentary is in the Work module.','Siya shoots backstage at fashion week. Wild.','NexGen Hub would’ve saved me months of finding a studio.','The Contact hub is where you say hello.'],
-  elf:['The photobook in Off frame is my favourite stop.','“Everything I’m not, made me who I am.” I think about that a lot.','The scarf print in the lab took my breath away.'],
+  elf:['The photobook in Off the clock is my favourite stop.','“Everything I’m not, made me who I am.” I think about that a lot.','The scarf print in the lab took my breath away.'],
   robot:['BEEP. NEXGEN HUB: UNIFIED PLATFORM DETECTED.','CALCULATING… RESULT: HIRE THIS DESIGNER.','SCANNING CRM DASHBOARD. LAYOUT: TIDY.'],
   blob:['blorp ✦','*happy wobble*','glorp glorp (the Mango Heist was hilarious)'],
-  floater:['I float between modules. The Off frame lab glows nicest.','Sher-o-shakkar! Akbar and Birbal in space!','The about room has a very comfy chair.']
+  floater:['I float between modules. The Off the clock lab glows nicest.','Sher-o-shakkar! Akbar and Birbal in space!','The about room has a very comfy chair.']
 };
 const visitors=[];
 function makeVisitor(type){
