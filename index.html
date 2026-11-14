@@ -1258,9 +1258,14 @@ function buildModule(def){
   if(def.id==='contact'){ cyl(.05,.08,2.4,6,dark,g,1.8,H+1.7,-1.6); const bl=sph(.12,glow(0xff5a4a,2),g,1.8,H+2.95,-1.6,8,6,false); anim.push(t=>{ bl.visible=(t+.8)%1.9<.4; }); box(.9,.5,.7,dark,g,-1.2,H+.9,-.8); }
   if(def.id==='about'){ box(.5,.5,.5,dark,g,1.9,H+.95,1.2); }
   buildProps(def.id, g);
-  // Siya waves hello from inside every room (visible on the tour and when a module is open)
-  const SIYA_SPOT={about:[-.3,.9],work:[-.9,.7],experiments:[-1.1,.7],contact:[-.9,.7]}[def.id];
-  if(SIYA_SPOT) buildSiya(g,{x:SIYA_SPOT[0],y:.04,z:SIYA_SPOT[1],ry:.2,props:false,bubble:false,phase:MODULES.findIndex(m=>m.id===def.id)*1.7});
+  // Siya is in every room too: she stands, arms relaxed, and takes in the room (shelves, screens, gear) instead of waving
+  const SIYA_ROOM={
+    about:{x:-.2,z:-.3,look:[[1.3,1.3,-2.45],[2.2,.9,-1.2],[-.9,1.75,-2.68]]},
+    work:{x:-1.4,z:-.4,look:[[-.5,1.25,-2.1],[-.4,2.0,-2.68],[1.5,1.9,-2.62]]},
+    experiments:{x:-1.1,z:0,look:[[1.7,1.3,-.6],[-.4,1.1,-2.2],[-1.2,1.85,-2.68]]},
+    contact:{x:-.9,z:-.5,look:[[-1.8,1.2,-2.2],[-.6,1.7,-2.5],[.5,.8,-2.05]]}
+  }[def.id];
+  if(SIYA_ROOM) buildSiya(g,{x:SIYA_ROOM.x,y:.04,z:SIYA_ROOM.z,look:SIYA_ROOM.look,props:false,bubble:false,phase:MODULES.findIndex(m=>m.id===def.id)*1.7});
   // hit volume
   const hit=new THREE.Mesh(new THREE.BoxGeometry(W+.6,H+2,D+.6), new THREE.MeshBasicMaterial({visible:false})); hit.position.y=H/2; hit.userData={module:def.id}; g.add(hit); pickables.push(hit);
   g.updateMatrixWorld(true);
@@ -1325,7 +1330,15 @@ function buildSiya(pad, o={}){
   const starTex=canvasTex(64,64,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#ffe08a'; x.shadowColor='#ffcf4a'; x.shadowBlur=8; x.beginPath(); const c=32,o=26,i=5; for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rr=k%2?i:o; x.lineTo(c+Math.cos(a)*rr,c+Math.sin(a)*rr); } x.closePath(); x.fill(); });
   const glowTexL=canvasTex(128,128,(x,w,h)=>{ const gr=x.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2); gr.addColorStop(0,'rgba(255,224,150,.9)'); gr.addColorStop(1,'rgba(255,200,100,0)'); x.fillStyle=gr; x.fillRect(0,0,w,h); });
 
-  const G=new THREE.Group(); G.position.set(o.x??-1.7,o.y??0,o.z??2.25); G.rotation.y=o.ry??.28; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
+  // observing mode (rooms): relaxed arms, body turned into the room, gaze drifting between points of interest
+  const look=o.look, hasLook=!!(look&&look.length), wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
+  let bodyRy=o.ry??.28, lookYaw=[], lookPitch=[], headYaw=[], hyaw=0, hpitch=0, lastT=0;
+  if(hasLook){ const px=o.x, pz=o.z;
+    lookYaw=look.map(([tx,ty,tz])=>Math.atan2(tx-px,tz-pz)); lookPitch=look.map(([tx,ty,tz])=>Math.max(-.5,Math.min(.5,-Math.atan2(ty-1.12,Math.hypot(tx-px,tz-pz)))));
+    const m=Math.atan2(lookYaw.reduce((a,y)=>a+Math.sin(y),0),lookYaw.reduce((a,y)=>a+Math.cos(y),0));
+    bodyRy=Math.max(-.85,Math.min(.85,.2+.42*wrapA(m-.2)));
+    headYaw=lookYaw.map(y=>Math.max(-1.05,Math.min(1.05,wrapA(y-bodyRy)))); }
+  const G=new THREE.Group(); G.position.set(o.x??-1.7,o.y??0,o.z??2.25); G.rotation.y=bodyRy; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
   const g=new THREE.Group(); g.position.y=.16; G.add(g); // upper body sits on longer legs
   blob(G,0,.02,.6,.4); if(withProps){ blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42); }
 
@@ -1436,8 +1449,13 @@ function buildSiya(pad, o={}){
   if(withBubble){ bub=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false})); bub.scale.set(.85,.45,1); bub.position.set(-1.45,1.9,2.25); pad.add(bub); }
 
   anim.push(t0=>{ const t=t0+ph, k=reduceMotion?0:1;
-    wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
-    head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); g.position.y=.16+k*.008*Math.sin(t*2.4);
+    if(hasLook){ const n=look.length, i=reduceMotion?0:Math.floor(Math.max(0,t)/6)%n; const dt=Math.min(.1,Math.max(0,t0-lastT)); lastT=t0; const kk=1-Math.exp(-dt*2.2);
+      hyaw+=(headYaw[i]-hyaw)*kk; hpitch+=(lookPitch[i]-hpitch)*kk;
+      head.rotation.y=hyaw+k*.03*Math.sin(t*.9); head.rotation.x=hpitch*.8+k*.02*Math.sin(t*1.1); head.rotation.z=k*.03*Math.sin(t*.6);
+      wave.rotation.z=-.07+k*.012*Math.sin(t*1.2); elbow.rotation.z=0; armR.rotation.z=.07-k*.012*Math.sin(t*1.2); }
+    else { wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
+      head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); }
+    g.position.y=.16+k*.008*Math.sin(t*2.4);
     if(withProps){ tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
       lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
       sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); }); }
