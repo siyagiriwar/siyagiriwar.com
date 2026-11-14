@@ -1650,16 +1650,14 @@ const glClamp=(v,a,b)=>Math.max(a,Math.min(b,v)), glR=Math.random;
 const GL_W=600, GL_H=750;
 function glLoad(i){
   if(glCache[i]) return glCache[i];
-  const c=glCache[i]={ready:false}, im=new Image();
-  im.onload=()=>{
-    const base=document.createElement('canvas'); base.width=GL_W; base.height=GL_H;
-    const bx=base.getContext('2d'); bx.drawImage(im,0,0,GL_W,GL_H);
-    const d=bx.getImageData(0,0,GL_W,GL_H).data;
-    const mk=ch=>{ const cv=document.createElement('canvas'); cv.width=GL_W; cv.height=GL_H; const x=cv.getContext('2d'); const o=x.createImageData(GL_W,GL_H), od=o.data;
-      for(let p=0;p<d.length;p+=4){ od[p+ch]=d[p+ch]; od[p+3]=255; } x.putImageData(o,0,0); return cv; };
-    c.base=base; c.r=mk(0); c.g=mk(1); c.b=mk(2); c.ready=true;
-  };
-  im.src=IMG['gl'+(i+1)].src;
+  const c=glCache[i]={ready:false}, im=new Image(), src=IMG['gl'+(i+1)].src; let tries=0;
+  /* the red, green and blue layers are made by tinting copies of the photo, so no pixel data is ever read back
+     (reading pixels is blocked by some browsers and when a page is opened as a local file, which left the window black) */
+  const layer=col=>{ const cv=document.createElement('canvas'); cv.width=GL_W; cv.height=GL_H; const x=cv.getContext('2d'); x.drawImage(im,0,0,GL_W,GL_H);
+    if(col){ x.globalCompositeOperation='multiply'; x.fillStyle=col; x.fillRect(0,0,GL_W,GL_H); } return cv; };
+  im.onload=()=>{ c.base=layer(null); c.r=layer('#f00'); c.g=layer('#0f0'); c.b=layer('#00f'); c.ready=true; };
+  im.onerror=()=>{ if(tries++<3) setTimeout(()=>{ im.src=src+(src.indexOf('?')<0?'?':'&')+'r='+Date.now(); }, 600*tries); };
+  im.src=src;
   return c;
 }
 function glInit(scope){
