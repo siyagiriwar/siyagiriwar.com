@@ -135,6 +135,8 @@ a{color:inherit}
 .sheet-body{overflow-y:auto;overscroll-behavior:contain;padding:10px 34px 36px 30px;flex:1}
 .sheet-foot{text-align:center;font:700 10.5px/1 var(--body);letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);padding:12px 0 16px;display:flex;align-items:center;gap:16px;margin:0 30px}
 .sheet-foot::before,.sheet-foot::after{content:"";flex:1;height:1px;background:rgba(27,33,64,.18)}
+.sheet-next{display:flex;justify-content:center;padding:6px 30px 2px}
+.sheet-next[hidden]{display:none}
 
 /* content (shared by panel + classic) */
 .c h2{font:800 clamp(34px,3.6vw,50px)/1.02 var(--display);margin:8px 0 12px;letter-spacing:-.01em;position:relative;padding-bottom:16px}
@@ -484,6 +486,8 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .sheet-head{padding:16px 14px 4px 18px}
   .sheet-body{padding:8px 18px 28px}
   .sheet-foot{letter-spacing:.16em;margin:0 16px}
+  .sheet-next{padding:6px 18px 2px}
+  .sheet-next .btn-sun{width:100%;justify-content:center}
   .c .intro-grid{grid-template-columns:1fr}
   .c .portrait img{aspect-ratio:4/3;object-position:50% 25%}
 }
@@ -620,6 +624,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
     <div class="sheet-head"><span class="lamp"></span><span class="lbl" id="panelLbl">Module</span>
       <button class="closer" id="panelClose" type="button" aria-label="Close module and return to the station"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="sheet-body c" id="panelBody"></div>
+    <div class="sheet-next" id="panelNext" hidden><button class="btn-sun" id="panelNextBtn" type="button" aria-label="Go to the Work module"><span>See my work</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     <div class="sheet-foot" id="panelFoot">Ideas travel far</div>
   </div>
 </div>
@@ -1586,6 +1591,7 @@ function openModule(id, fromHash=false){
   view=id; setDockCurrent(id);
   $('#panelLbl').textContent = def.title + (id==='contact'?' hub':' module');
   $('#railTxt').textContent = 'Siya Giriwar  ·  ' + def.title + (id==='contact'?' hub':' module');
+  $('#panelNext').hidden = (id!=='about');
   $('#panelFoot').textContent = {about:'Still observing', work:'Ideas travel far', experiments:'Beyond the frame', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
   panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
@@ -1601,6 +1607,7 @@ function closePanel(toHash=true){
   if(lastFocus && lastFocus.focus){ lastFocus.focus({preventScroll:true}); } lastFocus=null; updateEnter();
 }
 $('#panelClose').onclick=()=>closePanel();
+$('#panelNextBtn').onclick=()=>{ lastFocus=document.querySelector('.dock [data-go="work"]'); openModule('work'); };
 document.querySelectorAll('.dock [data-go]').forEach(b=>b.onclick=()=>{ lastFocus=b; view===b.dataset.go? closePanel() : openModule(b.dataset.go); });
 
 function updateEnter(){ $('#enterTxt').textContent = view==='dome'? 'Back to orbit' : view==='station' ? 'Enter station' : 'Back to orbit'; }
