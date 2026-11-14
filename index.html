@@ -135,6 +135,7 @@ a{color:inherit}
 .sheet-body{overflow-y:auto;overscroll-behavior:contain;padding:10px 34px 36px 30px;flex:1}
 .sheet-foot{text-align:center;font:700 10.5px/1 var(--body);letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);padding:12px 0 16px;display:flex;align-items:center;gap:16px;margin:0 30px}
 .sheet-foot::before,.sheet-foot::after{content:"";flex:1;height:1px;background:rgba(27,33,64,.18)}
+.sheet-foot:empty{display:none}
 .sheet-next{display:flex;justify-content:flex-end;padding:8px 30px 18px}
 .sheet-next[hidden]{display:none}
 #panel.no-foot .sheet-foot{display:none}
@@ -625,7 +626,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
       <button class="closer" id="panelClose" type="button" aria-label="Close module and return to the station"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="sheet-body c" id="panelBody"></div>
     <div class="sheet-next" id="panelNext" hidden><button class="btn-sun" id="panelNextBtn" type="button" aria-label="Go to the Work module"><span>See my work</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-    <div class="sheet-foot" id="panelFoot">Ideas travel far</div>
+    <div class="sheet-foot" id="panelFoot"></div>
   </div>
 </div>
 
@@ -664,17 +665,7 @@ const PROJECTS = [
   {cat:'dig', page:'astro', live:true, year:'Live', title:'Astro Jishnu Gupta: Vedic astrology and Vastu website', video:'assets/astro/card.mp4', poster:'astroThumb', desc:'A live website for a family practice with 44+ years of Vedic astrology and Vastu, with consultations, a free kundli, courses, a shop and a real-time view of the planets.', links:[['Visit the live site','https://astrojishnugupta.com/']]},
   {cat:'exp', page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
   {cat:'exp', page:'sher', year:'2025', title:'Sher-o-Shakkar: Akbar and Birbal’s adventure', img:'sherGif', desc:'An Akbar and Birbal folktale retold as a Phad scroll painting: character illustration, framed scenes, a long painted scroll and an illustrated storybook.', links:[['View on Behance','https://www.behance.net/gallery/222964783/Sher-o-shakkar-Akbar-and-Birbals-adventure']]},
-  {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'},
-  {cat:'vis', year:'2023–26', title:'Visual design compilation', img:'vdthumb', desc:'Social media campaigns, ads, watchfaces, branding, packaging, illustration, print and publication design across Layers, Travdor, 3dfashion, NIFT and personal work.', links:[['Event posters for Maskhara','https://www.behance.net/gallery/200500475/Event-Posters-I-Maskhara']]},
-  {cat:'doc', year:'', title:'Photobook', img:'pkthumb', desc:'Fashion weeks, graduation shoots, editorials, concept shoots, portraits, jewellery and product photography. A growing archive.', links:[['Open the full photobook','https://drive.google.com/drive/folders/1tNsBKFhr-_p4elnt3zTQcdYjw4eCXrSo']]},
-  {cat:'doc', wide:true, year:'2025', title:'Haute Couture: documentary', img:'v20', desc:'A documentary about the making of fashion at NIFT Delhi, with students, faculty and the studio floor. A college project.', links:[['View on Behance','https://www.behance.net/gallery/239472323/HAUTE-COUTURE-DOCUMENTARY']]},
-  {cat:'doc', year:'2025', title:'JoyScore: podcast and interviews', img:'v3', desc:'Podcast and interview video with Dr Joy, plus employee testimonials and reels for JoyScore, including colour grading.'},
-  {cat:'doc', year:'', title:'Two Forking Good x Draavin Canteen: Onam', img:'v11', desc:'Video and photography for an Onam Sadhya collaboration: the Icons of Onam interview, social posts and event photographs.'},
-  {cat:'doc', year:'', title:'The Mango Heist: mockumentary', img:'v22', desc:'A short mockumentary. Directed, shot, animated and sound designed by Siya, with Aasthadeep as assistant director and co-writer.'},
-  {cat:'dig', year:'', title:'CRM dashboard', img:null, desc:'Dashboard UI design. Full case study on Behance.', links:[['View on Behance','https://www.behance.net/gallery/238742435/CRM-Dashboard']]},
-  {cat:'dig', year:'', title:'BreakLoop: break the doomscroll', img:null, desc:'A mobile app concept for breaking the doomscroll. Full case study on Behance.', links:[['View on Behance','https://www.behance.net/gallery/239581787/BreakLoop-break-the-doomscroll']]},
-  {cat:'vis', year:'', title:'Adidas: Find Your Balance', img:null, desc:'A campaign concept for Adidas. Full project on Behance.', links:[['View on Behance','https://www.behance.net/gallery/239138873/Adidas-Find-Your-Balance']]},
-  {cat:'vis', year:'', title:'RAD’s Food Corner: branding', img:null, desc:'Brand identity for a food corner. Full project on Behance.', links:[['View on Behance','https://www.behance.net/gallery/224290413/BRANDING-RADs-FOOD-CORNER']]},
+  {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'}
 ];
 const GALLERY = [];
 const CAPS = ['UX research','Interface design','Brand identity','Visual communication','Styling','Illustration','Photography and videography','Video editing','Publication design','Copywriting','Creative direction'];
@@ -746,7 +737,7 @@ function projCard(p,i){
 function renderWork(h='h2'){
   return `<${h} ${h==='h2'?'id="panelTitle"':''}>Field expeditions</${h}>
   <p class="lead">Projects sorted by territory. Most entries link to the full case study on Behance.</p>
-  <div class="filters" role="group" aria-label="Filter projects by territory">${Object.entries(CATS).map(([k,v])=>`<button type="button" data-f="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('')}</div>
+  <div class="filters" role="group" aria-label="Filter projects by territory">${Object.entries(CATS).filter(([k])=>k==='all'||PROJECTS.some(p=>p.cat===k)).map(([k,v])=>`<button type="button" data-f="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('')}</div>
   <div class="projects">${PROJECTS.map((p,i)=>projCard(p,i)).join('')}</div>`;
 }
 /* ---- Off frame: raw clips collage (files live in the offframe/ folder; add new entries to this list) ---- */
@@ -1592,7 +1583,7 @@ function openModule(id, fromHash=false){
   $('#panelLbl').textContent = def.title + (id==='contact'?' hub':' module');
   $('#railTxt').textContent = 'Siya Giriwar  ·  ' + def.title + (id==='contact'?' hub':' module');
   $('#panelNext').hidden = (id!=='about');
-  $('#panelFoot').textContent = {about:'Still observing', work:'Ideas travel far', experiments:'Beyond the frame', contact:'Listening on all frequencies'}[id];
+  $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'Beyond the frame', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
   panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
