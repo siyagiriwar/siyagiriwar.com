@@ -1258,6 +1258,9 @@ function buildModule(def){
   if(def.id==='contact'){ cyl(.05,.08,2.4,6,dark,g,1.8,H+1.7,-1.6); const bl=sph(.12,glow(0xff5a4a,2),g,1.8,H+2.95,-1.6,8,6,false); anim.push(t=>{ bl.visible=(t+.8)%1.9<.4; }); box(.9,.5,.7,dark,g,-1.2,H+.9,-.8); }
   if(def.id==='about'){ box(.5,.5,.5,dark,g,1.9,H+.95,1.2); }
   buildProps(def.id, g);
+  // Siya waves hello from inside every room (visible on the tour and when a module is open)
+  const SIYA_SPOT={about:[-.3,.9],work:[-.9,.7],experiments:[-1.1,.7],contact:[-.9,.7]}[def.id];
+  if(SIYA_SPOT) buildSiya(g,{x:SIYA_SPOT[0],y:.04,z:SIYA_SPOT[1],ry:.2,props:false,bubble:false,phase:MODULES.findIndex(m=>m.id===def.id)*1.7});
   // hit volume
   const hit=new THREE.Mesh(new THREE.BoxGeometry(W+.6,H+2,D+.6), new THREE.MeshBasicMaterial({visible:false})); hit.position.y=H/2; hit.userData={module:def.id}; g.add(hit); pickables.push(hit);
   g.updateMatrixWorld(true);
@@ -1294,7 +1297,9 @@ function buildPad(){
 }
 /* Siya v2: art-directed low-poly designer avatar with her dog, books, UFO lamp and plant, waving beside the shuttle on the launch pad.
    Bevelled low-poly forms, warm lamp glow, soft contact shadows. Palette: midnight navy, muted lavender, warm cream, golden yellow. */
-function buildSiya(pad){
+function buildSiya(pad, o={}){
+  const withProps=o.props!==false, withBubble=o.bubble!==false, ph=o.phase||0; // rooms get a lighter version: just Siya, no dog/books/extra lights
+  let tail,dh,ears=[],lamp,lg,sparks=[],bub;
   // bevelled rounded box: faceted low-poly softness instead of crude cubes
   const rbox=(w,h,d,r,m,parent,x=0,y=0,z=0,sh)=>{ r=Math.min(r,w/2-.001,h/2-.001,d/2-.001);
     const gg=geo(`rb${w},${h},${d},${r}`,()=>{ const s=new THREE.Shape(), a=w/2-r, b=h/2-r; s.moveTo(-a,-b); s.lineTo(a,-b); s.lineTo(a,b); s.lineTo(-a,b); s.closePath();
@@ -1320,9 +1325,9 @@ function buildSiya(pad){
   const starTex=canvasTex(64,64,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#ffe08a'; x.shadowColor='#ffcf4a'; x.shadowBlur=8; x.beginPath(); const c=32,o=26,i=5; for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rr=k%2?i:o; x.lineTo(c+Math.cos(a)*rr,c+Math.sin(a)*rr); } x.closePath(); x.fill(); });
   const glowTexL=canvasTex(128,128,(x,w,h)=>{ const gr=x.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2); gr.addColorStop(0,'rgba(255,224,150,.9)'); gr.addColorStop(1,'rgba(255,200,100,0)'); x.fillStyle=gr; x.fillRect(0,0,w,h); });
 
-  const G=new THREE.Group(); G.position.set(-1.7,0,2.25); G.rotation.y=.28; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
+  const G=new THREE.Group(); G.position.set(o.x??-1.7,o.y??0,o.z??2.25); G.rotation.y=o.ry??.28; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
   const g=new THREE.Group(); g.position.y=.16; G.add(g); // upper body sits on longer legs
-  blob(G,0,.02,.6,.4); blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42);
+  blob(G,0,.02,.6,.4); if(withProps){ blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42); }
 
   // ---------- body ----------
   [-1,1].forEach(sx=>{
@@ -1387,19 +1392,20 @@ function buildSiya(pad){
   cyl(.003,.003,.05,4,silver,head,.208,-.08,.03,false);
   for(let i=0;i<5;i++){ const a=i/5*Math.PI*2; sph(.016,eyeW,head,.21,-.125+Math.cos(a)*.022,.03+Math.sin(a)*.022,6,5,false); } sph(.011,gold,head,.222,-.125,.03,5,4,false);
 
+  if(withProps){
   // ---------- her dog (screen left) ----------
   const d=new THREE.Group(); d.position.set(-.5,0,.2); d.rotation.y=.5; G.add(d);
   const dc=mat(0xf6ead9,{roughness:.8}), dt=mat(0xd9a066,{roughness:.8}), dtd=mat(0xc58a50,{roughness:.8});
   rbox(.21,.15,.22,.05,dc,d,0,.075,-.02); rbox(.11,.09,.12,.03,dt,d,.07,.125,-.04);
   rot(rbox(.15,.25,.14,.05,dc,d,0,.2,.05),-.1,0,0);
   [-1,1].forEach(s=>{ rbox(.052,.14,.056,.02,dc,d,s*.042,.07,.125); rbox(.056,.03,.08,.014,dc,d,s*.042,.015,.145); });
-  const dh=new THREE.Group(); dh.position.set(0,.4,.11); d.add(dh);
+  dh=new THREE.Group(); dh.position.set(0,.4,.11); d.add(dh);
   rbox(.23,.18,.18,.06,dc,dh,0,0,0); rbox(.13,.06,.15,.03,dt,dh,-.04,.085,0);
-  const ears=[-1,1].map(s=>{ const e=new THREE.Group(); e.position.set(s*.125,.045,-.01); dh.add(e); rot(rbox(.085,.14,.04,.016,dtd,e,0,-.055,0),0,0,s*.4); return e; });
+  ears=[-1,1].map(s=>{ const e=new THREE.Group(); e.position.set(s*.125,.045,-.01); dh.add(e); rot(rbox(.085,.14,.04,.016,dtd,e,0,-.055,0),0,0,s*.4); return e; });
   rbox(.105,.075,.085,.032,dc,dh,0,-.05,.12); rbox(.045,.032,.03,.012,ink,dh,0,-.012,.158,false); rbox(.036,.05,.012,.006,mat(0xe9788b,{roughness:.6}),dh,0,-.1,.15,false);
   [-1,1].forEach(s=>torus(.021,.006,ink,dh,s*.058,.025,.092,Math.PI,8));
   const col=torus(.085,.014,mat(0x1d1b22,{roughness:.7}),d,0,.305,.07,null,14); col.rotation.x=Math.PI/2; rot(rbox(.03,.03,.01,.008,gold,d,0,.268,.15,false),0,0,Math.PI/4);
-  const tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
+  tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
 
   // ---------- books + UFO lamp + plant (screen right) ----------
   const b=new THREE.Group(); b.position.set(.52,0,.08); G.add(b);
@@ -1411,30 +1417,31 @@ function buildSiya(pad){
   const ufo=sph(.088,mat(0xbab5dc,{flatShading:false,roughness:.35,metalness:.3}),b,0,.318,0,14,8); ufo.scale.y=.32;
   torus(.088,.009,gold,b,0,.312,0,null,18).rotation.x=Math.PI/2; const dome=sph(.046,mat(0xd9d6ef,{flatShading:false,roughness:.25,metalness:.2}),b,0,.338,0,10,7); dome.scale.y=.85;
   const winM=glow(0xffe3a0,1.8); const wins=[-.042,0,.042].map(x=>sph(.012,winM,b,x,.322,.076-Math.abs(x)*.4,6,5,false));
-  const lamp=new THREE.PointLight(0xffd58a,.8,3.2,1.6); lamp.position.set(0,.34,.12); b.add(lamp);
-  const lg=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.55})); lg.scale.set(.5,.5,1); lg.position.set(0,.31,.04); b.add(lg);
+  lamp=new THREE.PointLight(0xffd58a,.8,3.2,1.6); lamp.position.set(0,.34,.12); b.add(lamp);
+  lg=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.55})); lg.scale.set(.5,.5,1); lg.position.set(0,.31,.04); b.add(lg);
   // glossy trailing plant
   const leafM=[mat(0x6fb350,{flatShading:false,roughness:.35}),mat(0x8cc65f,{flatShading:false,roughness:.35})];
   [[-.03,.215,.115,.5],[-.09,.19,.125,-.5],[-.13,.15,.13,.6],[-.1,.1,.14,-.3],[-.14,.06,.14,.5],[-.06,.23,.12,.2],[-.04,.12,.13,-.7]].forEach(([x,y,z,r],i)=>{ const lf=sph(.036,leafM[i%2],b,x,y,z,7,5); lf.scale.set(.72,1.2,.22); lf.rotation.z=r; lf.rotation.x=-.3; });
   cyl(.004,.004,.2,4,mat(0x4d7a3a),b,-.08,.13,.12,false).rotation.z=.25;
 
   // ---------- sparkles ----------
-  const sparks=[[-.56,.98,.18,.2],[-.62,.6,.12,.14]].map(([x,y,z,s])=>{ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:starTex,transparent:true,depthWrite:false})); sp.scale.set(s,s,1); sp.position.set(x,y,z); sp.userData.s=s; G.add(sp); return sp; });
+  sparks=[[-.56,.98,.18,.2],[-.62,.6,.12,.14]].map(([x,y,z,s])=>{ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:starTex,transparent:true,depthWrite:false})); sp.scale.set(s,s,1); sp.position.set(x,y,z); sp.userData.s=s; G.add(sp); return sp; });
 
+  }
   // speech bubble: compact, with golden ticks
   const tex=canvasTex(320,170,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#fbf8ee'; x.strokeStyle='#1d2547'; x.lineWidth=5; x.lineJoin='round';
     x.beginPath(); x.moveTo(40,10); x.lineTo(w-40,10); x.quadraticCurveTo(w-8,10,w-8,42); x.lineTo(w-8,92); x.quadraticCurveTo(w-8,124,w-40,124); x.lineTo(108,124); x.lineTo(70,160); x.lineTo(78,124); x.lineTo(40,124); x.quadraticCurveTo(8,124,8,92); x.lineTo(8,42); x.quadraticCurveTo(8,10,40,10); x.closePath(); x.fill(); x.stroke();
     x.strokeStyle='#f3b92f'; x.lineWidth=5; x.lineCap='round'; x.beginPath(); x.moveTo(w-44,6); x.lineTo(w-34,-2); x.moveTo(w-24,10); x.lineTo(w-12,6); x.stroke();
     x.fillStyle='#1d2547'; x.textAlign='center'; x.textBaseline='middle'; x.font='800 44px Syne, "Avenir Next", sans-serif'; x.fillText('Hello!',w/2,68); });
-  const bub=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false})); bub.scale.set(.85,.45,1); bub.position.set(-1.45,1.9,2.25); pad.add(bub);
+  if(withBubble){ bub=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false})); bub.scale.set(.85,.45,1); bub.position.set(-1.45,1.9,2.25); pad.add(bub); }
 
-  anim.push(t=>{ const k=reduceMotion?0:1;
+  anim.push(t0=>{ const t=t0+ph, k=reduceMotion?0:1;
     wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
     head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); g.position.y=.16+k*.008*Math.sin(t*2.4);
-    tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
-    lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
-    sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); });
-    bub.position.y=1.9+k*.04*Math.sin(t*2); });
+    if(withProps){ tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
+      lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
+      sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); }); }
+    if(bub) bub.position.y=1.9+k*.04*Math.sin(t*2); });
 }
 
 /* rockets */
