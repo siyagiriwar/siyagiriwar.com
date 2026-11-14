@@ -415,7 +415,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .tale .cup img{border-radius:16px}
 .tale .tale-end{margin:10px 0 0!important;text-align:center;font:italic 17px/1.5 Georgia,serif;color:var(--ink-soft)!important}
 .tale .chap>div{max-width:760px}
-.tale .hero{max-width:860px;margin-top:20px}
+.tale .hero{max-width:520px;margin-top:20px}
 .tale .bio,.tale .tale-hl,.tale .vow{max-width:760px}
 .tale .bio{margin-top:26px}
 .tale .bio .lead{margin:0 0 18px!important;font:800 clamp(22px,3.4vw,32px)/1.25 var(--display);color:var(--ink)!important}
@@ -425,12 +425,6 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .tale .vow{margin-top:26px}
 .tale .vow-label{display:block;margin:0 0 10px;font:700 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:#6f46c9}
 @media (max-width:640px){.tale .chap{grid-template-columns:1fr}.tale .no{padding:0}.tale .cup{float:none;width:100%;margin:6px 0 16px}}
-@supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){
-.tale .chap{animation:taleRise linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
-.tale .hero img{animation:taleDrift linear both;animation-timeline:view()}
-.tale .cup{animation:taleRise linear both;animation-timeline:view();animation-range:entry 0% entry 50%}}
-@keyframes taleRise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-@keyframes taleDrift{from{transform:scale(1.12) translateY(-4%)}to{transform:scale(1.12) translateY(4%)}}}
 .reel{margin:24px 0 14px}
 .collage{columns:5 140px;column-gap:12px;margin-top:20px;padding:10px 4px 30px}
 .collage .gt{display:block;position:relative;width:100%;margin:0 0 12px;padding:0;border:0;border-radius:12px;overflow:hidden;background:#161320;break-inside:avoid;box-shadow:0 8px 20px rgba(20,16,40,.2);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
