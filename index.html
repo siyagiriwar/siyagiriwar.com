@@ -969,8 +969,13 @@ function signTex(text){
   return canvasTex(1024,192,(x,w,h)=>{
     x.fillStyle='#1d2547'; x.fillRect(0,0,w,h);
     x.strokeStyle='rgba(255,255,255,.12)'; x.lineWidth=6; x.strokeRect(10,10,w-20,h-20);
-    x.fillStyle='#fbf8ee'; x.font=`800 ${text.length>11?72:text.length>8?96:110}px Syne, "Avenir Next", sans-serif`; x.textBaseline='middle';
-    spaced(x, text, w/2, h/2+6, text.length>11?8:text.length>8?10:22);
+    x.fillStyle='#fbf8ee'; x.textBaseline='middle';
+    // start from the usual size, then shrink until the whole word sits inside the sign with a margin
+    let fs=text.length>11?72:text.length>8?96:110, sp=text.length>11?8:text.length>8?10:22;
+    const chars=[...text];
+    const width=()=>{ x.font=`800 ${fs}px Syne, "Avenir Next", sans-serif`; return chars.reduce((a,ch)=>a+x.measureText(ch).width,0)+sp*(chars.length-1); };
+    while(width()>w-150 && fs>28){ fs-=2; sp=Math.max(2,sp*.96); }
+    spaced(x, text, w/2, h/2+6, sp);
   });
 }
 function bandTex(){
