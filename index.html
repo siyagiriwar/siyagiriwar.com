@@ -225,7 +225,8 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 /* classic */
 .classic{position:fixed;inset:0;z-index:15;background:var(--cream);color:var(--ink);overflow-y:auto;padding-top:var(--sa-t);padding-bottom:var(--sa-b)}
 .classic[hidden]{display:none}
-.classic-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px clamp(18px,4vw,48px);background:var(--ink);color:var(--cream)}
+.classic-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px clamp(18px,4vw,48px);background:rgba(27,33,64,.72);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.16);box-shadow:0 8px 28px rgba(11,16,36,.16);color:var(--cream)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.classic-bar{background:var(--ink)}}
 .classic-bar strong{font:800 16px/1 var(--display);letter-spacing:.3em}
 .classic-bar nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
 .classic-bar nav a{text-decoration:none;font:700 13px/1 var(--body);padding:9px 12px;border-radius:999px}
