@@ -657,7 +657,7 @@ const CATS = {all:'All', dig:'Digital worlds', vis:'Visual communication', doc:'
 const PROJECTS = [
   {cat:'dig', wide:true, page:'nexgen', year:'2025', title:'NexGen Hub: a unified platform for creative discovery', img:'nx1', desc:'A platform for emerging filmmakers, photographers, models and creators to find collaborators, rent affordable studios and gain visibility. Research, UX and mobile app design.', links:[['View on Behance','https://www.behance.net/gallery/238697569/NexGen-Hub-A-Unified-Platform-for-Creative-Discovery']]},
   {cat:'dig', page:'layers', year:'2025–26', title:'Layers: designing chaos', video:'assets/media-25.mp4', poster:'lythumb', desc:'A graduation project at Layers Electronics: translating a bold brand philosophy into a mobile-first smartwatch website, with research, prototypes, watch UI and watchfaces.', links:[['Layers on Instagram','https://www.instagram.com/layers.shop/']]},
-  {cat:'dig', page:'astro', live:true, year:'Live', title:'Astro Jishnu Gupta: Vedic astrology and Vastu website', video:'/_blob/4a4ecbc72e3ccca54e096c79ad3f6e57', poster:'astroThumb', desc:'A live website for a family practice with 44+ years of Vedic astrology and Vastu, with consultations, a free kundli, courses, a shop and a real-time view of the planets.', links:[['Visit the live site','https://astrojishnugupta.com/']]},
+  {cat:'dig', page:'astro', live:true, year:'Live', title:'Astro Jishnu Gupta: Vedic astrology and Vastu website', video:'assets/astro/card.mp4', poster:'astroThumb', desc:'A live website for a family practice with 44+ years of Vedic astrology and Vastu, with consultations, a free kundli, courses, a shop and a real-time view of the planets.', links:[['Visit the live site','https://astrojishnugupta.com/']]},
   {cat:'exp', page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
   {cat:'exp', page:'sher', year:'2025', title:'Sher-o-Shakkar: Akbar and Birbal’s adventure', img:'sherGif', desc:'An Akbar and Birbal folktale retold as a Phad scroll painting: character illustration, framed scenes, a long painted scroll and an illustrated storybook.', links:[['View on Behance','https://www.behance.net/gallery/222964783/Sher-o-shakkar-Akbar-and-Birbals-adventure']]},
   {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'},
@@ -778,7 +778,16 @@ const OFFFRAME = [
   {type:'video', src:'offframe/clip-20.mp4', poster:'offframe/clip-20.jpg', cap:'Conference day', w:400, h:712},
   {type:'video', src:'offframe/clip-21.mp4', poster:'offframe/clip-21.jpg', cap:'Through the lens', w:400, h:712},
   {type:'video', src:'offframe/clip-22.mp4', poster:'offframe/clip-22.jpg', cap:'Night with a pup', w:400, h:712},
-  {type:'video', src:'offframe/clip-07.mp4', poster:'offframe/clip-07.jpg', cap:'Throwback', w:400, h:724}
+  {type:'video', src:'offframe/clip-07.mp4', poster:'offframe/clip-07.jpg', cap:'Throwback', w:400, h:724},
+  {type:'video', src:'offframe/guitar-night.mp4', poster:'offframe/guitar-night.jpg', cap:'Guitar night', w:480, h:640},
+  {type:'video', src:'offframe/school-visit.mp4', poster:'offframe/school-visit.jpg', cap:'School visit', w:540, h:960},
+  {type:'image', src:'offframe/photo-camera-back.jpg', cap:'Behind the shot', w:900, h:1599},
+  {type:'video', src:'offframe/after-dark.mp4', poster:'offframe/after-dark.jpg', cap:'Dancing after dark', w:540, h:960},
+  {type:'video', src:'offframe/on-set.mp4', poster:'offframe/on-set.jpg', cap:'On set', w:464, h:832},
+  {type:'video', src:'offframe/classroom-day.mp4', poster:'offframe/classroom-day.jpg', cap:'Classroom photo day', w:540, h:960},
+  {type:'image', src:'offframe/photo-dsc-0716.jpg', cap:'Back of the camera', w:900, h:1599},
+  {type:'video', src:'offframe/wall-art.mp4', poster:'offframe/wall-art.jpg', cap:'Wall art', w:540, h:960},
+  {type:'video', src:'offframe/quiet-song.mp4', poster:'offframe/quiet-song.jpg', cap:'Quiet song', w:540, h:960}
 ];
 const SND_ICON = '<i class="snd" aria-hidden="true"><svg class="s-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/></svg><svg class="s-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></i>';
 function renderReel(){
@@ -1818,7 +1827,7 @@ const CASES = {
   nexgen: {
     title:'NexGen Hub', tag:'A unified platform for creative discovery', kicker:'UI/UX case study, mobile app, 2025',
     meta:[['Industry','Social media'],['Category','Mobile app'],['Year','2025'],['Timeline','3–4 weeks research, 2–3 weeks solution, 2–3 weeks prototype']],
-    hero:{img:'/_blob/5ba2437824a63990bb75168de032ba8e', h:1040},
+    hero:{img:'assets/nexgen-hub/hero.webp', h:1040},
     sections:[
       ['Overview',['NexGen is a platform that helps aspiring filmmakers, photographers, models and content creators connect for collaborations, access affordable studios and equipment, and gain visibility.','Unlike other professional-focused apps, it is designed for students and emerging talent building their creative careers.']],
       ['The problem',['Creators struggle to find reliable collaborators, because opportunities are scattered across social media platforms.','Most rental options cater to professionals, which makes them unaffordable for students and emerging creators.','Young creators also find it hard to show their work and get recognised in competitive professional spaces.']],
@@ -1828,22 +1837,22 @@ const CASES = {
     ],
     features:[['Discover','Browse featured projects and trending collaborations, and find creators by skill, style or category.'],['Connect','Send a request or message directly. In-app chat keeps briefs and details in one place.'],['Rentals','Search studios by location, availability and facilities, view amenities and book a time slot.']],
     boards:[
-      ['/_blob/e77e3d952a138d3093ba482dd15532eb',4760,'Project overview, timeline, project summary, and the research and discovery journey map'],
-      ['/_blob/98c8b760b3dd443e53990e30930497af',3236,'Solution, consumer study and competitive analysis'],
-      ['/_blob/ac91ceaa6bcd218222cc985ea14ce29c',2163,'Qualitative and quantitative research'],
-      ['/_blob/ff2a0ce675604f0fe9b683c64a24ded4',4290,'User personas, empathy mapping and information architecture'],
-      ['/_blob/1d1d2ab74e09bfceeb04dc7b2574d64b',3660,'User flow and mid-fidelity wireframes'],
-      ['/_blob/a94df495fcbf557b61dedac4b0ce7dc3',4600,'Visual design: logo, colour, Inter typography, design system, icons and high fidelity'],
-      ['/_blob/f06a434457fbdc5ac69ccbb897982942',2421,'Flow: discover creators, project preview and connect instantly'],
-      ['/_blob/d40346bbb8991d4f0fce8cd8f11dc480',3330,'Booking features and conversation'],
-      ['/_blob/2a4af552de202eed7f73454685423f52',3688,'Connect feature, profile, uploading new projects and onboarding']
+      ['assets/nexgen-hub/board-01.webp',4760,'Project overview, timeline, project summary, and the research and discovery journey map'],
+      ['assets/nexgen-hub/board-02.webp',3236,'Solution, consumer study and competitive analysis'],
+      ['assets/nexgen-hub/board-03.webp',2163,'Qualitative and quantitative research'],
+      ['assets/nexgen-hub/board-04.webp',4290,'User personas, empathy mapping and information architecture'],
+      ['assets/nexgen-hub/board-05.webp',3660,'User flow and mid-fidelity wireframes'],
+      ['assets/nexgen-hub/board-06.webp',4600,'Visual design: logo, colour, Inter typography, design system, icons and high fidelity'],
+      ['assets/nexgen-hub/board-07.webp',2421,'Flow: discover creators, project preview and connect instantly'],
+      ['assets/nexgen-hub/board-08.webp',3330,'Booking features and conversation'],
+      ['assets/nexgen-hub/board-09.webp',3688,'Connect feature, profile, uploading new projects and onboarding']
     ],
     link:['View the full case study on Behance','https://www.behance.net/gallery/238697569/NexGen-Hub-A-Unified-Platform-for-Creative-Discovery'], barLink:'View on Behance'
   },
   astro: {
     title:'Astro Jishnu Gupta', tag:'A 44-year Vedic astrology and Vastu practice, online, with a live view of the sky.', kicker:'Website design, live site',
     meta:[['Client','Astro Jishnu Gupta'],['Category','Website'],['Services on the site','Astrology, Vastu, consultations, pooja, courses, shop'],['Status','Live at astrojishnugupta.com']],
-    hero:{video:'/_blob/01f1568cfa18520b64b530e1e9895eed', poster:'/_blob/b21abd42c95ab4181a49be763abe1efd', label:'Walkthrough of the Live Transit feature'},
+    hero:{video:'assets/astro/walkthrough.mp4', poster:'assets/astro/walkthrough-poster.webp', label:'Walkthrough of the Live Transit feature'},
     sections:[
       ['Overview',['Astro Jishnu Gupta is a family practice with more than 44 years of Vedic astrology and Vastu experience. The website brings that practice online, so people across India can book a consultation, order a pooja or start learning, online or in person.']],
       ['The challenge',['Astrology sites often feel either cluttered or mystical to the point of being hard to trust. This one needed to carry decades of credibility, explain many different services clearly, and still feel calm, modern and easy to act on.']],
