@@ -665,7 +665,7 @@ const PROJECTS = [
   {cat:'dig', wide:true, page:'nexgen', year:'2025', title:'NexGen Hub: a unified platform for creative discovery', img:'nx1', desc:'A platform for emerging filmmakers, photographers, models and creators to find collaborators, rent affordable studios and gain visibility. Research, UX and mobile app design.', links:[['View on Behance','https://www.behance.net/gallery/238697569/NexGen-Hub-A-Unified-Platform-for-Creative-Discovery']]},
   {cat:'dig', page:'layers', year:'2025–26', title:'Layers: designing chaos', video:'assets/media-25.mp4', poster:'lythumb', desc:'A graduation project at Layers Electronics: translating a bold brand philosophy into a mobile-first smartwatch website, with research, prototypes, watch UI and watchfaces.', links:[['Layers on Instagram','https://www.instagram.com/layers.shop/']]},
   {cat:'dig', page:'astro', live:true, year:'Live', title:'Astro Jishnu Gupta: Vedic astrology and Vastu website', video:'assets/astro/card.mp4', poster:'astroThumb', desc:'A live website for a family practice with 44+ years of Vedic astrology and Vastu, with consultations, a free kundli, courses, a shop and a real-time view of the planets.', links:[['Visit the live site','https://astrojishnugupta.com/']]},
-  {cat:'exp', page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
+  {cat:'exp', also:['doc'], page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
   {cat:'exp', page:'sher', year:'2025', title:'Sher-o-Shakkar: Akbar and Birbal’s adventure', img:'sherGif', desc:'An Akbar and Birbal folktale retold as a Phad scroll painting: character illustration, framed scenes, a long painted scroll and an illustrated storybook.', links:[['View on Behance','https://www.behance.net/gallery/222964783/Sher-o-shakkar-Akbar-and-Birbals-adventure']]},
   {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'}
 ];
@@ -728,13 +728,13 @@ function projCard(p,i){
   if(p.video) media=`<video data-auto muted loop playsinline preload="none" poster="${IMG[p.poster]?IMG[p.poster].src:''}" aria-label="${esc(p.title)} preview"><source src="${p.video}" type="video/mp4"></video>`;
   else if(p.img) media=img(p.img, p.title+' cover');
   else media=`<div class="ph">${planetSvg}<span>Case study on Behance</span></div>`;
-  const meta=[CATS[p.cat], p.year].filter(Boolean).join(' · ');
+  const meta=[[p.cat].concat(p.also||[]).map(c=>CATS[c]).join(', '), p.year].filter(Boolean).join(' · ');
   const tag = p.page ? `<span class="ptag">${p.live?'Live site':'Case study'}</span>` : '';
   const frame=`<div class="pframe"><div class="media">${media}</div>${HUD}${tag}</div>`;
   const body=`<div class="pbody"><div><span class="pmeta">${esc(meta)}</span><h4>${esc(p.title)}</h4></div><p>${esc(p.desc)}</p></div>`;
   const links=(p.page?[`<a href="#${p.page}">${p.live?'Read the project story':'Read the case study'}</a>`]:[]).concat((p.links||[]).map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])}</a>`)).join('');
   const inner = p.page ? `<a class="case-link cover" href="#${p.page}">${frame}${body}</a>` : `${frame}${body}`;
-  return `<article class="pcard" data-cat="${p.cat}">${inner}${links?`<div class="plinks">${links}</div>`:''}</article>`;
+  return `<article class="pcard" data-cat="${[p.cat].concat(p.also||[]).join(' ')}">${inner}${links?`<div class="plinks">${links}</div>`:''}</article>`;
 }
 function renderWork(h='h2'){
   return `<${h} ${h==='h2'?'id="panelTitle"':''}>Field expeditions</${h}>
@@ -862,7 +862,7 @@ $('#lbClose').onclick=closeLightbox; $('#lightbox').onclick=e=>{ if(e.target.id=
 function wire(scope){
   scope.addEventListener('click', e=>{
     const f=e.target.closest('[data-f]');
-    if(f){ scope.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed', b===f)); scope.querySelectorAll('.pcard').forEach(p=>p.hidden = !(f.dataset.f==='all' || p.dataset.cat===f.dataset.f)); const any=[...scope.querySelectorAll('.pcard')].some(p=>!p.hidden); scope.querySelectorAll('.pempty').forEach(e=>e.hidden=any); blip(660); return; }
+    if(f){ scope.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed', b===f)); scope.querySelectorAll('.pcard').forEach(p=>p.hidden = !(f.dataset.f==='all' || p.dataset.cat.split(' ').indexOf(f.dataset.f)>-1)); const any=[...scope.querySelectorAll('.pcard')].some(p=>!p.hidden); scope.querySelectorAll('.pempty').forEach(e=>e.hidden=any); blip(660); return; }
     const c=e.target.closest('[data-copy]'); if(c){ copyText(c.dataset.copy, scope); blip(990); return; }
     const l=e.target.closest('[data-lb]'); if(l){ openLightbox(l.dataset.lb, l.dataset.cap, l); return; }
   });
