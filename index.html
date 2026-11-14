@@ -135,8 +135,9 @@ a{color:inherit}
 .sheet-body{overflow-y:auto;overscroll-behavior:contain;padding:10px 34px 36px 30px;flex:1}
 .sheet-foot{text-align:center;font:700 10.5px/1 var(--body);letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);padding:12px 0 16px;display:flex;align-items:center;gap:16px;margin:0 30px}
 .sheet-foot::before,.sheet-foot::after{content:"";flex:1;height:1px;background:rgba(27,33,64,.18)}
-.sheet-next{display:flex;justify-content:center;padding:6px 30px 2px}
+.sheet-next{display:flex;justify-content:flex-end;padding:8px 30px 18px}
 .sheet-next[hidden]{display:none}
+#panel.no-foot .sheet-foot{display:none}
 
 /* content (shared by panel + classic) */
 .c h2{font:800 clamp(34px,3.6vw,50px)/1.02 var(--display);margin:8px 0 12px;letter-spacing:-.01em;position:relative;padding-bottom:16px}
@@ -486,8 +487,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .sheet-head{padding:16px 14px 4px 18px}
   .sheet-body{padding:8px 18px 28px}
   .sheet-foot{letter-spacing:.16em;margin:0 16px}
-  .sheet-next{padding:6px 18px 2px}
-  .sheet-next .btn-sun{width:100%;justify-content:center}
+  .sheet-next{padding:8px 18px 16px}
   .c .intro-grid{grid-template-columns:1fr}
   .c .portrait img{aspect-ratio:4/3;object-position:50% 25%}
 }
@@ -1594,7 +1594,7 @@ function openModule(id, fromHash=false){
   $('#panelNext').hidden = (id!=='about');
   $('#panelFoot').textContent = {about:'Still observing', work:'Ideas travel far', experiments:'Beyond the frame', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
-  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
+  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
   setTimeout(()=>{ const t=$('#panelTitle'); t&&t.setAttribute('tabindex','-1'); t&&t.focus({preventScroll:true}); }, 60);
   blip(880); updateEnter();
