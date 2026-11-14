@@ -415,6 +415,15 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .tale .cup img{border-radius:16px}
 .tale .tale-end{margin:10px 0 0!important;text-align:center;font:italic 17px/1.5 Georgia,serif;color:var(--ink-soft)!important}
 .tale .chap>div{max-width:760px}
+.tale .hero{max-width:860px;margin-top:20px}
+.tale .bio,.tale .tale-hl,.tale .vow{max-width:760px}
+.tale .bio{margin-top:26px}
+.tale .bio .lead{margin:0 0 18px!important;font:800 clamp(22px,3.4vw,32px)/1.25 var(--display);color:var(--ink)!important}
+.tale .bio p{margin:0 0 14px!important;font-size:clamp(15.5px,1.9vw,17px);line-height:1.75;color:var(--ink-soft)}
+.tale .tale-hl{margin:30px 0 0!important;font:800 clamp(22px,3.4vw,30px)/1.35 var(--display);color:var(--ink)!important}
+.tale .tale-hl span{background:linear-gradient(transparent 60%,rgba(167,125,255,.35) 0);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.tale .vow{margin-top:26px}
+.tale .vow-label{display:block;margin:0 0 10px;font:700 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:#6f46c9}
 @media (max-width:640px){.tale .chap{grid-template-columns:1fr}.tale .no{padding:0}.tale .cup{float:none;width:100%;margin:6px 0 16px}}
 @supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){
 .tale .chap{animation:taleRise linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
@@ -819,36 +828,21 @@ function armReel(scope){
   tiles.forEach(t=>io.observe(t));
 }
 function renderStory(){
-  const ch=(n,title,body)=>`<article class="chap"><span class="no">${n}</span><div><h4>${title}</h4>${body}</div></article>`;
   return `<section class="tale" aria-labelledby="taleT">
-  <p class="tale-eyebrow">In six small chapters</p>
+  <p class="tale-eyebrow">A little about me</p>
   <h3 id="taleT" class="tale-title">My story</h3>
-  <p class="tale-intro">A little about who I am, told the way I would tell it under a night sky.</p>
-  ${ch('01','A girl who walks a little slower',`
-    <p>I live in the 21st century, an age overflowing with noise, velocity and neon-bright possibility. I walk a little slower, breathe a little deeper, and notice the quiet <b>magic</b> pulsing in ordinary things.</p>
-    <figure class="hero">${img('storyHero','Illustration: a girl in a mask with very long dark hair sits on a throne of boxes marked with memories, a camera in her hands, with dogs, swords, anime and UFOs around her under a purple and gold sky')}
-    </figure>`)}
-  ${ch('02','Kindness is a discipline',`
-    <p>For me, happiness was never a coincidence. I believe in <b>kindness</b>, not because the world has earned it, but because you deserve to become the sort of person who chooses light even when the sky is heavy.</p>
-    <p>I want to be the reason someone still believes in goodness, the invisible nudge that makes a weary stranger smile on a difficult day.</p>`)}
-  ${ch('03','You can’t pour from an empty cup',`
-    <figure class="cup">${img('storyCup','Illustration: a hand with spiked bracelets pours from an empty cup, with the words “but you can’t pour from an empty cup”')}</figure>
-    <p>Somewhere along the way I learned a truth wrapped in tenderness: <b>you cannot pour stars into someone else’s sky if yours has gone dark.</b></p>
-    <p>So I tend to my own heart first. Filling it. Healing it. Honoring it. Only a full soul can spill love into the world without draining itself dry.</p>`)}
-  ${ch('04','What the Earth remembers',`
-    <p>I want the Earth to remember its <b>ancient wisdom</b>. I want people to look within themselves and discover who they really are.</p>
-    <p>The human body is capable of such amazing magic, and somewhere along the way we forgot it. I think remembering starts quietly, with looking inward.</p>`)}
-  ${ch('05','Earth is my current address.',`
-    <p>My mind, however, has questionable coordinates.</p>
-    <p>I have a tendency to go down rabbit holes and come back with questions about <b>aliens</b>, ancient civilisations, parallel universes and things that probably weren’t meant to be questioned.</p>
-    <p>I’m fascinated by the unexplained, the unconventional and everything that makes this universe feel a little less ordinary.</p>
-    <p>If you’re picking up this transmission, there’s a good chance we’re going to get along. My intergalactic friendship club is always accepting new life forms.</p>`)}
-  ${ch('06','The vow',`
+  <figure class="hero">${img('storyHero','Illustration: a girl in a mask with very long dark hair sits on a throne of boxes marked with memories, a camera in her hands, with dogs, swords, anime and UFOs around her under a purple and gold sky')}
+  </figure>
+  <div class="bio">
+    <p class="lead">Born on Earth. Not entirely convinced I belong here.</p>
+    <p>I find joy in creating, exploring, learning and connecting with the world around me. Fascinated by human nature, drawn to the unexplained and always looking for a little more magic in being alive.</p>
+    <p>I collect experiences, chase rabbit holes and find wonder in ordinary things. Somewhere between design, music, art, nature, ancient mysteries and questionable theories about aliens, I’m figuring out what it means to be human.</p>
+    <p>I believe in kindness, big hugs, little adventures and living a life worth remembering.</p>
+  </div>
+  <p class="tale-hl"><span>Everything I’m not has shaped who I’m becoming.</span></p>
+  <div class="vow"><span class="vow-label">One vow</span>
     <blockquote class="pull">When death finally finds me, may it find me brilliantly, wildly, unmistakably alive.</blockquote>
-    <p>Because in the end, after all the storms and softness, <b>everything is going to be alright.</b> Not because life is easy, but because I am learning to live it deeply.</p>
-    <p>I believe the future is a blank page, waiting for courage to touch the first line. So I choose to laugh loudly, love generously and hug people like presence itself is a blessing. I smile at strangers, dance with uncertainty, and refuse to shrink my joy.</p>
-    <p>Everything I’m not has shaped who I’m becoming.</p>`)}
-  <p class="tale-end">That’s my story so far.</p>
+  </div>
   </section>`;
 }
 function renderExperiments(h='h2'){
