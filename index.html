@@ -167,6 +167,8 @@ a{color:inherit}
 .filters button:hover{border-color:var(--ink)}
 .filters button[aria-pressed="true"]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.pempty{margin:6px 0 0;padding:26px 20px;border:1.5px dashed rgba(27,33,64,.22);border-radius:14px;text-align:center;font:600 15px/1.45 var(--body);color:var(--ink-soft)}
+.pempty[hidden]{display:none}
 .proj{background:#fff;border-radius:16px;overflow:hidden;border:1px solid rgba(27,33,64,.1);display:flex;flex-direction:column}
 .proj.wide{grid-column:1/-1}
 .proj .im{aspect-ratio:16/9;background:var(--ink);position:relative;overflow:hidden}
@@ -737,8 +739,9 @@ function projCard(p,i){
 function renderWork(h='h2'){
   return `<${h} ${h==='h2'?'id="panelTitle"':''}>Field expeditions</${h}>
   <p class="lead">Projects sorted by territory. Most entries link to the full case study on Behance.</p>
-  <div class="filters" role="group" aria-label="Filter projects by territory">${Object.entries(CATS).filter(([k])=>k==='all'||PROJECTS.some(p=>p.cat===k)).map(([k,v])=>`<button type="button" data-f="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('')}</div>
-  <div class="projects">${PROJECTS.map((p,i)=>projCard(p,i)).join('')}</div>`;
+  <div class="filters" role="group" aria-label="Filter projects by territory">${Object.entries(CATS).map(([k,v])=>`<button type="button" data-f="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('')}</div>
+  <div class="projects">${PROJECTS.map((p,i)=>projCard(p,i)).join('')}</div>
+  <p class="pempty" hidden>Nothing in this category just yet. New projects are on the way.</p>`;
 }
 /* ---- Off frame: raw clips collage (files live in the offframe/ folder; add new entries to this list) ---- */
 const OFFFRAME = [
@@ -859,7 +862,7 @@ $('#lbClose').onclick=closeLightbox; $('#lightbox').onclick=e=>{ if(e.target.id=
 function wire(scope){
   scope.addEventListener('click', e=>{
     const f=e.target.closest('[data-f]');
-    if(f){ scope.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed', b===f)); scope.querySelectorAll('.pcard').forEach(p=>p.hidden = !(f.dataset.f==='all' || p.dataset.cat===f.dataset.f)); blip(660); return; }
+    if(f){ scope.querySelectorAll('[data-f]').forEach(b=>b.setAttribute('aria-pressed', b===f)); scope.querySelectorAll('.pcard').forEach(p=>p.hidden = !(f.dataset.f==='all' || p.dataset.cat===f.dataset.f)); const any=[...scope.querySelectorAll('.pcard')].some(p=>!p.hidden); scope.querySelectorAll('.pempty').forEach(e=>e.hidden=any); blip(660); return; }
     const c=e.target.closest('[data-copy]'); if(c){ copyText(c.dataset.copy, scope); blip(990); return; }
     const l=e.target.closest('[data-lb]'); if(l){ openLightbox(l.dataset.lb, l.dataset.cap, l); return; }
   });
