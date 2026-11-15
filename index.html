@@ -1305,7 +1305,7 @@ function buildPad(){
    Bevelled low-poly forms, warm lamp glow, soft contact shadows. Palette: midnight navy, muted lavender, warm cream, golden yellow. */
 function buildSiya(pad, o={}){
   const withProps=o.props!==false, withBubble=o.bubble!==false, ph=o.phase||0; // rooms get a lighter version: just Siya, no dog/books/extra lights
-  let tail,dh,ears=[],lamp,lg,sparks=[],bub;
+  let tail,dh,ears=[],lamp,lg,sparks=[],bub,d,jumpT=-1,lastJ=0;
   // bevelled rounded box: faceted low-poly softness instead of crude cubes
   const rbox=(w,h,d,r,m,parent,x=0,y=0,z=0,sh)=>{ r=Math.min(r,w/2-.001,h/2-.001,d/2-.001);
     const gg=geo(`rb${w},${h},${d},${r}`,()=>{ const s=new THREE.Shape(), a=w/2-r, b=h/2-r; s.moveTo(-a,-b); s.lineTo(a,-b); s.lineTo(a,b); s.lineTo(-a,b); s.closePath();
@@ -1408,7 +1408,7 @@ function buildSiya(pad, o={}){
 
   if(withProps){
   // ---------- her dog (screen left) ----------
-  const d=new THREE.Group(); d.position.set(-.5,0,.2); d.rotation.y=.5; G.add(d);
+  d=new THREE.Group(); d.position.set(-.5,0,.2); d.rotation.y=.5; G.add(d);
   const dc=mat(0xf6ead9,{roughness:.8}), dt=mat(0xd9a066,{roughness:.8}), dtd=mat(0xc58a50,{roughness:.8});
   rbox(.21,.15,.22,.05,dc,d,0,.075,-.02); rbox(.11,.09,.12,.03,dt,d,.07,.125,-.04);
   rot(rbox(.15,.25,.14,.05,dc,d,0,.2,.05),-.1,0,0);
@@ -1419,9 +1419,9 @@ function buildSiya(pad, o={}){
   rbox(.105,.075,.085,.032,dc,dh,0,-.05,.12); rbox(.045,.032,.03,.012,ink,dh,0,-.012,.158,false); rbox(.036,.05,.012,.006,mat(0xe9788b,{roughness:.6}),dh,0,-.1,.15,false);
   [-1,1].forEach(s=>torus(.021,.006,ink,dh,s*.058,.025,.092,Math.PI,8));
   const col=torus(.085,.014,mat(0x1d1b22,{roughness:.7}),d,0,.305,.07,null,14); col.rotation.x=Math.PI/2; rot(rbox(.03,.03,.01,.008,gold,d,0,.268,.15,false),0,0,Math.PI/4);
-  // Caesar: invisible hover/tap area so the tooltip works on the dog
+  // Ceaser: invisible hover/tap area so the tooltip works on the dog
   const dogHit=new THREE.Mesh(geo('doghit',()=>new THREE.SphereGeometry(.3,8,6)),new THREE.MeshBasicMaterial({visible:false})); dogHit.position.set(0,.25,.05);
-  dogHit.userData={pet:true,node:d,text:"I’m Caesar. I am 12 years young. My sister loves me."}; d.add(dogHit); pickables.push(dogHit);
+  dogHit.userData={pet:true,node:d,text:"I’m Ceaser. I am 12 years young. My sister loves me.",bounce:()=>{ if(!reduceMotion && jumpT<0) jumpT=0; }}; d.add(dogHit); pickables.push(dogHit);
   tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
 
   // ---------- books + UFO lamp + plant (screen right) ----------
@@ -1460,6 +1460,9 @@ function buildSiya(pad, o={}){
     else { wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
       head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); }
     g.position.y=.16+k*.008*Math.sin(t*2.4);
+    if(withProps){ const dtj=Math.min(.1,Math.max(0,t0-lastJ)); lastJ=t0;
+      if(jumpT>=0){ jumpT+=dtj; const p=jumpT/.62; if(p>=1){ jumpT=-1; d.position.y=0; d.scale.set(1,1,1); }
+        else { const a=Math.sin(Math.PI*p); d.position.y=a*.26; d.scale.set(1-.05*a,1+.1*a,1-.05*a); tail.rotation.y=.5+.5*Math.sin(t*30); } } }
     if(withProps){ tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
       lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
       sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); }); }
@@ -1704,6 +1707,7 @@ const tipEl=document.createElement('div'); tipEl.className='tip'; tipEl.hidden=t
 let tipPos={x:0,y:0};
 function hoverAt(x,y){ const u=pickAt(x,y); tipPos={x,y}; setHover(u); }
 function setHover(u){
+  const prevKey=hovered;
   const key = u? (u.module||u.visitor||(u.game&&'game')||(u.pet&&'pet')) : null;
   if(hovered && hovered!==key && typeof hovered==='string' && modules[hovered]){ modules[hovered].light.intensity=1.0; }
   hovered=key; canvas.classList.toggle('hover', !!key);
@@ -1713,6 +1717,7 @@ function setHover(u){
   else if(u&&u.pet){ tipEl.textContent=u.text; tipEl.hidden=false; }
   else tipEl.hidden=true;
   tipEl.classList.toggle('long', !!(u&&u.pet));
+  if(u&&u.pet&&prevKey!=='pet'&&u.bounce) u.bounce(); // Ceaser hops when the pointer lands on him
   if(!tipEl.hidden) tipEl.style.transform=`translate(${tipPos.x+16}px,${tipPos.y+14}px)`;
 }
 
@@ -1735,7 +1740,7 @@ function updateBubbles(){
     b.el.style.transform=`translate(${Math.round(x)}px,${Math.round(y-b.el.offsetHeight)}px)`;
   }
 }
-function petSay(u){ const p=new THREE.Vector3(); u.node.getWorldPosition(p); say({g:{position:p},h:.6}, 'Woof!', u.text, 5); } // tap/click on Caesar (also covers touch screens)
+function petSay(u){ if(u.bounce) u.bounce(); const p=new THREE.Vector3(); u.node.getWorldPosition(p); say({g:{position:p},h:.6}, 'Woof!', u.text, 5); } // tap/click on Ceaser (also covers touch screens)
 function greet(v){
   const typeName = {alien:'Alien',human:'Human',elf:'Elf',robot:'Robot',blob:'Blob',floater:'Floater'}[v.type];
   const az=Math.atan2(camera.position.x-v.x, camera.position.z-v.z); v.talkTo=az; v.wait=Math.max(v.wait,4.5); v.waving=true;
