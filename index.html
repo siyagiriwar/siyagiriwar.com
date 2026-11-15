@@ -1056,7 +1056,7 @@ const PROJECTS = [
   {cat:'exp', also:['doc'], page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
   {cat:'exp', page:'sher', year:'2025', title:'Sher-o-Shakkar: Akbar and Birbal’s adventure', img:'sherGif', desc:'An Akbar and Birbal folktale retold as a Phad scroll painting: character illustration, framed scenes, a long painted scroll and an illustrated storybook.', links:[['View on Behance','https://www.behance.net/gallery/222964783/Sher-o-shakkar-Akbar-and-Birbals-adventure']]},
   {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'},
-  {cat:'doc', also:['vis'], page:'aicommercials', tagText:'3 films', linkText:'Watch the films', year:'', title:'AI Commercials: three brand films', trio:['assets/ai/gucci-tile.jpg','assets/ai/gully-tile.jpg','assets/ai/mogu-tile.jpg'], desc:'Three AI commercial concepts for Gucci Bloom, Gully Labs and Mogu Mogu: concept, art direction, storyboards and the final films.'}
+  {cat:'doc', also:['vis'], page:'aicommercials', tagText:'3 films', linkText:'Watch the films', year:'', title:'AI Commercials: three brand films', trio:['assets/ai/mogu-tile.jpg','assets/ai/gucci-tile.jpg','assets/ai/gully-tile.jpg'], desc:'Three AI commercial concepts for Gucci Bloom, Gully Labs and Mogu Mogu: concept, art direction, storyboards and the final films.'}
 ];
 PROJECTS.push({"cat": "vis", "page": "visual", "year": "", "title": "Visual design compilation", "img": "visThumb", "desc": "Ads, social campaigns, emailers, watchfaces, branding, print and illustration: a visual design compilation led by the Layers smartwatch ads, with travel, course, brand identity and print work."}); /* project 8: Visual design compilation */
 IMG.visThumb={"src":"assets/visual/thumb-anim.webp","w":800,"h":460};
@@ -2520,7 +2520,7 @@ function renderCase(c){
 }
 /* ---------- AI Commercials: a mini-project with three films, each on its own page ---------- */
 const AI_CONTRIB=['Concept Development','Art Direction','Storyboarding','AI Video Generation'];
-const AI_FILMS=['gucci-bloom','gully-labs','mogu-mogu'];
+const AI_FILMS=['mogu-mogu','gucci-bloom','gully-labs'];
 const aiArrow=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
 const aiPlay=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>`;
 const aiBlossom=`<svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><g transform="translate(15 15)"><ellipse cx="0" cy="-8" rx="4" ry="7"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(288)"/><circle r="2" fill="currentColor"/></g></svg>`;
@@ -2529,17 +2529,17 @@ const aiMelon=`<svg viewBox="0 0 110 66" aria-hidden="true"><path d="M6 6a49 49 
 const aiTC=n=>{ const t=Math.floor(n/30); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
 
 CASES['aicommercials']={hub:true, title:'AI Commercials'};
-CASES['gucci-bloom']={film:'gucci', n:1, parent:'aicommercials', next:'gully-labs', title:'Gucci Bloom: a fragrance that blooms', short:'Gucci Bloom', kicker:'Gucci Bloom Parfum', sub:'A fragrance that blooms', tag:'An ode to the beauty of nature, bottled.',
+CASES['gucci-bloom']={film:'gucci', n:2, parent:'aicommercials', next:'gully-labs', title:'Gucci Bloom: a fragrance that blooms', short:'Gucci Bloom', kicker:'Gucci Bloom Parfum', sub:'A fragrance that blooms', tag:'An ode to the beauty of nature, bottled.',
   overview:'A cinematic exploration of fragrance through the language of nature. Translating the delicate, feminine world of Gucci Bloom into an immersive visual experience through florals, textures and atmospheric storytelling.',
   direction:'Luxury · Botanical · Cinematic', story:'From nature-inspired imagery to the final product reveal.',
   video:'assets/ai/gucci-bloom.mp4', poster:'assets/ai/gucci-poster.jpg', w:1280, h:720,
   frames:[['assets/ai/gucci-sb1.webp',0,'A woman half hidden by white jasmine blossoms in a garden'],['assets/ai/gucci-sb2.webp',97,'A Gucci Bloom bottle resting on a sunlit stone ledge'],['assets/ai/gucci-sb3.webp',195,'A hand reaching toward white flowers'],['assets/ai/gucci-sb4.webp',292,'The black Gucci Bloom bottle among white blossoms'],['assets/ai/gucci-sb5.webp',390,'The Gucci Bloom bottle with the end line: a fragrance that blooms with you']]};
-CASES['gully-labs']={film:'gully', n:2, parent:'aicommercials', next:'mogu-mogu', title:'Gully Labs: Ghungroo, tradition on the move', short:'Ghungroo', kicker:'Gully Labs', sub:'Tradition on the move', tag:'Where heritage finds its rhythm.',
+CASES['gully-labs']={film:'gully', n:3, parent:'aicommercials', next:'mogu-mogu', title:'Gully Labs: Ghungroo, tradition on the move', short:'Ghungroo', kicker:'Gully Labs', sub:'Tradition on the move', tag:'Where heritage finds its rhythm.',
   overview:'A fashion-led product film exploring the meeting point of Indian heritage and contemporary sneaker culture. Celebrating traditional influences through bold compositions, intricate details and modern visual storytelling.',
   direction:'Cultural · Editorial · Contemporary', story:'A journey through heritage, craftsmanship and contemporary expression.',
   video:'assets/ai/gully-labs.mp4', poster:'assets/ai/gully-poster.jpg', w:720, h:1280,
   frames:[['assets/ai/gully-sb1.webp',0,'Hands opening a gullylab shoebox'],['assets/ai/gully-sb2.webp',81,'A brown sneaker decorated with brass ghungroo bells'],['assets/ai/gully-sb3.webp',163,'Close-up of the sneaker with its beaded chain and bells'],['assets/ai/gully-sb4.webp',244,'Feet in sneakers walking past a maroon saree with a gold border'],['assets/ai/gully-sb5.webp',326,'End card: gullylab Ghungru, tradition on the move, with the sneakers']]};
-CASES['mogu-mogu']={film:'mogu', n:3, parent:'aicommercials', next:'gucci-bloom', title:'Mogu Mogu: sip. chew. repeat.', short:'Mogu Mogu', kicker:'Mogu Mogu Watermelon', stickers:['Sip.','Chew.','Repeat.'], tag:'A little sip. A lot of fun.',
+CASES['mogu-mogu']={film:'mogu', n:1, parent:'aicommercials', next:'gucci-bloom', title:'Mogu Mogu: sip. chew. repeat.', short:'Mogu Mogu', kicker:'Mogu Mogu Watermelon', stickers:['Sip.','Chew.','Repeat.'], tag:'A little sip. A lot of fun.',
   overview:'A playful commercial concept bringing the refreshing world of Mogu Mogu Watermelon to life. Exploring vibrant colours, juicy textures and energetic compositions to capture the fun of its distinctive sip-and-chew experience.',
   direction:'Playful · Vibrant · Experimental', story:'A burst of colour, flavour and playful product storytelling.',
   video:'assets/ai/mogu-mogu.mp4', poster:'assets/ai/mogu-poster.jpg', w:1280, h:720,
@@ -2571,7 +2571,7 @@ function renderFilm(c){
 function renderHub(c){
   const tiles=AI_FILMS.map((id,i)=>{ const f=CASES[id];
     return `<a class="hub-tile t-${f.film}" href="#${id}" data-rv style="--d:${(i*.1).toFixed(1)}s"><div class="ph-img"><img src="${f.poster}" alt="" loading="lazy" decoding="async"><span class="play">${aiPlay}</span></div><div class="tb"><small>Film 0${i+1}</small><strong>${esc(f.short)}</strong><span class="tl">${esc(f.tag)}</span></div></a>`; }).join('');
-  return `<div class="hub"><div class="film-bar"><button class="back" type="button" data-case-back>${backArrow}Back to work</button><span class="film-count">Project 07</span></div><div class="film-wrap"><header class="hub-head"><span class="case-kicker">Project 07 · Mini-series</span><h1 id="caseTitle" tabindex="-1">AI Commercials</h1><p class="tagline">Three brand films, three visual worlds.</p><dl class="case-meta"><div><dt>Films</dt><dd>Gucci Bloom · Gully Labs · Mogu Mogu</dd></div><div><dt>My contribution</dt><dd>${AI_CONTRIB.join(' · ')}</dd></div></dl></header><div class="hub-tiles">${tiles}</div></div></div>`;
+  return `<div class="hub"><div class="film-bar"><button class="back" type="button" data-case-back>${backArrow}Back to work</button><span class="film-count">Project 07</span></div><div class="film-wrap"><header class="hub-head"><span class="case-kicker">Project 07 · Mini-series</span><h1 id="caseTitle" tabindex="-1">AI Commercials</h1><p class="tagline">Three brand films, three visual worlds.</p><dl class="case-meta"><div><dt>Films</dt><dd>Mogu Mogu · Gucci Bloom · Gully Labs</dd></div><div><dt>My contribution</dt><dd>${AI_CONTRIB.join(' · ')}</dd></div></dl></header><div class="hub-tiles">${tiles}</div></div></div>`;
 }
 /* fade each block in as the page is scrolled */
 function initReveal(){
