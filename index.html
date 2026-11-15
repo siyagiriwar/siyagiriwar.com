@@ -112,6 +112,7 @@ a{color:inherit}
 .bubble{position:absolute;left:0;top:0;max-width:220px;padding:9px 13px;border-radius:14px 14px 14px 4px;background:var(--cream);color:var(--ink);font:600 13px/1.35 var(--body);box-shadow:0 8px 24px rgba(0,0,0,.35);transform-origin:0 100%;transition:opacity .25s}
 .bubble b{display:block;font:700 10.5px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
 .tip{position:absolute;left:0;top:0;padding:8px 14px;border-radius:999px;background:var(--sun);color:var(--ink);font:700 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.tip.long{white-space:normal;width:max-content;max-width:230px;text-transform:none;letter-spacing:.01em;line-height:1.4;font-size:13px;border-radius:16px;padding:10px 15px}
 
 /* ---------- hatch panel ---------- */
 .hatch{position:fixed;z-index:8;top:calc(96px + var(--sa-t));bottom:calc(112px + var(--sa-b));right:max(3vw,calc(20px + var(--sa-r)));width:min(620px,47vw);display:flex;padding:14px 14px 14px 0;border-radius:30px;background:linear-gradient(160deg,#dcdde4 0%,var(--metal) 40%,var(--metal-2) 100%);box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 2px 0 rgba(255,255,255,.7), inset 0 -3px 0 rgba(0,0,0,.15);animation:hatch .55s cubic-bezier(.2,.8,.2,1)}
@@ -1418,6 +1419,9 @@ function buildSiya(pad, o={}){
   rbox(.105,.075,.085,.032,dc,dh,0,-.05,.12); rbox(.045,.032,.03,.012,ink,dh,0,-.012,.158,false); rbox(.036,.05,.012,.006,mat(0xe9788b,{roughness:.6}),dh,0,-.1,.15,false);
   [-1,1].forEach(s=>torus(.021,.006,ink,dh,s*.058,.025,.092,Math.PI,8));
   const col=torus(.085,.014,mat(0x1d1b22,{roughness:.7}),d,0,.305,.07,null,14); col.rotation.x=Math.PI/2; rot(rbox(.03,.03,.01,.008,gold,d,0,.268,.15,false),0,0,Math.PI/4);
+  // Caesar: invisible hover/tap area so the tooltip works on the dog
+  const dogHit=new THREE.Mesh(geo('doghit',()=>new THREE.SphereGeometry(.3,8,6)),new THREE.MeshBasicMaterial({visible:false})); dogHit.position.set(0,.25,.05);
+  dogHit.userData={pet:true,node:d,text:"I’m Caesar. I am 12 years young. My sister loves me."}; d.add(dogHit); pickables.push(dogHit);
   tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
 
   // ---------- books + UFO lamp + plant (screen right) ----------
@@ -1691,7 +1695,7 @@ function bindPointer(){
       lastInteract=performance.now();
     } else hoverAt(e.clientX,e.clientY);
   });
-  const up=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch0=0; canvas.classList.remove('drag'); if(down && !down.moved && ptrs.size===0){ const u=pickAt(e.clientX,e.clientY); if(u&&u.module) openModule(u.module); else if(u&&u.game) openGame(); else if(u&&u.visitor) greet(u.visitor); } if(ptrs.size===0){ down=null; userDragging=false; } };
+  const up=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch0=0; canvas.classList.remove('drag'); if(down && !down.moved && ptrs.size===0){ const u=pickAt(e.clientX,e.clientY); if(u&&u.module) openModule(u.module); else if(u&&u.game) openGame(); else if(u&&u.visitor) greet(u.visitor); else if(u&&u.pet) petSay(u); } if(ptrs.size===0){ down=null; userDragging=false; } };
   canvas.addEventListener('pointerup',up); canvas.addEventListener('pointercancel',up);
   canvas.addEventListener('wheel',e=>{ e.preventDefault(); goal.dist=THREE.MathUtils.clamp(goal.dist*Math.exp(e.deltaY*.0012),8,110); lastInteract=performance.now(); },{passive:false});
   canvas.addEventListener('pointerleave',()=>setHover(null));
@@ -1700,13 +1704,15 @@ const tipEl=document.createElement('div'); tipEl.className='tip'; tipEl.hidden=t
 let tipPos={x:0,y:0};
 function hoverAt(x,y){ const u=pickAt(x,y); tipPos={x,y}; setHover(u); }
 function setHover(u){
-  const key = u? (u.module||u.visitor||(u.game&&'game')) : null;
+  const key = u? (u.module||u.visitor||(u.game&&'game')||(u.pet&&'pet')) : null;
   if(hovered && hovered!==key && typeof hovered==='string' && modules[hovered]){ modules[hovered].light.intensity=1.0; }
   hovered=key; canvas.classList.toggle('hover', !!key);
   if(u&&u.module){ modules[u.module].light.intensity=1.8; tipEl.textContent='Open '+MODULE_BY_ID[u.module].title; tipEl.hidden=false; }
   else if(u&&u.game){ tipEl.textContent='Play rocket game ▸'; tipEl.hidden=false; }
   else if(u&&u.visitor){ tipEl.textContent=u.visitor.name; tipEl.hidden=false; }
+  else if(u&&u.pet){ tipEl.textContent=u.text; tipEl.hidden=false; }
   else tipEl.hidden=true;
+  tipEl.classList.toggle('long', !!(u&&u.pet));
   if(!tipEl.hidden) tipEl.style.transform=`translate(${tipPos.x+16}px,${tipPos.y+14}px)`;
 }
 
@@ -1729,6 +1735,7 @@ function updateBubbles(){
     b.el.style.transform=`translate(${Math.round(x)}px,${Math.round(y-b.el.offsetHeight)}px)`;
   }
 }
+function petSay(u){ const p=new THREE.Vector3(); u.node.getWorldPosition(p); say({g:{position:p},h:.6}, 'Woof!', u.text, 5); } // tap/click on Caesar (also covers touch screens)
 function greet(v){
   const typeName = {alien:'Alien',human:'Human',elf:'Elf',robot:'Robot',blob:'Blob',floater:'Floater'}[v.type];
   const az=Math.atan2(camera.position.x-v.x, camera.position.z-v.z); v.talkTo=az; v.wait=Math.max(v.wait,4.5); v.waving=true;
