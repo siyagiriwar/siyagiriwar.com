@@ -410,6 +410,210 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 @media (max-width:760px){.shoot{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 14px}}
 
 
+/* ---------- AI Commercials: hub and three film pages ---------- */
+@font-face{font-family:"Cormorant Garamond";font-weight:500;font-style:normal;font-display:swap;src:url(assets/fonts/cormorant-garamond-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:500;font-style:italic;font-display:swap;src:url(assets/fonts/cormorant-garamond-latin-500-italic.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:600;font-style:normal;font-display:swap;src:url(assets/fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Serif Display";font-weight:400;font-style:normal;font-display:swap;src:url(assets/fonts/dm-serif-display-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Serif Display";font-weight:400;font-style:italic;font-display:swap;src:url(assets/fonts/dm-serif-display-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Fredoka";font-weight:500;font-style:normal;font-display:swap;src:url(assets/fonts/fredoka-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Fredoka";font-weight:700;font-style:normal;font-display:swap;src:url(assets/fonts/fredoka-latin-700-normal.woff2) format("woff2")}
+
+.trio{display:flex;gap:2px;width:100%;height:100%}
+.pframe .media .trio img{flex:1 1 0;width:0;min-width:0}
+
+/* shared */
+.film,.hub{min-height:100vh;min-height:100dvh;animation:filmIn .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes filmIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.film-bar{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(12px + var(--sa-t)) clamp(16px,4vw,48px) 12px}
+.film-bar .back{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;background:transparent;color:inherit;border:1.5px solid rgba(255,255,255,.3);border-radius:999px;padding:10px 18px;font:700 14px/1 var(--body);cursor:pointer}
+.film-bar .back svg{width:18px;height:18px;flex:none}
+.film-count{font:700 11px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;opacity:.75}
+.film-wrap{max-width:1200px;margin:0 auto;padding:0 clamp(18px,5vw,64px)}
+.film-head{padding-top:clamp(36px,6vw,80px)}
+.fvid video{display:block;width:100%;height:auto;background:#000}
+.film-info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,40px);padding:clamp(34px,5vw,64px) 0 0}
+.film-info h3{margin:0 0 10px;font:700 11px/1.2 var(--body);letter-spacing:.26em;text-transform:uppercase}
+.film-info p,.film-info li{margin:0;font-size:16px;line-height:1.6}
+.film-info ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.film-sb{padding:clamp(40px,6vw,76px) 0 0}
+.film-sb h2{margin:0;font-size:clamp(24px,2.6vw,34px);line-height:1.1}
+.film-sb .sbl{margin:6px 0 22px;max-width:36em}
+.sb-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.sb-strip figure{margin:0}
+.sb-strip img{display:block;width:100%;height:auto}
+.sb-strip figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding-top:8px;font-size:13px}
+.film-next{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:clamp(44px,6vw,80px);padding:28px 0 clamp(60px,8vw,100px);text-decoration:none;color:inherit}
+.film-next small{display:block;font:700 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;opacity:.7;margin-bottom:8px}
+.film-next strong{font-size:clamp(28px,4vw,52px);line-height:1}
+.film-next .arr{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.film-next:hover .arr{transform:translateX(8px)}
+.film-next svg{width:22px;height:22px}
+[data-rv]{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+[data-rv].in{opacity:1;transform:none}
+@media (max-width:900px){
+  .film-info{grid-template-columns:1fr;gap:22px}
+  .sb-strip{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:min(74vw,340px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;margin:0 calc(-1 * clamp(18px,5vw,64px));padding-left:clamp(18px,5vw,64px);padding-right:clamp(18px,5vw,64px);scroll-padding-left:clamp(18px,5vw,64px)}
+  .sb-strip>li{scroll-snap-align:start}
+}
+@media (prefers-reduced-motion:reduce){ .film,.hub{animation:none} [data-rv]{opacity:1;transform:none;transition:none} }
+
+/* GUCCI BLOOM: botanical and luxurious */
+.f-gucci{--gold:#c9ae74;--ivory:#f2ead9;--dim:#a8b2a0;background:radial-gradient(120% 70% at 50% -8%,#1b3523 0%,#0d1912 52%,#070d09 100%);color:var(--ivory);font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif}
+.f-gucci .film-bar{background:rgba(8,16,11,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,174,116,.28)}
+.f-gucci .back{color:var(--ivory);border-color:rgba(201,174,116,.5)}
+.f-gucci .film-head{text-align:center;position:relative;overflow-x:clip}
+@media (max-width:600px){.f-gucci .sprig{width:74px;opacity:.32}}
+.f-gucci .fk{font:600 11px/1 var(--body);letter-spacing:.46em;text-transform:uppercase;color:var(--gold)}
+.f-gucci h1{font:500 clamp(56px,10vw,138px)/.92 "Cormorant Garamond",Georgia,serif;letter-spacing:.015em;margin:20px 0 8px;color:var(--ivory)}
+.f-gucci .fsub{font:italic 500 clamp(22px,2.8vw,36px)/1.2 "Cormorant Garamond",Georgia,serif;color:var(--gold);margin:0}
+.f-gucci .ftag{font:italic 500 clamp(18px,1.9vw,25px)/1.45 "Cormorant Garamond",Georgia,serif;color:var(--dim);margin:14px 0 0}
+.f-gucci .sprig{position:absolute;top:clamp(20px,4vw,56px);width:clamp(90px,15vw,210px);color:var(--gold);opacity:.5;pointer-events:none;animation:sway 9s ease-in-out infinite}
+.f-gucci .sprig.l{left:0;transform-origin:20% 100%}
+.f-gucci .sprig.r{right:0;transform:scaleX(-1);transform-origin:80% 100%;animation-name:swayR}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes swayR{0%,100%{transform:scaleX(-1) rotate(-2deg)}50%{transform:scaleX(-1) rotate(2deg)}}
+.f-gucci .fdiv{display:flex;align-items:center;gap:16px;color:var(--gold);margin:clamp(34px,5vw,60px) 0 clamp(26px,4vw,44px)}
+.f-gucci .fdiv::before,.f-gucci .fdiv::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:.6}
+.f-gucci .fdiv svg{width:30px;height:30px}
+.f-gucci .fvid{position:relative;padding:10px;border:1px solid rgba(201,174,116,.55);box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.f-gucci .fvid::before{content:"";position:absolute;inset:-10px;border:1px solid rgba(201,174,116,.2);pointer-events:none}
+.f-gucci .film-info h3{color:var(--gold)}
+.f-gucci .film-info p,.f-gucci .film-info li{font-size:clamp(19px,1.6vw,22px);line-height:1.5;color:var(--ivory)}
+.f-gucci .film-info li{padding-left:18px;position:relative}
+.f-gucci .film-info li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--gold)}
+.f-gucci .film-sb h2{font:500 clamp(30px,3.4vw,46px)/1.1 "Cormorant Garamond",Georgia,serif;color:var(--ivory)}
+.f-gucci .film-sb .sbl{font:italic 500 21px/1.45 "Cormorant Garamond",Georgia,serif;color:var(--dim)}
+.f-gucci .sb-strip img{border:1px solid rgba(201,174,116,.5);padding:4px;background:#0a140e;transition:transform .7s cubic-bezier(.2,.7,.2,1),border-color .4s}
+.f-gucci .sb-strip figure:hover img{transform:translateY(-6px);border-color:var(--gold)}
+.f-gucci .sb-strip figcaption{font:italic 500 19px/1 "Cormorant Garamond",Georgia,serif;color:var(--gold)}
+.f-gucci .sb-strip figcaption span{font:600 11px/1 var(--body);font-style:normal;letter-spacing:.2em;color:var(--dim)}
+.f-gucci .film-next{border-top:1px solid rgba(201,174,116,.3)}
+.f-gucci .film-next strong{font-weight:500;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic}
+.f-gucci .film-next .arr{border:1px solid var(--gold);color:var(--gold)}
+.f-gucci [data-rv]{transition-duration:1.3s}
+
+/* GULLY LABS: editorial and heritage */
+.f-gully{--saff:#e5a23a;--cream:#f3e7d0;--maroon:#5a1620;--terra:#c8603a;background:#220e0c;color:var(--cream)}
+.f-gully .film-bar{background:rgba(34,14,12,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:3px double var(--saff)}
+.f-gully .back{color:var(--cream);border-color:rgba(229,162,58,.6)}
+.f-gully .zari{height:16px;background:repeating-linear-gradient(90deg,var(--saff) 0 9px,transparent 9px 14px) 0 0/auto 6px repeat-x,linear-gradient(var(--saff),var(--saff)) 0 12px/100% 2px no-repeat;opacity:.9}
+.f-gully .film-top{display:grid;grid-template-columns:minmax(240px,400px) minmax(0,1fr);grid-template-areas:"main head" "main info";column-gap:clamp(28px,5vw,72px);align-items:start;padding-top:clamp(28px,4vw,56px)}
+.f-gully .film-head{grid-area:head;padding-top:6px}
+.f-gully .film-main{grid-area:main}
+.f-gully .film-info{grid-area:info;grid-template-columns:1fr;gap:20px;padding-top:28px}
+.f-gully .fk{font:700 12px/1 var(--body);letter-spacing:.36em;text-transform:uppercase;color:var(--saff)}
+.f-gully h1{font:400 clamp(48px,8vw,112px)/.95 "DM Serif Display",Georgia,serif;letter-spacing:.03em;text-transform:uppercase;margin:16px 0 10px;color:var(--cream)}
+.f-gully .fsub{font:italic 400 clamp(24px,3vw,40px)/1.15 "DM Serif Display",Georgia,serif;color:var(--saff);margin:0}
+.f-gully .ftag{font:600 clamp(16px,1.6vw,20px)/1.5 var(--body);color:var(--cream);opacity:.88;margin:14px 0 0}
+.f-gully .bells{height:24px;background:radial-gradient(circle at 50% 9px,var(--saff) 0 5px,transparent 6px) 0 0/22px 24px repeat-x}
+.f-gully .fvid{position:relative;border:2px dashed var(--saff);padding:9px;border-radius:6px;background:var(--maroon);box-shadow:14px 14px 0 rgba(0,0,0,.28)}
+.f-gully .fvid video{border-radius:2px;max-height:78vh;margin:0 auto;aspect-ratio:9/16;object-fit:cover}
+.f-gully .film-info h3{color:var(--saff);display:inline-block;border-bottom:2px solid var(--terra);padding-bottom:6px}
+.f-gully .film-info p,.f-gully .film-info li{color:var(--cream);opacity:.92}
+.f-gully .film-info li::before{content:"✦  ";color:var(--saff);font-size:11px}
+.f-gully .film-sb h2{font:400 clamp(30px,3.4vw,46px)/1.1 "DM Serif Display",Georgia,serif;color:var(--cream)}
+.f-gully .film-sb .sbl{font:italic 400 20px/1.4 "DM Serif Display",Georgia,serif;color:var(--saff)}
+.f-gully .sb-strip>li{background:var(--maroon);border-radius:4px 4px 6px 6px;padding:0 8px 10px;border-top:5px solid var(--saff);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.f-gully .sb-strip>li:hover{transform:translateY(-8px) rotate(-.6deg)}
+.f-gully .sb-strip img{border-radius:2px}
+.f-gully .sb-strip figcaption{font:700 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--saff);padding-top:10px}
+.f-gully .sb-strip figcaption span{color:var(--cream);opacity:.7}
+.f-gully .film-next{border-top:3px double var(--saff)}
+.f-gully .film-next strong{font:400 clamp(30px,4vw,54px)/1 "DM Serif Display",Georgia,serif;text-transform:uppercase;letter-spacing:.03em}
+.f-gully .film-next .arr{background:var(--saff);color:#220e0c}
+.f-gully [data-rv]{transform:translateX(-34px)}
+.f-gully [data-rv].in{transform:none}
+@media (max-width:900px){
+  .f-gully .film-top{grid-template-columns:1fr;grid-template-areas:"head" "main" "info"}
+  .f-gully .fvid{max-width:340px;margin:22px auto 0}
+}
+@media (prefers-reduced-motion:reduce){ .f-gully [data-rv]{transform:none} }
+
+/* MOGU MOGU: playful and vibrant */
+.f-mogu{--yel:#ffe45c;--pink:#ff5c7a;--grn:#1f9d55;--ink:#23160f;background:radial-gradient(circle at 10% 6%,#fff8c9 0,transparent 42%),radial-gradient(circle at 92% 18%,#ffc2d1 0,transparent 36%),radial-gradient(circle at 70% 92%,#ffd9a8 0,transparent 34%),#ffe45c;color:var(--ink);font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif}
+.f-mogu .film-bar{background:rgba(255,228,92,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:3px solid var(--ink)}
+.f-mogu .back{color:var(--ink);border:2.5px solid var(--ink);background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.f-mogu .film-head{text-align:center;position:relative}
+.f-mogu .fk{display:inline-block;font:700 13px/1 "Fredoka",sans-serif;letter-spacing:.2em;text-transform:uppercase;background:var(--ink);color:var(--yel);padding:9px 16px;border-radius:999px;transform:rotate(-2deg)}
+.f-mogu h1{font:700 clamp(58px,11vw,150px)/.92 "Fredoka","Trebuchet MS",sans-serif;margin:18px 0 6px;color:var(--ink);text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(31,157,85,.0);transform:rotate(-1.5deg);display:inline-block}
+.f-mogu .stickers{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:12px 0 0}
+.f-mogu .stk{font:700 clamp(20px,2.4vw,30px)/1 "Fredoka",sans-serif;padding:10px 18px;border:3px solid var(--ink);border-radius:999px;box-shadow:4px 4px 0 var(--ink);animation:bob 3.2s ease-in-out infinite}
+.f-mogu .stk:nth-child(1){background:#fff;transform:rotate(-3deg)}
+.f-mogu .stk:nth-child(2){background:var(--pink);color:#fff;transform:rotate(2deg);animation-delay:-.8s}
+.f-mogu .stk:nth-child(3){background:var(--grn);color:#fff;transform:rotate(-1.5deg);animation-delay:-1.6s}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.f-mogu .ftag{font:500 clamp(18px,2vw,26px)/1.4 "Fredoka",sans-serif;margin:18px 0 0}
+.f-mogu .melon{position:absolute;width:clamp(70px,11vw,150px);pointer-events:none;animation:wob 4s ease-in-out infinite}
+.f-mogu .melon.a{left:2%;top:clamp(24px,5vw,70px);transform:rotate(-18deg)}
+.f-mogu .melon.b{right:2%;top:clamp(110px,16vw,230px);transform:rotate(14deg);animation-delay:-2s;width:clamp(56px,8vw,110px)}
+@keyframes wob{0%,100%{rotate:0deg}50%{rotate:9deg}}
+.f-mogu .film-main{margin-top:clamp(28px,4vw,48px)}
+.f-mogu .fvid{border:4px solid var(--ink);border-radius:28px;overflow:hidden;box-shadow:11px 11px 0 var(--pink);background:#000}
+.f-mogu .film-info h3{display:inline-block;font:700 12px/1 "Fredoka",sans-serif;letter-spacing:.16em;background:var(--ink);color:var(--yel);padding:7px 12px;border-radius:999px;margin-bottom:14px}
+.f-mogu .film-info>div{padding:20px 22px 22px;border:3px solid var(--ink);border-radius:24px;box-shadow:6px 6px 0 var(--ink);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.f-mogu .film-info{align-items:start}
+.f-mogu .film-info>div:nth-child(1){background:#fff;transform:rotate(-1.2deg)}
+.f-mogu .film-info>div:nth-child(2){background:#ffd1dc;transform:rotate(1deg)}
+.f-mogu .film-info>div:nth-child(3){background:#c8f2d4;transform:rotate(-.6deg)}
+.f-mogu .film-info>div:hover{transform:rotate(0) scale(1.02)}
+.f-mogu .film-info p,.f-mogu .film-info li{font:500 17px/1.5 "Fredoka",sans-serif}
+.f-mogu .film-info li::before{content:"● ";color:var(--pink);font-size:10px}
+.f-mogu .film-sb h2{font:700 clamp(30px,3.6vw,48px)/1.05 "Fredoka",sans-serif}
+.f-mogu .film-sb .sbl{font:500 19px/1.4 "Fredoka",sans-serif}
+.f-mogu .sb-strip{gap:16px;padding-top:10px}
+.f-mogu .sb-strip>li{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 8px 10px;box-shadow:5px 5px 0 var(--ink);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.f-mogu .sb-strip>li:nth-child(odd){transform:rotate(-2deg)}
+.f-mogu .sb-strip>li:nth-child(even){transform:rotate(2deg) translateY(8px)}
+.f-mogu .sb-strip>li:hover{transform:rotate(0) scale(1.05) translateY(-6px)}
+.f-mogu .sb-strip img{border-radius:10px}
+.f-mogu .sb-strip figcaption{font:700 15px/1 "Fredoka",sans-serif;padding-top:10px}
+.f-mogu .sb-strip figcaption b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--pink);color:#fff;border:2.5px solid var(--ink)}
+.f-mogu .film-next{border-top:4px dashed var(--ink)}
+.f-mogu .film-next strong{font:700 clamp(30px,4.4vw,58px)/1 "Fredoka",sans-serif}
+.f-mogu .film-next .arr{background:var(--pink);color:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.f-mogu [data-rv]{transform:translateY(30px) scale(.93) rotate(-2deg);transition:opacity .5s ease var(--d,0s),transform .8s cubic-bezier(.34,1.56,.64,1) var(--d,0s)}
+.f-mogu [data-rv].in{transform:none}
+.f-mogu .film-info>div[data-rv].in:nth-child(1){transform:rotate(-1.2deg)}
+.f-mogu .film-info>div[data-rv].in:nth-child(2){transform:rotate(1deg)}
+.f-mogu .film-info>div[data-rv].in:nth-child(3){transform:rotate(-.6deg)}
+.f-mogu .sb-strip>li[data-rv].in:nth-child(odd){transform:rotate(-2deg)}
+.f-mogu .sb-strip>li[data-rv].in:nth-child(even){transform:rotate(2deg) translateY(8px)}
+@media (max-width:900px){ .f-mogu .melon{display:none} }
+@media (prefers-reduced-motion:reduce){ .f-mogu .stk,.f-mogu .melon{animation:none} .f-gucci .sprig{animation:none} }
+
+/* hub */
+.hub{background:#0b0b0e;color:#ecebf2}
+.hub .film-bar{background:rgba(11,11,14,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.hub .film-wrap{padding-bottom:clamp(50px,7vw,90px)}
+.hub-head{padding-top:clamp(36px,6vw,80px)}
+.hub-head h1{font:800 clamp(40px,6.2vw,84px)/1 var(--display);margin:14px 0 16px;color:#fff}
+.hub-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,26px);margin-top:clamp(30px,4vw,52px)}
+.hub-tile{display:flex;flex-direction:column;text-decoration:none;border-radius:20px;overflow:hidden;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s;color:inherit}
+.hub-tile:hover,.hub-tile:focus-visible{transform:translateY(-8px)}
+.hub-tile .ph-img{position:relative;aspect-ratio:4/5;overflow:hidden}
+.hub-tile img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.hub-tile:hover img{transform:scale(1.06)}
+.hub-tile .play{position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);color:#111;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.hub-tile:hover .play{transform:scale(1.15)}
+.hub-tile .play svg{width:18px;height:18px;margin-left:2px}
+.hub-tile .tb{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px}
+.hub-tile small{font:700 10.5px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;opacity:.8}
+.hub-tile strong{font-size:clamp(28px,2.8vw,38px);line-height:1}
+.hub-tile span.tl{font-size:15px;line-height:1.4;opacity:.85}
+.hub-tile.t-gucci{background:linear-gradient(#142a1b,#0b150f);border:1px solid rgba(201,174,116,.4);color:#f2ead9}
+.hub-tile.t-gucci strong{font:500 clamp(34px,3.4vw,46px)/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em}
+.hub-tile.t-gucci span.tl{font:italic 500 19px/1.35 "Cormorant Garamond",Georgia,serif;color:#c9ae74}
+.hub-tile.t-gucci small{color:#c9ae74}
+.hub-tile.t-gully{background:#4a1219;border:2px dashed #e5a23a;color:#f3e7d0}
+.hub-tile.t-gully strong{font:400 clamp(30px,3vw,42px)/1 "DM Serif Display",Georgia,serif;text-transform:uppercase;letter-spacing:.03em}
+.hub-tile.t-gully small,.hub-tile.t-gully span.tl{color:#e5a23a}
+.hub-tile.t-mogu{background:#ffe45c;border:4px solid #23160f;box-shadow:8px 8px 0 #ff5c7a;color:#23160f}
+.hub-tile.t-mogu strong{font:700 clamp(32px,3.2vw,44px)/1 "Fredoka","Trebuchet MS",sans-serif}
+.hub-tile.t-mogu span.tl{font:500 17px/1.3 "Fredoka",sans-serif}
+.hub-tile.t-mogu:hover{transform:translateY(-8px) rotate(-1deg)}
+@media (max-width:900px){ .hub-tiles{grid-template-columns:1fr} .hub-tile .ph-img{aspect-ratio:16/10} .hub-tile.t-gully .ph-img{aspect-ratio:4/5} }
+
 /* rocket game */
 #game{position:fixed;inset:0;z-index:25;background:#0b1024;touch-action:none}
 #game[hidden]{display:none}
@@ -850,7 +1054,8 @@ const PROJECTS = [
   {cat:'dig', page:'astro', live:true, year:'Live', title:'Astro Jishnu Gupta: Vedic astrology and Vastu website', video:'assets/astro/card.mp4', poster:'astroThumb', desc:'A live website for a family practice with 44+ years of Vedic astrology and Vastu, with consultations, a free kundli, courses, a shop and a real-time view of the planets.', links:[['Visit the live site','https://astrojishnugupta.com/']]},
   {cat:'exp', also:['doc'], page:'fanblade', year:'2025', title:'Fanblade: Silk & Steel', img:'fbThumb', desc:'A summer collection where delicate silk fans meet urban combat. Research, flats and fabrics, character illustration, styling and a full photoshoot across five looks.', links:[['View on Behance','https://www.behance.net/gallery/224374171/FANBLADE-a-summer25-collection']]},
   {cat:'exp', page:'sher', year:'2025', title:'Sher-o-Shakkar: Akbar and Birbal’s adventure', img:'sherGif', desc:'An Akbar and Birbal folktale retold as a Phad scroll painting: character illustration, framed scenes, a long painted scroll and an illustrated storybook.', links:[['View on Behance','https://www.behance.net/gallery/222964783/Sher-o-shakkar-Akbar-and-Birbals-adventure']]},
-  {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'}
+  {cat:'exp', page:'starborn', year:'', title:'Starborn: a celestial conundrum', img:'sbThumb', desc:'A fashion collection that gives an identity to extraterrestrials and humans alike. Trend story, Pantone palette, five illustrated looks, flats and styling.'},
+  {cat:'doc', also:['vis'], page:'aicommercials', tagText:'3 films', linkText:'Watch the films', year:'', title:'AI Commercials: three brand films', trio:['assets/ai/gucci-tile.jpg','assets/ai/gully-tile.jpg','assets/ai/mogu-tile.jpg'], desc:'Three AI commercial concepts for Gucci Bloom, Gully Labs and Mogu Mogu: concept, art direction, storyboards and the final films.'}
 ];
 PROJECTS.push({"cat": "vis", "page": "visual", "year": "", "title": "Visual design compilation", "img": "visThumb", "desc": "Ads, social campaigns, emailers, watchfaces, branding, print and illustration: a visual design compilation led by the Layers smartwatch ads, with travel, course, brand identity and print work."}); /* project 8: Visual design compilation */
 IMG.visThumb={"src":"assets/visual/thumb.webp","w":1000,"h":575};
@@ -911,13 +1116,14 @@ function projCard(p,i){
   const n=String(i+1).padStart(2,'0');
   let media;
   if(p.video) media=`<video data-auto muted loop playsinline preload="none" poster="${IMG[p.poster]?IMG[p.poster].src:''}" aria-label="${esc(p.title)} preview"><source src="${p.video}" type="video/mp4"></video>`;
+  else if(p.trio) media=`<div class="trio">${p.trio.map(src=>`<img src="${src}" alt="" loading="lazy" decoding="async">`).join('')}</div>`;
   else if(p.img) media=img(p.img, p.title+' cover');
   else media=`<div class="ph">${planetSvg}<span>Case study on Behance</span></div>`;
   const meta=[[p.cat].concat(p.also||[]).map(c=>CATS[c]).join(', '), p.year].filter(Boolean).join(' · ');
-  const tag = p.page ? `<span class="ptag">${p.live?'Live site':'Case study'}</span>` : '';
+  const tag = p.page ? `<span class="ptag">${p.live?'Live site':(p.tagText||'Case study')}</span>` : '';
   const frame=`<div class="pframe"><div class="media">${media}</div>${HUD}${tag}</div>`;
   const body=`<div class="pbody"><div><span class="pmeta">${esc(meta)}</span><h4>${esc(p.title)}</h4></div><p>${esc(p.desc)}</p></div>`;
-  const links=(p.page?[`<a href="#${p.page}">${p.live?'Read the project story':'Read the case study'}</a>`]:[]).concat((p.links||[]).map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])}</a>`)).join('');
+  const links=(p.page?[`<a href="#${p.page}">${p.live?'Read the project story':(p.linkText||'Read the case study')}</a>`]:[]).concat((p.links||[]).map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])}</a>`)).join('');
   const inner = p.page ? `<a class="case-link cover" href="#${p.page}">${frame}${body}</a>` : `${frame}${body}`;
   return `<article class="pcard" data-cat="${[p.cat].concat(p.also||[]).join(' ')}">${inner}${links?`<div class="plinks">${links}</div>`:''}</article>`;
 }
@@ -2194,7 +2400,7 @@ document.addEventListener('keydown',e=>{
   if(e.key!=='Escape') return;
   if(!zoomEl.hidden){ closeZoom(); return; }
   if(!$('#lightbox').hidden){ closeLightbox(); return; }
-  if(!caseEl.hidden){ location.hash=caseFrom; return; }
+  if(!caseEl.hidden){ location.hash=caseBack(); return; }
   if(!$('#settings').hidden){ $('#settings').hidden=true; $('#setBtn').setAttribute('aria-expanded',false); $('#setBtn').focus(); return; }
   if(!panel.hidden){ closePanel(); return; }
   if(tourIdx>=0){ endTour(true); return; }
@@ -2300,6 +2506,7 @@ const backArrow=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 /* case study for project 8 (kept separate from the CASES literal) */
 CASES.visual={"title": "Visual design compilation", "tag": "Ads, social campaigns, emailers, watchfaces, branding, print and illustration, gathered in one place.", "kicker": "Visual communication: campaigns, branding, print and illustration", "meta": [["Project", "Visual design compilation"], ["Category", "Visual communication"], ["Genres", "Ads, social media, emailers, watchfaces, branding, print, illustration"], ["Designer", "Siya Giriwar"]], "hero": {"img": "assets/visual/vc-07.webp", "h": 900, "alt": "Eight Anarc smartwatch ads in four layouts, each with a ₹3999 offer on white, blue and purple backgrounds"}, "sections": [["Overview", ["A compilation of visual design across ads, social media, email, watchfaces, branding, print and illustration. It brings together campaign work for Layers.shop, a travel company and a 3D fashion course, alongside brand identities, printed pieces and illustrated storytelling.", "The pages run in order by theme, so you can scroll from smartwatch ads and emailers through travel and course campaigns, into the Phad storybook, brand identities, print design and posters."]], ["Working across formats", ["Each body of work has its own voice. Layers is bold and electric blue, the travel posts are warm and photographic, and the print and branding pieces lean on pattern, type and texture. The aim in every case is a clear idea, a strong first read and a system that holds across many pieces."]]], "featuresTitle": "What is inside", "features": [["Layers.shop", "Social posts and campaigns, smartwatch ads, emailers, story thumbnails, email signatures, app nudges and watchfaces."], ["Travdor Journeys", "A social media series for a travel company: bucket-list posts, destination guides and itinerary carousels."], ["Learn 3D Fashion", "Ads and layouts for a 3D fashion and AI design course, plus brand-building and passive-income campaigns."], ["Phad storybook", "A Phad painting storybook publication: the folk-art scroll, framed scenes and the book layout."], ["Branding", "BRCH Brioche Sandos, Rad’s Food Corner, Bean To Brew, Bloom, Techeonn and a Yonex logo redesign."], ["Print and posters", "Banners for NIFT at Dilli Haat, wedding save-the-dates, a tabloid spread, typographic and event posters, scarves and tote prints."]], "boardsTitle": "The full compilation", "boardsSub": "Forty-eight pages, from Layers ads to branding, print and posters.", "boards": [["assets/visual/vc-02.webp", 900, "Layers.shop Instagram profile with story highlights and a grid of posts"], ["assets/visual/vc-03.webp", 900, "Ten blue, black and white social posts for the Bold Quests series, with portrait cards and bold typography"], ["assets/visual/vc-04.webp", 900, "Women of Layers series: team portraits with short quotes on blue and white post templates"], ["assets/visual/vc-05.webp", 900, "Photo-collage posts celebrating the Layers team, with torn-paper frames and handwritten captions"], ["assets/visual/vc-06.webp", 900, "Wrapped 2025 and Agent of Chaos posts in electric blue, including a chat-style 8pm to 12am post"], ["assets/visual/vc-07.webp", 900, "Eight Anarc smartwatch ads in four layouts, each with a ₹3999 offer on white, blue and purple backgrounds"], ["assets/visual/vc-08.webp", 900, "A second set of Anarc smartwatch ads in square and portrait formats with price callouts"], ["assets/visual/vc-09.webp", 900, "Dark Anarc smartwatch ads with the lines Never, Now and The moment you wear it"], ["assets/visual/vc-10.webp", 900, "Dark New Year offer ads for the smartwatch with 50% off and free strap callouts"], ["assets/visual/vc-11.webp", 900, "Four long-form emailers announcing a bold sale, with a watch hero, comparison table and call to action"], ["assets/visual/vc-12.webp", 900, "Six dark blue thumbnails reading Welcome to Making Tech Fun Again"], ["assets/visual/vc-13.webp", 900, "A grid of colourful smartwatch watchfaces next to always-on display versions"], ["assets/visual/vc-14.webp", 900, "More smartwatch watchfaces in purple, neon and gradient styles"], ["assets/visual/vc-15.webp", 900, "Email signatures in light and dark, and two app nudges offering a complimentary gift"], ["assets/visual/vc-16.webp", 900, "Four smartwatch feature banners: Your vibe, Your face; track every hour clearly; ask, speak, know; and every detail"], ["assets/visual/vc-17.webp", 900, "Travdor Journeys Instagram profile with highlights for Thailand, Dubai, Malaysia and Sri Lanka"], ["assets/visual/vc-18.webp", 900, "Travel social posts with yellow headlines on torn-paper and photo backgrounds, including bucket-list and short-trip guides"], ["assets/visual/vc-19.webp", 900, "Teal travel carousels with destination photos, trip tips and itinerary steps"], ["assets/visual/vc-20.webp", 900, "Travel posts about packing and Sri Lanka, with bold yellow type over destination photography"], ["assets/visual/vc-21.webp", 900, "Night-sky and jungle travel carousels numbered 01 to 04 in dark teal and gold"], ["assets/visual/vc-22.webp", 900, "Learn 3D Fashion website hero: Master 3D Fashion and AI Design, 2026"], ["assets/visual/vc-23.webp", 900, "Four Learn 3D Fashion course ads in black, white and blue"], ["assets/visual/vc-24.webp", 900, "Build Your Brand ad series with bold type on terracotta, black and cream"], ["assets/visual/vc-25.webp", 900, "More Build Your Brand ads in orange, blue and lilac colour blocks"], ["assets/visual/vc-26.webp", 900, "Learn 3D Fashion ad layouts with editorial photography"], ["assets/visual/vc-27.webp", 900, "Turn your expertise into passive income: three cream and terracotta ads"], ["assets/visual/vc-28.webp", 900, "A long Phad painting scroll showing a folktale across many framed scenes"], ["assets/visual/vc-29.webp", 900, "Framed scenes from the Phad painting storybook, with royal courts and trees"], ["assets/visual/vc-30.webp", 900, "More Phad scenes arranged into a storybook layout with a long panoramic spread"], ["assets/visual/vc-31.webp", 900, "Illustration of warrior characters against an orange swirl background"], ["assets/visual/vc-32.webp", 900, "Fashion research and a flats-and-fabric board with garments on a yellow ground"], ["assets/visual/vc-33.webp", 900, "BRCH Brioche Sandos branding: logo variations, colour palette and paper bag packaging"], ["assets/visual/vc-34.webp", 900, "BRCH packaging dielines, pattern and a pair of mascot illustrations"], ["assets/visual/vc-35.webp", 900, "Rad's Food Corner branding: logos, patterns, menus and takeaway packaging"], ["assets/visual/vc-36.webp", 900, "Bean To Brew coffee shop branding: logo, palette, type pairing and cup and coaster mockups"], ["assets/visual/vc-37.webp", 900, "Five illustrated fashion looks in green and white on a dark green background"], ["assets/visual/vc-38.webp", 900, "Starborn collection board: moodboard, illustrated scene and flats"], ["assets/visual/vc-39.webp", 900, "Starborn scarf pattern, illustrated looks and supporting print details"], ["assets/visual/vc-40.webp", 900, "Print design: printed scarves, patterned fabric swatches and a cap"], ["assets/visual/vc-41.webp", 900, "Print design: a botanical pattern in blue and orange on a tote bag and cushions"], ["assets/visual/vc-42.webp", 900, "Banners for NIFT at Dilli Haat in red and cream with a repeating motif"], ["assets/visual/vc-43.webp", 900, "Save-the-date wedding invite with orange floral illustration, envelope and phone mockup"], ["assets/visual/vc-44.webp", 900, "La Mondé tabloid newspaper design with a Rockabilly Rumble cover"], ["assets/visual/vc-45.webp", 900, "Univers typography poster in black and cream with a large letter S and alphabet"], ["assets/visual/vc-46.webp", 900, "Bloom crochet branding: logo, tags, packaging and tote bag in green and orange"], ["assets/visual/vc-47.webp", 900, "Yonex logo redesign with a badminton player, apparel and packaging mockups"], ["assets/visual/vc-48.webp", 900, "Techeonn tech brand logo on cards, signage and a dark merchandise shot"], ["assets/visual/vc-49.webp", 900, "Event posters in orange and teal for chess, a photo exhibition, pixel art, bangarang and a hackathon"]]};
 function renderCase(c){
+  if(c.film) return renderFilm(c); if(c.hub) return renderHub(c);
   return `<div class="case-bar"><button class="back" type="button" data-case-back>${backArrow}Back to work</button><strong>${esc(c.title)}</strong>${c.link?`<a class="btn-sun" href="${c.link[1]}" target="_blank" rel="noopener">${esc(c.barLink||c.link[0])}</a>`:''}</div>
   <header class="case-head"><span class="case-kicker">${esc(c.kicker)}</span><h1 id="caseTitle" tabindex="-1">${esc(c.title)}</h1><p class="tagline">${esc(c.tag)}</p><dl class="case-meta">${c.meta.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></header>
   <div class="case-hero${c.hero.tall?' tall':''}">${c.hero.video ? `<video src="${c.hero.video}" poster="${c.hero.poster}" controls playsinline muted loop preload="metadata" ${reduceMotion?'':'autoplay'} aria-label="${esc(c.hero.label)}"></video>` : `<img src="${c.hero.img}" width="1600" height="${c.hero.h}" alt="${esc(c.hero.alt||c.title+' app shown on a phone')}">`}</div>
@@ -2310,17 +2517,82 @@ function renderCase(c){
   ${c.after||''}
   <div class="case-foot">${c.link?`<a class="btn-sun" href="${c.link[1]}" target="_blank" rel="noopener">${esc(c.link[0])}</a>`:''}<button class="btn-line" type="button" data-case-back>Back to work</button></div>`;
 }
+/* ---------- AI Commercials: a mini-project with three films, each on its own page ---------- */
+const AI_CONTRIB=['Concept Development','Art Direction','Storyboarding','AI Video Generation'];
+const AI_FILMS=['gucci-bloom','gully-labs','mogu-mogu'];
+const aiArrow=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+const aiPlay=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>`;
+const aiBlossom=`<svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><g transform="translate(15 15)"><ellipse cx="0" cy="-8" rx="4" ry="7"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="4" ry="7" transform="rotate(288)"/><circle r="2" fill="currentColor"/></g></svg>`;
+const aiSprig=`<svg viewBox="0 0 120 230" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 226C30 172 46 118 92 40"/><path d="M26 186c-17-1-28-11-30-26 15 1 27 10 30 26z"/><path d="M36 150c15-6 33-3 42 8-14 7-32 4-42-8z"/><path d="M46 118c-15-2-25-12-26-26 14 1 24 11 26 26z"/><path d="M58 92c14-8 31-6 41 3-13 9-30 8-41-3z"/><path d="M70 66c-13-3-21-13-21-26 13 2 21 12 21 26z"/><g transform="translate(96 28)"><ellipse cx="0" cy="-12" rx="6" ry="11"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(72)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(144)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(216)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(288)"/><circle r="3" fill="currentColor"/></g><g transform="translate(54 92) scale(.55)"><ellipse cx="0" cy="-12" rx="6" ry="11"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(72)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(144)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(216)"/><ellipse cx="0" cy="-12" rx="6" ry="11" transform="rotate(288)"/><circle r="3" fill="currentColor"/></g></svg>`;
+const aiMelon=`<svg viewBox="0 0 110 66" aria-hidden="true"><path d="M6 6a49 49 0 0 0 98 0z" fill="#ff4d6d" stroke="#23160f" stroke-width="4" stroke-linejoin="round"/><path d="M6 6a49 49 0 0 0 98 0" fill="none" stroke="#1f9d55" stroke-width="8" stroke-linecap="round"/><g fill="#23160f"><ellipse cx="34" cy="26" rx="3" ry="5" transform="rotate(-18 34 26)"/><ellipse cx="55" cy="38" rx="3" ry="5"/><ellipse cx="76" cy="26" rx="3" ry="5" transform="rotate(18 76 26)"/></g></svg>`;
+const aiTC=n=>{ const t=Math.floor(n/30); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
+
+CASES['aicommercials']={hub:true, title:'AI Commercials'};
+CASES['gucci-bloom']={film:'gucci', n:1, parent:'aicommercials', next:'gully-labs', title:'Gucci Bloom: a fragrance that blooms', short:'Gucci Bloom', kicker:'Gucci Bloom Parfum', sub:'A fragrance that blooms', tag:'An ode to the beauty of nature, bottled.',
+  overview:'A cinematic exploration of fragrance through the language of nature. Translating the delicate, feminine world of Gucci Bloom into an immersive visual experience through florals, textures and atmospheric storytelling.',
+  direction:'Luxury · Botanical · Cinematic', story:'From nature-inspired imagery to the final product reveal.',
+  video:'assets/ai/gucci-bloom.mp4', poster:'assets/ai/gucci-poster.jpg', w:1280, h:720,
+  frames:[['assets/ai/gucci-sb1.webp',0,'A woman half hidden by white jasmine blossoms in a garden'],['assets/ai/gucci-sb2.webp',97,'A Gucci Bloom bottle resting on a sunlit stone ledge'],['assets/ai/gucci-sb3.webp',195,'A hand reaching toward white flowers'],['assets/ai/gucci-sb4.webp',292,'The black Gucci Bloom bottle among white blossoms'],['assets/ai/gucci-sb5.webp',390,'The Gucci Bloom bottle with the end line: a fragrance that blooms with you']]};
+CASES['gully-labs']={film:'gully', n:2, parent:'aicommercials', next:'mogu-mogu', title:'Gully Labs: Ghungroo, tradition on the move', short:'Ghungroo', kicker:'Gully Labs', sub:'Tradition on the move', tag:'Where heritage finds its rhythm.',
+  overview:'A fashion-led product film exploring the meeting point of Indian heritage and contemporary sneaker culture. Celebrating traditional influences through bold compositions, intricate details and modern visual storytelling.',
+  direction:'Cultural · Editorial · Contemporary', story:'A journey through heritage, craftsmanship and contemporary expression.',
+  video:'assets/ai/gully-labs.mp4', poster:'assets/ai/gully-poster.jpg', w:720, h:1280,
+  frames:[['assets/ai/gully-sb1.webp',0,'Hands opening a gullylab shoebox'],['assets/ai/gully-sb2.webp',81,'A brown sneaker decorated with brass ghungroo bells'],['assets/ai/gully-sb3.webp',163,'Close-up of the sneaker with its beaded chain and bells'],['assets/ai/gully-sb4.webp',244,'Feet in sneakers walking past a maroon saree with a gold border'],['assets/ai/gully-sb5.webp',326,'End card: gullylab Ghungru, tradition on the move, with the sneakers']]};
+CASES['mogu-mogu']={film:'mogu', n:3, parent:'aicommercials', next:'gucci-bloom', title:'Mogu Mogu: sip. chew. repeat.', short:'Mogu Mogu', kicker:'Mogu Mogu Watermelon', stickers:['Sip.','Chew.','Repeat.'], tag:'A little sip. A lot of fun.',
+  overview:'A playful commercial concept bringing the refreshing world of Mogu Mogu Watermelon to life. Exploring vibrant colours, juicy textures and energetic compositions to capture the fun of its distinctive sip-and-chew experience.',
+  direction:'Playful · Vibrant · Experimental', story:'A burst of colour, flavour and playful product storytelling.',
+  video:'assets/ai/mogu-mogu.mp4', poster:'assets/ai/mogu-poster.jpg', w:1280, h:720,
+  frames:[['assets/ai/mogu-sb1.webp',0,'A slice of watermelon on a yellow background'],['assets/ai/mogu-sb2.webp',75,'A Mogu Mogu bottle in a pink juice splash with watermelon slices and ice'],['assets/ai/mogu-sb3.webp',150,'Juice poured into a glass beside the word CHEW'],['assets/ai/mogu-sb4.webp',225,'A smiling woman with curly hair drinking Mogu Mogu'],['assets/ai/mogu-sb5.webp',301,'The bottle with watermelon slices and the words Sip. Chew. Repeat.']]};
+
+function renderFilm(c){
+  const k=c.film;
+  const bar=`<div class="film-bar"><button class="back" type="button" data-case-back>${backArrow}AI Commercials</button><span class="film-count">Film 0${c.n} / 03</span></div>`;
+  const head=k==='gucci'
+    ? `<header class="film-head"><span class="sprig l">${aiSprig}</span><span class="sprig r">${aiSprig}</span><span class="fk" data-rv>${esc(c.kicker)}</span><h1 id="caseTitle" tabindex="-1" data-rv style="--d:.1s">${esc(c.short)}</h1><p class="fsub" data-rv style="--d:.25s">${esc(c.sub)}</p><p class="ftag" data-rv style="--d:.4s">${esc(c.tag)}</p></header>`
+    : k==='gully'
+    ? `<header class="film-head"><span class="fk" data-rv>${esc(c.kicker)}</span><h1 id="caseTitle" tabindex="-1" data-rv style="--d:.1s">${esc(c.short)}</h1><p class="fsub" data-rv style="--d:.25s">${esc(c.sub)}</p><p class="ftag" data-rv style="--d:.4s">${esc(c.tag)}</p></header>`
+    : `<header class="film-head"><span class="melon a">${aiMelon}</span><span class="melon b">${aiMelon}</span><span class="fk" data-rv>${esc(c.kicker)}</span><br><h1 id="caseTitle" tabindex="-1" data-rv style="--d:.1s">${esc(c.short)}</h1><div class="stickers" data-rv style="--d:.25s">${c.stickers.map(s=>`<span class="stk">${esc(s)}</span>`).join('')}</div><p class="ftag" data-rv style="--d:.4s">${esc(c.tag)}</p></header>`;
+  const vid=`<div class="film-main" data-rv style="--d:.15s">${k==='gully'?'<div class="bells" aria-hidden="true"></div>':''}<div class="fvid"><video src="${c.video}" poster="${c.poster}" width="${c.w}" height="${c.h}" controls playsinline muted loop preload="metadata" ${reduceMotion?'':'autoplay'} aria-label="${esc(c.short)}: the final AI commercial film"></video></div></div>`;
+  const info=`<div class="film-info"><div data-rv><h3>Overview</h3><p>${esc(c.overview)}</p></div><div data-rv style="--d:.1s"><h3>Creative direction</h3><p>${esc(c.direction)}</p></div><div data-rv style="--d:.2s"><h3>My contribution</h3><ul>${AI_CONTRIB.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>`;
+  const roman=['i','ii','iii','iv','v'];
+  const cap=(i,n)=> k==='gucci' ? `<em>${roman[i]}.</em><span>${aiTC(n)}</span>` : k==='gully' ? `<span style="opacity:1">No. 0${i+1}</span><span>${aiTC(n)}</span>` : `<b>${i+1}</b><span>${aiTC(n)}</span>`;
+  const dim=k==='gully' ? 'width="405" height="720"' : 'width="720" height="406"';
+  const sb=`<section class="film-sb" aria-label="Storyboard"><h2 data-rv>Storyboard</h2><p class="sbl" data-rv style="--d:.08s">${esc(c.story)}</p><ol class="sb-strip">${c.frames.map(([src,n,alt],i)=>`<li data-rv style="--d:${(i*.09).toFixed(2)}s"><figure><img src="${src}" ${dim} alt="Storyboard frame ${i+1} of 5: ${esc(alt)}" loading="lazy" decoding="async"><figcaption>${cap(i,n)}</figcaption></figure></li>`).join('')}</ol></section>`;
+  const nx=CASES[c.next];
+  const next=`<a class="film-next" href="#${c.next}" data-rv><span><small>Next film</small><strong>${esc(nx.short)}</strong></span><span class="arr">${aiArrow}</span></a>`;
+  const body = k==='gucci'
+    ? `${head}<div class="fdiv" aria-hidden="true">${aiBlossom}</div>${vid}${info}${sb}${next}`
+    : k==='gully'
+    ? `<div class="film-top">${head}${vid}${info}</div>${sb}${next}`
+    : `${head}${vid}${info}${sb}${next}`;
+  return `<div class="film f-${k}">${bar}${k==='gully'?'<div class="zari" aria-hidden="true"></div>':''}<div class="film-wrap">${body}</div>${k==='gully'?'<div class="zari" aria-hidden="true"></div>':''}</div>`;
+}
+function renderHub(c){
+  const tiles=AI_FILMS.map((id,i)=>{ const f=CASES[id];
+    return `<a class="hub-tile t-${f.film}" href="#${id}" data-rv style="--d:${(i*.1).toFixed(1)}s"><div class="ph-img"><img src="${f.poster}" alt="" loading="lazy" decoding="async"><span class="play">${aiPlay}</span></div><div class="tb"><small>Film 0${i+1}</small><strong>${esc(f.short)}</strong><span class="tl">${esc(f.tag)}</span></div></a>`; }).join('');
+  return `<div class="hub"><div class="film-bar"><button class="back" type="button" data-case-back>${backArrow}Back to work</button><span class="film-count">Project 07</span></div><div class="film-wrap"><header class="hub-head"><span class="case-kicker">Project 07 · Mini-series</span><h1 id="caseTitle" tabindex="-1">AI Commercials</h1><p class="tagline">Three brand films, three visual worlds.</p><dl class="case-meta"><div><dt>Films</dt><dd>Gucci Bloom · Gully Labs · Mogu Mogu</dd></div><div><dt>My contribution</dt><dd>${AI_CONTRIB.join(' · ')}</dd></div></dl></header><div class="hub-tiles">${tiles}</div></div></div>`;
+}
+/* fade each block in as the page is scrolled */
+function initReveal(){
+  const els=[...caseEl.querySelectorAll('[data-rv]')];
+  if(reduceMotion||!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }),{root:caseEl,threshold:.12,rootMargin:'0px 0px -4% 0px'});
+  els.forEach(e=>io.observe(e));
+}
+const caseBack=()=>(CASES[caseEl.dataset.id]||{}).parent||caseFrom;
 function openCase(id){
   if(!caseEl.hidden && caseEl.dataset.id===id) return;
-  caseFrom = !classic.hidden ? 'classic' : (MODULE_BY_ID[view] ? view : 'work');
-  caseEl.dataset.id=id; caseEl.setAttribute('aria-label', CASES[id].title+' case study'); caseEl.innerHTML=renderCase(CASES[id]); caseEl.hidden=false; caseEl.scrollTop=0;
+  const cs=CASES[id];
+  if(!(cs.parent && !caseEl.hidden)) caseFrom = !classic.hidden ? 'classic' : (MODULE_BY_ID[view] ? view : 'work');
+  caseEl.dataset.id=id; caseEl.setAttribute('aria-label', cs.title+' case study'); caseEl.innerHTML=renderCase(cs); caseEl.hidden=false; caseEl.scrollTop=0;
+  if(cs.film||cs.hub) initReveal();
   setTimeout(()=>{ const t=$('#caseTitle'); t&&t.focus({preventScroll:true}); },40); blip(900);
 }
 function closeCaseUI(){
   caseEl.hidden=true; caseEl.innerHTML=''; caseEl.dataset.id='';
   setTimeout(()=>{ const l=document.querySelector('#panel:not([hidden]) .case-link, #classic:not([hidden]) .case-link'); l&&l.focus({preventScroll:true}); },60);
 }
-caseEl.addEventListener('click',e=>{ if(e.target.closest('[data-case-back]')) location.hash=caseFrom; });
+caseEl.addEventListener('click',e=>{ if(e.target.closest('[data-case-back]')) location.hash=caseBack(); });
 /* tap-to-zoom for process boards on phones */
 const zoomEl=document.createElement('div'); zoomEl.className='zoomer'; zoomEl.hidden=true; zoomEl.setAttribute('role','dialog'); zoomEl.setAttribute('aria-modal','true'); zoomEl.setAttribute('aria-label','Zoomed board');
 zoomEl.innerHTML='<button class="zx" type="button" aria-label="Close zoomed board"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img alt=""><div class="zh">Scroll to pan, pinch to zoom</div>';
@@ -2357,8 +2629,8 @@ function lights(){
 }
 let last=performance.now();
 function frame(now){
-  const _cl=document.getElementById('classic'), _pn=document.getElementById('panel');
-  if(document.hidden || (_cl&&!_cl.hidden)){ last=now; requestAnimationFrame(frame); return; }
+  const _cl=document.getElementById('classic'), _pn=document.getElementById('panel'), _cs=document.getElementById('case');
+  if(document.hidden || (_cl&&!_cl.hidden) || (_cs&&!_cs.hidden)){ last=now; requestAnimationFrame(frame); return; }
   if(_pn&&!_pn.hidden&&(frame.skip=!frame.skip)){ requestAnimationFrame(frame); return; }
   const dt=Math.min(.05,(now-last)/1000); last=now; clock.t+=dt;
   for(const f of anim) f(clock.t,dt);
