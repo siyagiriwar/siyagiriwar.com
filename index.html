@@ -339,6 +339,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .case-boards>p{color:#9896a8;margin:0 0 24px;padding:0 clamp(18px,2vw,24px)}
 .case-boards .stack{border-radius:18px;overflow:hidden;background:#0d0d10}
 .case-boards figure{margin:0}
+#case[data-id="visual"] .case-boards figure{content-visibility:auto;contain-intrinsic-size:auto 720px} /* compilation page: skip rendering off-screen pages, scrolls and loads lighter */
 .case-boards img{width:100%;height:auto;display:block}
 .case-foot{max-width:1200px;margin:0 auto;padding:48px clamp(18px,5vw,64px) 80px;display:flex;gap:12px;flex-wrap:wrap}
 .case-foot .btn-line{color:#fff;border-color:rgba(255,255,255,.3)}
@@ -1058,7 +1059,7 @@ const PROJECTS = [
   {cat:'doc', also:['vis'], page:'aicommercials', tagText:'3 films', linkText:'Watch the films', year:'', title:'AI Commercials: three brand films', trio:['assets/ai/gucci-tile.jpg','assets/ai/gully-tile.jpg','assets/ai/mogu-tile.jpg'], desc:'Three AI commercial concepts for Gucci Bloom, Gully Labs and Mogu Mogu: concept, art direction, storyboards and the final films.'}
 ];
 PROJECTS.push({"cat": "vis", "page": "visual", "year": "", "title": "Visual design compilation", "img": "visThumb", "desc": "Ads, social campaigns, emailers, watchfaces, branding, print and illustration: a visual design compilation led by the Layers smartwatch ads, with travel, course, brand identity and print work."}); /* project 8: Visual design compilation */
-IMG.visThumb={"src":"assets/visual/thumb.webp","w":1000,"h":575};
+IMG.visThumb={"src":"assets/visual/thumb-anim.webp","w":800,"h":460};
 const GALLERY = [];
 const CAPS = ['UX research','Interface design','Brand identity','Visual communication','Styling','Illustration','Photography and videography','Video editing','Publication design','Copywriting','Creative direction'];
 const TOOLS = ['Figma','Adobe Creative Suite','Framer','Procreate','Blender','AutoCAD','Datatex NOW','HTML / CSS','AI tools'];
