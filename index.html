@@ -615,6 +615,132 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .c h2.nm .n1{color:var(--ink)}
 .c h2.nm .n2{color:var(--ink);filter:url(#gl-outline)}
 .c .tagline{font:600 clamp(18px,1.9vw,24px)/1.4 var(--body);max-width:30em;margin:0 0 6px;color:var(--ink)}
+
+/* sharp cut corners everywhere (circles like lamps and dots stay round). Browsers with corner-shape get true bevels, others a clip-path equivalent. Undo = revert the 'sharp corners' commit */
+@supports (corner-shape:bevel){
+.tip,
+.rail .slot,
+.chips li,
+.gallery span,
+.proj .badge,
+.shoot figcaption,
+.collage .cap{border-radius:8px;corner-shape:bevel}
+.btn-sun,
+.round,
+.pill,
+.welcome .x,
+.btn-ink,
+.btn-line,
+.closer,
+.filters button,
+.classic-bar nav a,
+.case-bar .back,
+.pcard .cover,
+.zoomer .zx,
+.collage .gt,
+.gl-win:not(.gl-main){border-radius:10px;corner-shape:bevel}
+.dock button,
+.gallery button,
+.lightbox img{border-radius:12px;corner-shape:bevel}
+.c .portrait img,
+.edu div,
+.pempty,
+.direct a,.direct button,
+.case-pages figure,
+.case-motion figure,
+.case-vid video,
+.case-vid+figure,.case-boards .case-wide,
+.case-fig,
+.case-sw div,
+.shoot figure,
+.xp article{border-radius:14px;corner-shape:bevel}
+.status,
+.tip.long,
+.c blockquote,
+.proj,
+.quote,
+.track,
+form.hello input,form.hello textarea,
+.case-feats div,
+.tale blockquote.pull,
+.tale .cup img{border-radius:16px;corner-shape:bevel}
+.settings,
+.dock,
+.welcome,
+.tour,
+.case-hero img,
+.case-boards .stack,
+.pcard,
+.case-hero video,
+.case-boards .sheetfig,
+.flats-scroll{border-radius:18px;corner-shape:bevel}
+.case-hero.tall video,
+#game .gpanel,
+.tale .hero,
+.gl-stage{border-radius:20px;corner-shape:bevel}
+}
+@supports not (corner-shape:bevel){
+.tip,
+.rail .slot,
+.chips li,
+.gallery span,
+.proj .badge,
+.shoot figcaption,
+.collage .cap{border-radius:0;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.btn-sun,
+.round,
+.pill,
+.welcome .x,
+.btn-ink,
+.btn-line,
+.closer,
+.filters button,
+.classic-bar nav a,
+.case-bar .back,
+.pcard .cover,
+.zoomer .zx,
+.collage .gt,
+.gl-win:not(.gl-main){border-radius:0;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)}
+.dock button,
+.gallery button,
+.lightbox img{border-radius:0;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+.c .portrait img,
+.edu div,
+.pempty,
+.direct a,.direct button,
+.case-pages figure,
+.case-motion figure,
+.case-vid video,
+.case-vid+figure,.case-boards .case-wide,
+.case-fig,
+.case-sw div,
+.shoot figure,
+.xp article{border-radius:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
+.status,
+.tip.long,
+.c blockquote,
+.proj,
+.quote,
+.track,
+form.hello input,form.hello textarea,
+.case-feats div,
+.tale blockquote.pull,
+.tale .cup img{border-radius:0;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px)}
+.settings,
+.dock,
+.welcome,
+.tour,
+.case-hero img,
+.case-boards .stack,
+.pcard,
+.case-hero video,
+.case-boards .sheetfig,
+.flats-scroll{border-radius:0;clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}
+.case-hero.tall video,
+#game .gpanel,
+.tale .hero,
+.gl-stage{border-radius:0;clip-path:polygon(20px 0,calc(100% - 20px) 0,100% 20px,100% calc(100% - 20px),calc(100% - 20px) 100%,20px 100%,0 calc(100% - 20px),0 20px)}
+}
 </style>
 </head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="gl-outline" x="-2%" y="-5%" width="104%" height="110%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="erode" radius="1.1" result="in"/><feComposite in="SourceGraphic" in2="in" operator="out"/></filter></svg>
