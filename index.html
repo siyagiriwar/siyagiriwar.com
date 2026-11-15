@@ -547,6 +547,15 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .gl-bar s{width:9px;height:9px;border:1.5px solid rgba(217,255,128,.85);border-radius:2px;display:block}
 .gl-main{z-index:2;--px:-22px;--py:10px;left:50%;top:12px;width:var(--mw);margin-left:calc(var(--mw)/-2);height:calc(var(--gi,var(--gh)) - 24px);
   border-color:rgba(185,243,59,.85);box-shadow:0 26px 60px rgba(0,0,0,.6),0 0 40px rgba(185,243,59,.22)}
+/* HUD-frame shape for the portrait card: cut corners and notched edges with a neon outline (undo = revert the 'HUD frame' commit) */
+.gl-win.gl-main{--c:34px;--n:12px;--d:2.5px;border:0;border-radius:0;background:none;overflow:visible;box-shadow:none;
+  filter:drop-shadow(0 0 12px rgba(185,243,59,.3)) drop-shadow(0 24px 34px rgba(0,0,0,.55))}
+.gl-edge{flex:1;min-height:0;display:flex;padding:var(--d);background:linear-gradient(155deg,#e4ff95,#b9f33b 38%,#79c71c);
+  clip-path:polygon(var(--c) 0,100% 0,100% 44%,calc(100% - var(--n)) calc(44% + var(--n)),calc(100% - var(--n)) calc(66% - var(--n)),100% 66%,100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,calc(var(--c)*.45) 100%,0 calc(100% - var(--c)*.45),0 46%,var(--n) calc(46% - var(--n)),var(--n) calc(24% + var(--n)),0 24%,0 var(--c))}
+.gl-in{position:relative;flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:#0b130e;
+  clip-path:polygon(calc(var(--c) - var(--d)*.6) 0,100% 0,100% calc(44% - 1px),calc(100% - var(--n) + 2px) calc(44% + var(--n) - 1px),calc(100% - var(--n) + 2px) calc(66% - var(--n) + 1px),100% calc(66% + 1px),100% calc(100% - var(--c) + var(--d)*.6),calc(100% - var(--c) + var(--d)*.6) 100%,calc(var(--c)*.45 - var(--d)*.6) 100%,0 calc(100% - var(--c)*.45 + var(--d)*.6),0 calc(46% + 1px),calc(var(--n) - 2px) calc(46% - var(--n) + 1px),calc(var(--n) - 2px) calc(24% + var(--n) - 1px),0 calc(24% - 1px),0 calc(var(--c) - var(--d)*.6))}
+.gl-in .gl-bar{padding-left:calc(var(--c) + 4px)}
+.gl-in::after{content:"";position:absolute;z-index:4;left:calc(var(--c)*.7);bottom:9px;width:54px;height:3px;pointer-events:none;background:repeating-linear-gradient(90deg,#b9f33b 0 9px,transparent 9px 12px)}
 .gl-view{position:relative;flex:1;min-height:0;background:#000;overflow:hidden}
 .gl-cv{display:block;width:100%;height:100%;object-fit:cover}
 .gl-view::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.26) 0 1px,transparent 1px 3px),radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.45))}
@@ -581,6 +590,10 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .gl-data{display:none}
   .gl-nosig{width:96px;left:calc(50% + var(--mw)/2 - 40px);top:4%}
   .gl-chan{width:176px;min-width:0;left:auto;right:4px;bottom:3%}
+  .gl-win.gl-main{--c:26px;--n:9px}
+  .gl-in .gl-bar{padding-left:calc(var(--c) + 2px);padding-right:10px}
+  .gl-in .gl-bar b{font-size:10.5px;letter-spacing:.06em}
+  .gl-in .gl-bar em{display:none}
   .gl-chb{padding:10px 12px}
   .gl-num{font-size:22px}
   .gl-pips{display:none}
@@ -1860,7 +1873,7 @@ function glitchStage(){
     <div class="gl-grid" aria-hidden="true"></div>
     <div class="gl-win gl-data" aria-hidden="true">${bar('SG_DATA.TXT')}<pre></pre></div>
     <div class="gl-win gl-nosig" aria-hidden="true">${bar('NO_SIGNAL.SYS')}<canvas width="96" height="96"></canvas></div>
-    <div class="gl-win gl-main">${bar('SIYA_GIRIWAR.EXE')}<div class="gl-view"><canvas class="gl-cv" width="600" height="750" role="img" aria-label="${esc(GL_ALT[0])}"></canvas></div></div>
+    <div class="gl-win gl-main"><div class="gl-edge"><div class="gl-in">${bar('SIYA_GIRIWAR.EXE')}<div class="gl-view"><canvas class="gl-cv" width="600" height="750" role="img" aria-label="${esc(GL_ALT[0])}"></canvas></div></div></div></div>
     <div class="gl-win gl-chan">${bar('CHANNEL')}<div class="gl-chb">
       <div class="gl-num"><span class="gl-n">01</span><small>/ 0${GL_N}</small></div>
       <div class="gl-name"><span class="gl-nm">${GL_NAMES[0]}</span><span class="gl-st">Signal locked</span></div>
