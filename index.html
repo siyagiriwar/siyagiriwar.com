@@ -204,6 +204,16 @@ a{color:inherit}
 .quote small{display:block;margin-top:10px;font:600 12.5px/1.3 var(--body);color:rgba(246,241,228,.7)}
 .quote.alt{background:#fff;color:var(--ink);border:1px solid rgba(27,33,64,.12)}
 .quote.alt small{color:var(--ink-soft)}
+.tracks{display:grid;gap:12px;margin-top:6px}
+.track{display:flex;align-items:center;gap:14px;padding:15px 20px;border-radius:16px;background:#fff;color:var(--ink);border:1px solid rgba(27,33,64,.12);text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s}
+.track:hover,.track:focus-visible{border-color:var(--ink);transform:translateY(-1px);box-shadow:0 8px 22px rgba(27,33,64,.12)}
+.track .tk-ico{flex:none;width:40px;height:40px;border-radius:50%;background:var(--sun);color:var(--ink);display:grid;place-items:center}
+.track .tk-ico svg{width:16px;height:16px;margin-left:2px}
+.track .tk-txt{flex:1;min-width:0}
+.track b{display:block;font:700 18px/1.3 var(--display);overflow-wrap:anywhere}
+.track small{display:block;margin-top:3px;font:600 12.5px/1.3 var(--body);color:var(--ink-soft)}
+.track .tk-go{flex:none;font:700 18px/1 var(--body);color:var(--ink-soft)}
+.track:hover .tk-go{color:var(--ink)}
 .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 form.hello{display:grid;gap:16px;margin-top:6px}
 form.hello label{display:grid;gap:7px;font:700 11.5px/1 var(--body);letter-spacing:.22em;text-transform:uppercase}
@@ -843,6 +853,12 @@ function renderExperiments(h='h2'){
   <div class="quotes">
     <button type="button" class="quote" data-copy="Everything I’m not, made me who I am."><q>Everything I’m not, made me who I am.</q><small>Favourite quote. Tap to copy.</small></button>
     <button type="button" class="quote alt" data-copy="When death finds you, may it find you alive."><q>When death finds you, may it find you alive.</q><small>Favourite quote. Tap to copy.</small></button>
+  </div>
+  <h3>My audio aesthetics</h3>
+  <div class="tracks">
+    ${[['times','My playlist · Spotify','https://open.spotify.com/playlist/53QHNCpcvi8lWmHn14ox6s'],
+       ['Classics','My playlist · Spotify','https://open.spotify.com/playlist/3r4CBAuBkLno5NC0OIHg5p'],
+       ['Pineal Gland Activation 963 Hz','Meditation frequencies · Spotify','https://open.spotify.com/playlist/4vaLSJUdgEPXOCx3jyuMrf']].map(([n,sub,u])=>`<a class="track" href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${esc(n)}, playlist on Spotify (opens in a new tab)"><span class="tk-ico" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z" fill="currentColor"/></svg></span><span class="tk-txt"><b>${esc(n)}</b><small>${esc(sub)}</small></span><span class="tk-go" aria-hidden="true">↗</span></a>`).join('')}
   </div>
   <p class="live muted" role="status"></p>`;
 }
@@ -1777,7 +1793,7 @@ function openModule(id, fromHash=false){
   $('#panelLbl').textContent = def.title + (id==='contact'?' hub':' module');
   $('#railTxt').textContent = 'Siya Giriwar  ·  ' + def.title + (id==='contact'?' hub':' module');
   $('#panelNext').hidden = (id!=='about');
-  $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'Beyond the frame', contact:'Listening on all frequencies'}[id];
+  $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
   panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
