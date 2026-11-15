@@ -454,7 +454,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .tale .tale-end{margin:10px 0 0!important;text-align:center;font:italic 17px/1.5 Georgia,serif;color:var(--ink-soft)!important}
 .tale .chap>div{max-width:760px}
 .tale .hero{max-width:520px;margin-top:20px}
-.tale .hero video{display:block;width:100%;height:auto;aspect-ratio:1400/875;object-fit:cover}
+.tale .hero img{display:block;width:100%;height:auto;aspect-ratio:1400/875;object-fit:cover}
 .tale .bio,.tale .tale-hl,.tale .vow{max-width:760px}
 .tale .bio{margin-top:26px}
 .tale .bio .lead{margin:0 0 18px!important;font:800 clamp(22px,3.4vw,32px)/1.25 var(--display);color:var(--ink)!important}
@@ -997,7 +997,7 @@ function renderStory(){
   return `<section class="tale" aria-labelledby="taleT">
   <p class="tale-eyebrow">A little about me</p>
   <h3 id="taleT" class="tale-title">My story</h3>
-  <figure class="hero"><video data-auto muted loop playsinline preload="none" poster="assets/media-02.jpg" src="assets/story-loop.mp4" width="1400" height="875" aria-label="Illustration: a girl in a mask with very long dark hair sits on a throne of boxes marked with memories, a camera in her hands, with dogs, swords, anime and UFOs around her under a purple and gold sky"></video>
+  <figure class="hero"><img src="assets/media-02.jpg" width="1400" height="875" loading="lazy" decoding="async" alt="Illustration: a girl in a mask with very long dark hair sits on a throne of boxes marked with memories, a camera in her hands, with dogs, swords, anime and UFOs around her under a purple and gold sky">
   </figure>
   <div class="bio">
     <p class="lead">Born on Earth. Not entirely convinced I belong here.</p>
