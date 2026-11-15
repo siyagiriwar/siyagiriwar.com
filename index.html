@@ -2656,7 +2656,13 @@ let last=performance.now();
 function frame(now){
   const _cl=document.getElementById('classic'), _pn=document.getElementById('panel'), _cs=document.getElementById('case');
   if(document.hidden || (_cl&&!_cl.hidden) || (_cs&&!_cs.hidden)){ last=now; requestAnimationFrame(frame); return; }
-  if(_pn&&!_pn.hidden&&(frame.skip=!frame.skip)){ requestAnimationFrame(frame); return; }
+  /* a panel hides most of the scene: draw it at full speed only during the opening camera move, then at a low rate */
+  if(_pn&&!_pn.hidden){
+    if(!frame.pw) frame.pw=now;
+    const gap = (now-frame.pw)<1500 ? 33 : (_pn.classList.contains('wide') ? 125 : 66);
+    if(now-(frame.lr||0)<gap){ requestAnimationFrame(frame); return; }
+    frame.lr=now;
+  } else frame.pw=0;
   const dt=Math.min(.05,(now-last)/1000); last=now; clock.t+=dt;
   for(const f of anim) f(clock.t,dt);
   for(const v of visitors) if(v.g.visible) updateVisitor(v,dt,clock.t);
