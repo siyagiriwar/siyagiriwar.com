@@ -2020,7 +2020,7 @@ function avoidOthers(v,dt){
   const repel=(ox,oz,minD,gain)=>{ let dx=cx-ox, dz=cz-oz, d=Math.hypot(dx,dz); if(d>=minD) return; if(d<1e-3){ dx=rx; dz=rz; d=1; }
     const ux=dx/d, uz=dz/d; let sx=-uz, sz=ux; if(sx*rx+sz*rz<0){ sx=-sx; sz=-sz; }
     const depth=(minD-d)*gain; px+=(ux+sx*.6)*depth; pz+=(uz+sz*.6)*depth; };
-  for(const o of visitors){ if(o===v||Math.abs(o.baseY-v.baseY)>.8) continue; repel(o.x+o.ox,o.z+o.oz,(v.rad+o.rad)*((v.encCool>0||o.encCool>0)?1.15:.75),.5); }
+  for(const o of visitors){ if(o===v||Math.abs(o.baseY-v.baseY)>.8) continue; repel(o.x+o.ox,o.z+o.oz,(v.rad+o.rad)*1.4,1.1); }
   for(const o of OBST){ obstXZ(o); if(Math.abs(o.y-v.baseY)<1) repel(o.x,o.z,v.rad+o.r,1); }
   v.ox+=px*k; v.oz+=pz*k;
   const back=Math.max(0,1-dt*1.1); v.ox*=back; v.oz*=back;
@@ -2038,15 +2038,32 @@ function updateEnc(v,dt){
 function startBump(a,b,dx,dz,d,m){
   const ux=d>1e-3?dx/d:1, uz=d>1e-3?dz/d:0, push=Math.max(0,m*1.15-d)/2+.06;
   a.enc={t:0,other:b,ax:-ux,az:-uz,push,pitch:0,roll:0,hop:0}; b.enc={t:0,other:a,ax:ux,az:uz,push,pitch:0,roll:0,hop:0};
-  if(bubbles.length<4 && (view==='station'||view==='dome')){ say(a,'Oops!','',1.5); say(b,pick(['Sorry!','My bad!','Excuse me!']),'',1.5); }
+  if(bubbles.length<6){ say(a,'Oops!','',1.5); say(b,pick(['Sorry!','My bad!','Excuse me!']),'',1.5); }
 }
+/* bumps are a rare treat, not constant: at most one bump every ~15-25 s across the whole scene, and only one the viewer can see */
+let bumpWait=8+Math.random()*6;
+function onScreen(v){ tmpV.set(v.g.position.x, v.g.position.y+.5, v.g.position.z).project(camera); return tmpV.z<1 && Math.abs(tmpV.x)<.85 && Math.abs(tmpV.y)<.85; }
 function detectBumps(dt){
   const n=visitors.length;
   for(let i=0;i<n;i++){ const a=visitors[i]; if(a.encCool>0) a.encCool-=dt; }
+  separate();
+  if(bumpWait>0){ bumpWait-=dt; return; }
+  if(view!=='station'&&view!=='dome') return;
   for(let i=0;i<n;i++){ const a=visitors[i]; if(!a.g.visible||a.enc||a.encCool>0||a.waving||a.talkTo) continue;
     for(let j=i+1;j<n;j++){ const b=visitors[j]; if(!b.g.visible||b.enc||b.encCool>0||b.waving||b.talkTo||Math.abs(a.baseY-b.baseY)>.8||!(a.seg||b.seg)) continue;
       const dx=(b.x+b.ox)-(a.x+a.ox), dz=(b.z+b.oz)-(a.z+a.oz), d=Math.hypot(dx,dz), m=a.rad+b.rad;
-      if(d<m*.95){ startBump(a,b,dx,dz,d,m); break; } } }
+      if(d<m*1.3 && a.seg && b.seg && onScreen(a)){ startBump(a,b,dx,dz,d,m); bumpWait=15+Math.random()*10; return; } } }
+}
+/* hard guarantee: nobody ever overlaps another character, even when the soft steering is not enough */
+function separate(){
+  const n=visitors.length;
+  for(let i=0;i<n;i++){ const a=visitors[i]; if(!a.g.visible) continue;
+    for(let j=i+1;j<n;j++){ const b=visitors[j]; if(!b.g.visible||Math.abs(a.baseY-b.baseY)>.8) continue;
+      let dx=(b.x+b.ox)-(a.x+a.ox), dz=(b.z+b.oz)-(a.z+a.oz), d=Math.hypot(dx,dz); const m=(a.rad+b.rad)*.95;
+      if(d>=m) continue; if(d<1e-3){ dx=Math.cos(a.heading); dz=-Math.sin(a.heading); d=1; }
+      const h=(m-Math.min(d,m))/2, ux=dx/d, uz=dz/d;
+      a.ox-=ux*h; a.oz-=uz*h; b.ox+=ux*h; b.oz+=uz*h;
+      a.g.position.x=a.x+a.ox; a.g.position.z=a.z+a.oz; b.g.position.x=b.x+b.ox; b.g.position.z=b.z+b.oz; } }
 }
 function updateVisitor(v,dt,t){
   let moving=false;
