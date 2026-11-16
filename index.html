@@ -1713,7 +1713,7 @@ function buildSiya(pad, o={}){
   let seed=11; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   const camoTex=canvasTex(256,256,(x,w,h)=>{ x.fillStyle='#6e6c48'; x.fillRect(0,0,w,h);
     ['#4a4a35','#8d8b63','#3a3b2c','#a39f78','#5b5b3f'].forEach(c=>{ x.fillStyle=c; for(let i=0;i<15;i++){ const cx=rnd()*w, cy=rnd()*h, r=14+rnd()*26; x.beginPath(); for(let k=0;k<6;k++){ const a=k/6*Math.PI*2+rnd()*.6, rr=r*(.6+rnd()*.6); x.lineTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr); } x.closePath(); x.fill(); } }); });
-  camoTex.wrapS=camoTex.wrapT=THREE.RepeatWrapping;
+  camoTex.wrapS=camoTex.wrapT=THREE.RepeatWrapping; camoTex.repeat.set(2.2,1.8);
   const camo=new THREE.MeshStandardMaterial({map:camoTex, roughness:.92, flatShading:true}), camoD=mat(0x484833,{roughness:.95}), camoL=mat(0x797751,{roughness:.95});
   // soft contact shadow + star sprites
   const blobTex=canvasTex(128,128,(x,w,h)=>{ const gr=x.createRadialGradient(w/2,h/2,2,w/2,h/2,w/2); gr.addColorStop(0,'rgba(8,10,40,.55)'); gr.addColorStop(.6,'rgba(8,10,40,.22)'); gr.addColorStop(1,'rgba(8,10,40,0)'); x.fillStyle=gr; x.fillRect(0,0,w,h); });
@@ -1745,7 +1745,7 @@ function buildSiya(pad, o={}){
   rbox(.036,.09,.014,.006,mat(0x4fb3d9,{roughness:.5}),g,.155,.33,.108);
   // oversized black tee
   rbox(.37,.33,.205,.05,black,g,0,.585,0); rbox(.385,.05,.215,.02,black,g,0,.43,0);
-  cyl(.05,.056,.075,8,skin,g,0,.78,0);
+  cyl(.05,.056,.05,8,skin,g,0,.77,0);
   // camera on brown straps
   rot(rbox(.035,.3,.018,.006,strap,g,-.085,.63,.106),0,0,.3); rot(rbox(.035,.3,.018,.006,strap,g,.085,.63,.106),0,0,-.3);
   const cam=new THREE.Group(); cam.position.set(0,.5,.135); g.add(cam);
@@ -1767,35 +1767,39 @@ function buildSiya(pad, o={}){
   [[0x18171d,-.135],[0xf4efe6,-.152],[0x18171d,-.169],[0xe7ddd0,-.186],[0x18171d,-.203]].forEach(([c,y])=>cyl(.05,.05,.014,8,mat(c,{roughness:.6}),elbow,0,y,0));
   sph(.066,skin,elbow,0,-.29,0,8,6); rbox(.1,.04,.09,.015,skin,elbow,0,-.255,.01); sph(.028,skin,elbow,.055,-.27,.03,6,5,false);
 
-  // ---------- head ----------
-  const head=new THREE.Group(); head.position.set(0,.94,0); head.scale.setScalar(.84); g.add(head);
-  sph(.2,skin,head,0,0,0,14,11).scale.set(1.02,1.04,.96);
-  // eyes, glasses, brows, lashes, blush, nose, smile
-  [-1,1].forEach(sx=>{
-    sph(.05,eyeW,head,sx*.083,.014,.17,10,8,false).scale.z=.5; sph(.036,ink,head,sx*.083,.014,.19,9,7,false); sph(.013,eyeW,head,sx*.083+.012,.03,.208,6,5,false); sph(.007,eyeW,head,sx*.083-.012,.0,.208,5,4,false);
-    rot(rbox(.1,.024,.02,.009,ink,head,sx*.083,.108,.188,false),0,0,sx*-.12);
-    rot(rbox(.03,.008,.01,.003,ink,head,sx*.14,.05,.19,false),0,0,sx*-.55);
-    const bl=sph(.042,pink,head,sx*.125,-.05,.148,8,6,false); bl.scale.z=.3; });
-  sph(.016,skinD,head,0,-.03,.19,7,5,false);
-  const sm=torus(.05,.011,mat(0xc4283e,{flatShading:false}),head,0,-.07,.172,Math.PI,14); sm.rotation.z=Math.PI;
+  // ---------- head (v3: big round chibi head, white round glasses, centre-parted hair framing the face) ----------
+  const head=new THREE.Group(); head.position.set(0,.985,0); head.scale.setScalar(1.04); g.add(head);
+  sph(.2,skin,head,0,0,0,16,12).scale.set(1.1,1,.95);
+  [-1,1].forEach(sx=>{ const e=sph(.042,skin,head,sx*.212,-.01,0,8,6); e.scale.set(.5,1,.8); });                 // ears
+  // big dark eyes with sparkles, inside white round glasses
+  [-1,1].forEach(sx=>{ const ex=sx*.088;
+    const iris=sph(.047,ink,head,ex,.0,.168,12,9,false); iris.scale.set(1,1.05,.45);
+    sph(.017,eyeW,head,ex+.017,.019,.19,8,6,false); sph(.008,eyeW,head,ex-.016,-.017,.19,6,5,false);
+    torus(.067,.012,frame,head,ex,.0,.192,null,22);                                                                   // round frame
+    rot(rbox(.012,.012,.11,.005,frame,head,sx*.19,.03,.135,false),0,sx*.2,0);                                         // temple arm back to the ear
+    const br=rot(rbox(.085,.026,.022,.011,hairM,head,ex+sx*.008,.104,.186,false),0,0,sx*-.16);                         // thick brows above the frames
+    const bl=sph(.04,pink,head,sx*.15,-.068,.15,8,6,false); bl.scale.set(1.1,.7,.3); });
+  rot(cyl(.007,.007,.045,6,frame,head,0,.012,.2,false),0,0,Math.PI/2);                                                 // bridge
+  const nose=sph(.016,skinD,head,0,-.045,.192,7,5,false); nose.scale.set(1.1,.8,.8);
+  const sm=torus(.034,.01,mat(0xc4283e,{flatShading:false}),head,0,-.075,.18,Math.PI,14); sm.rotation.z=Math.PI; sm.rotation.x=-.25;
   // ---------- hair ----------
-  const hair=sph(.218,hairM,head,0,.05,-.045,12,9); hair.scale.set(1,.95,1.03);
-  [-1,1].forEach(sx=>{ const f=sph(.1,hairM,head,sx*.09,.14,.12,8,6); f.scale.set(1,.5,.7); f.rotation.z=sx*-.4;
-    rot(rbox(.09,.36,.12,.035,hairM,head,sx*.195,-.14,-.01),0,0,sx*.05);
-    rot(rbox(.115,.34,.11,.04,hairM,head,sx*.222,-.45,-.04),0,0,sx*-.08);
-    rot(rbox(.105,.3,.1,.04,hairM,head,sx*.205,-.73,-.07),0,0,sx*.1); });
-  rbox(.4,.55,.12,.04,hairM,head,0,-.22,-.15); rot(rbox(.34,.4,.1,.04,hairM,head,0,-.62,-.16),0,0,.05);
-  // warm rim strands (left) and soft tan (right), teal streak
-  rot(rbox(.03,.52,.06,.012,hairWarm,head,-.282,-.42,-.05),0,0,.05); rot(rbox(.03,.3,.06,.012,hairWarm,head,-.262,-.78,-.08),0,0,-.1);
-  rot(rbox(.028,.46,.05,.012,hairTan,head,.272,-.46,-.04),0,0,-.04);
-  rot(rbox(.034,.55,.03,.01,teal,head,.245,-.36,.04),0,0,-.07); rot(rbox(.034,.24,.026,.01,teal,head,.108,.115,.19,false),0,0,.95);
-  // bun, curl and chopstick with golden tips
-  sph(.108,hairM,head,0,.315,-.06,7,5); torus(.032,.006,hairM,head,.105,.3,-.02,Math.PI*1.4,10).rotation.z=.4;
-  const st=cyl(.01,.01,.64,6,wood,head,.01,.325,-.06,false); st.rotation.z=1.38; [-1,1].forEach(s=>sph(.017,gold,head,.01+s*-.32*Math.sin(1.38),.325+s*.32*Math.cos(1.38),-.06,6,5,false));
-  // earrings: silver stack + flower dangle (screen right ear)
-  [[.02,.0],[.055,.012]].forEach(([y,z])=>{ const h=torus(.026,.005,silver,head,.205,y,z,null,12); h.rotation.y=Math.PI/2; });
-  cyl(.003,.003,.05,4,silver,head,.208,-.08,.03,false);
-  for(let i=0;i<5;i++){ const a=i/5*Math.PI*2; sph(.016,eyeW,head,.21,-.125+Math.cos(a)*.022,.03+Math.sin(a)*.022,6,5,false); } sph(.011,gold,head,.222,-.125,.03,5,4,false);
+  const hair=sph(.226,hairM,head,0,.05,-.075,14,10); hair.scale.set(1.12,1,.98);                                      // skull cap
+  [-1,1].forEach(sx=>{
+    const f=sph(.13,hairM,head,sx*.105,.178,.05,10,7); f.scale.set(1.02,.42,.66); f.rotation.z=sx*-.45;                  // centre part: two swept fringe lobes
+    const fs=sph(.1,hairM,head,sx*.19,-.01,.07,8,6); fs.scale.set(.55,1.25,.6);                                      // hair over the temples, framing the face
+    rot(rbox(.13,.4,.15,.05,hairM,head,sx*.24,-.25,-.01),0,0,sx*.07);                                                  // long locks, flaring outward
+    rot(rbox(.15,.3,.14,.05,hairM,head,sx*.275,-.52,-.05),0,0,sx*.1); });
+  rbox(.5,.6,.16,.06,hairM,head,0,-.27,-.16); rot(rbox(.46,.24,.13,.05,hairM,head,0,-.58,-.17),0,0,.03);               // back curtain
+  // warm sheen strands, teal streak at the part (screen right) running down the side
+    const ts=sph(.05,teal,head,.08,.165,.135,8,6,false); ts.scale.set(.38,1.2,.4); ts.rotation.z=-.7;
+  rot(rbox(.034,.42,.034,.012,teal,head,.245,-.26,.075),0,0,-.07);
+  // bun on top, chopstick through it with golden tips
+  sph(.11,hairM,head,0,.29,-.04,9,7); torus(.034,.007,hairM,head,.11,.29,0,Math.PI*1.4,10).rotation.z=.4;
+  const st=cyl(.011,.011,.72,6,wood,head,0,.3,-.02,false); st.rotation.z=1.42; [-1,1].forEach(s=>sph(.018,gold,head,s*-.36*Math.sin(1.42),.3+s*.36*Math.cos(1.42),-.02,6,5,false));
+  // earrings (screen right ear): silver cuffs + white daisy with a gold centre
+  [[.03,.0],[.06,-.02]].forEach(([y,z])=>{ const h=torus(.022,.005,silver,head,.222,y,z,null,12); h.rotation.y=Math.PI/2; });
+  cyl(.003,.003,.08,4,silver,head,.245,-.09,.04,false);
+  for(let i=0;i<6;i++){ const a=i/6*Math.PI*2; const pe=sph(.016,eyeW,head,.25+Math.sin(a)*.021,-.15+Math.cos(a)*.021,.06,6,5,false); pe.scale.z=.5; } sph(.011,gold,head,.25,-.15,.068,5,4,false);
 
   if(withProps){
   // ---------- her dog (screen left) ----------
@@ -1805,15 +1809,20 @@ function buildSiya(pad, o={}){
   rot(rbox(.15,.25,.14,.05,dc,d,0,.2,.05),-.1,0,0);
   [-1,1].forEach(s=>{ rbox(.052,.14,.056,.02,dc,d,s*.042,.07,.125); rbox(.056,.03,.08,.014,dc,d,s*.042,.015,.145); });
   dh=new THREE.Group(); dh.position.set(0,.4,.11); d.add(dh);
-  rbox(.23,.18,.18,.06,dc,dh,0,0,0); rbox(.13,.06,.15,.03,dt,dh,-.04,.085,0);
-  ears=[-1,1].map(s=>{ const e=new THREE.Group(); e.position.set(s*.125,.045,-.01); dh.add(e); rot(rbox(.085,.14,.04,.016,dtd,e,0,-.055,0),0,0,s*.4); return e; });
-  rbox(.105,.075,.085,.032,dc,dh,0,-.05,.12); rbox(.045,.032,.03,.012,ink,dh,0,-.012,.158,false); rbox(.036,.05,.012,.006,mat(0xe9788b,{roughness:.6}),dh,0,-.1,.15,false);
-  [-1,1].forEach(s=>torus(.021,.006,ink,dh,s*.058,.025,.092,Math.PI,8));
-  const col=torus(.085,.014,mat(0x1d1b22,{roughness:.7}),d,0,.305,.07,null,14); col.rotation.x=Math.PI/2; rot(rbox(.03,.03,.01,.008,gold,d,0,.268,.15,false),0,0,Math.PI/4);
+  const dw=mat(0xfbf4ea,{roughness:.8});
+  sph(.125,dc,dh,0,0,0,10,8).scale.set(1.12,.95,.95);
+  [-1,1].forEach(s=>{ const p=sph(.085,dt,dh,s*.068,.045,.02,8,6); p.scale.set(.9,.95,.95); });                 // tan patches over eyes and crown
+  const bz=sph(.05,dw,dh,0,.03,.075,7,5); bz.scale.set(.6,1.4,.6);                                                       // white blaze
+  ears=[-1,1].map(s=>{ const e=new THREE.Group(); e.position.set(s*.12,.07,-.005); dh.add(e); rot(rbox(.075,.15,.035,.016,dt,e,s*.012,-.065,0),0,0,s*.18); return e; });
+  const mz=sph(.07,dw,dh,0,-.045,.085,9,7); mz.scale.set(1.2,.85,1);                                                     // muzzle
+  sph(.024,ink,dh,0,-.01,.155,7,5,false).scale.set(1.2,.8,.8);                                                         // nose
+  const tg=rbox(.036,.045,.012,.006,mat(0xe9788b,{roughness:.6}),dh,0,-.1,.13,false); tg.rotation.x=.25;              // tongue
+  [-1,1].forEach(s=>torus(.02,.0065,ink,dh,s*.06,.03,.112,Math.PI,8));                                                 // closed happy eyes
+  const col=torus(.085,.014,mat(0x1d1b22,{roughness:.7}),d,0,.305,.07,null,14); col.rotation.x=Math.PI/2; { const sg=new THREE.Shape(); for(let k=0;k<10;k++){ const a=k/10*Math.PI*2+Math.PI/2, r=k%2?.012:.027; sg[k?'lineTo':'moveTo'](Math.cos(a)*r,Math.sin(a)*r); } const stg=new THREE.Mesh(geo('dogstar',()=>new THREE.ExtrudeGeometry(sg,{depth:.008,bevelEnabled:false})),gold); stg.position.set(0,.262,.148); d.add(stg); }
   // Ceaser: invisible hover/tap area so the tooltip works on the dog
   const dogHit=new THREE.Mesh(geo('doghit',()=>new THREE.SphereGeometry(.3,8,6)),new THREE.MeshBasicMaterial({visible:false})); dogHit.position.set(0,.25,.05);
   dogHit.userData={pet:true,node:d,text:"I’m Ceaser. I am 12 years young. My sister loves me.",bounce:()=>{ if(!reduceMotion && jumpT<0) jumpT=0; }}; d.add(dogHit); pickables.push(dogHit);
-  tail=new THREE.Group(); tail.position.set(.1,.07,-.15); d.add(tail); rbox(.07,.07,.2,.03,dt,tail,0,0,-.08); rbox(.066,.066,.08,.028,dc,tail,0,0,-.2); tail.rotation.y=.5;
+  tail=new THREE.Group(); tail.position.set(.06,.1,-.12); tail.rotation.order='XYZ'; tail.rotation.x=1.05; d.add(tail); rbox(.075,.075,.17,.035,dt,tail,0,0,-.07); const tf=sph(.05,dc,tail,0,0,-.17,7,5); tf.scale.set(1,1,1.3); tail.rotation.y=.5;
 
   // ---------- books + UFO lamp + plant (screen right) ----------
   const b=new THREE.Group(); b.position.set(.52,0,.08); G.add(b);
