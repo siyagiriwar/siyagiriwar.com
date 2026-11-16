@@ -833,6 +833,16 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .gl-num{font-size:22px}
   .gl-pips{display:none}
   .gl-prog{margin:9px 0 8px}
+  /* module panel on phones: same idea, with a compact strip so the whole portrait stays visible */
+  .sheet-body .gl-main{--px:0px;--py:0px}
+  .sheet-body .gl-nosig{display:none}
+  .sheet-body .gl-chan{left:8px;right:8px;width:auto;bottom:6px;--r:0deg;--px:0px;--py:0px;animation:none}
+  .sheet-body .gl-chan .gl-bar{display:none}
+  .sheet-body .gl-chb{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 12px;padding:7px 12px 9px}
+  .sheet-body .gl-num{font-size:22px}
+  .sheet-body .gl-name{margin:0;flex-direction:column;align-items:flex-start;gap:2px}
+  .sheet-body .gl-prog{grid-column:1/-1;margin:2px 0 0}
+  .sheet-body .gl-hint{display:none}
   /* classic page on phones: portrait stays still and fully visible, the channel card sits under it instead of on top */
   .classic .gl-main{--px:0px;--py:0px}
   .classic .gl-nosig{display:none}
@@ -2385,7 +2395,7 @@ function glTick(now){
 }
 function glFrame(st, now){
   const sc=st.sc, cr=sc.getBoundingClientRect(); if(!cr.height) return;
-  const mob=innerWidth<=760 && st.sc.classList.contains('classic'), CH=mob?120:0;
+  const narrow=innerWidth<=760, mob=narrow && st.sc.classList.contains('classic'), CH=mob?120:(narrow?64:0);
   let top=parseFloat(getComputedStyle(st.stage).top)||0; const sw=st.stage.clientWidth; let H;
   if(mob){
     // phone + classic page: keep the portrait below the sticky header and centred in the space that is left
@@ -2395,7 +2405,7 @@ function glFrame(st, now){
     if(top!==st.lastTop){ st.lastTop=top; st.stage.style.setProperty('--gl-top',top+'px'); }
   } else {
     if(st.lastTop!=null){ st.lastTop=null; st.stage.style.removeProperty('--gl-top'); top=parseFloat(getComputedStyle(st.stage).top)||0; }
-    H=Math.round(glClamp(cr.height-top-16,320,Math.min(660,sw*1.02+54)));
+    H=Math.round(glClamp(cr.height-top-16-CH,narrow?220:320,Math.min(660,sw*1.02+54)));
   }
   const GH=H+CH, hk=H+'|'+CH;
   if(hk!==st.lastH){ st.lastH=hk; const seg=Math.max(260,cr.height*.5);
