@@ -974,6 +974,7 @@ form.hello input,form.hello textarea,
 .tale .hero,
 .gl-stage{border-radius:0;clip-path:polygon(20px 0,calc(100% - 20px) 0,100% 20px,100% calc(100% - 20px),calc(100% - 20px) 100%,20px 100%,0 calc(100% - 20px),0 20px)}
 }
+body.lowfx .round,body.lowfx .settings,body.lowfx .dock,body.lowfx .pill,body.lowfx .status,body.lowfx .welcome{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(18,22,44,.95)}
 </style>
 </head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="gl-outline" x="-2%" y="-5%" width="104%" height="110%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="erode" radius="1.1" result="in"/><feComposite in="SourceGraphic" in2="in" operator="out"/></filter></svg>
@@ -1352,7 +1353,7 @@ const rand=(a,b)=>a+Math.random()*(b-a), pick=a=>a[Math.floor(Math.random()*a.le
 function init3D(){
   if(typeof THREE==='undefined') throw new Error('three.js did not load');
   renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.5));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.useLegacyLights = true;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.12;
@@ -2454,8 +2455,9 @@ function glDraw(st,I,now){
 
 /* classic portfolio */
 const classic=$('#classic');
-['about','work','experiments','contact'].forEach(id=>{ const s=$('#c-'+id); s.innerHTML=RENDER[id]('h2','c').replace('id="panelTitle"',''); wire(s); armVideos(s); armReel(s); glInit(s); });
-function openClassic(fromHash=false){ closePanel(false); classic.hidden=false; glRun(); view='classic'; if(!fromHash) history.pushState(null,'','#classic'); classic.scrollTop=0; (getComputedStyle($('#backToStation')).display==='none'?$('#backToStationM'):$('#backToStation')).focus(); }
+let classicBuilt=false;  /* built on first open, so its photos and video posters don't download for every visitor */
+function buildClassic(){ if(classicBuilt) return; classicBuilt=true; ['about','work','experiments','contact'].forEach(id=>{ const s=$('#c-'+id); s.innerHTML=RENDER[id]('h2','c').replace('id="panelTitle"',''); wire(s); armVideos(s); armReel(s); glInit(s); }); }
+function openClassic(fromHash=false){ buildClassic(); closePanel(false); classic.hidden=false; glRun(); view='classic'; if(!fromHash) history.pushState(null,'','#classic'); classic.scrollTop=0; (getComputedStyle($('#backToStation')).display==='none'?$('#backToStationM'):$('#backToStation')).focus(); }
 function closeClassic(){ classic.hidden=true; view='station'; if(scene) setOverview(); history.pushState(null,'','#station'); $('#classicBtn').focus(); }
 $('#classicBtn').onclick=()=>openClassic(); $('#backToStation').onclick=closeClassic; $('#backToStationM').onclick=closeClassic;
 classic.querySelectorAll('.classic-bar nav a').forEach(a=>a.onclick=e=>{ e.preventDefault(); $(a.getAttribute('href')).scrollIntoView({behavior:reduceMotion?'auto':'smooth'}); });
@@ -2463,7 +2465,7 @@ classic.querySelectorAll('.classic-bar nav a').forEach(a=>a.onclick=e=>{ e.preve
 /* settings */
 $('#setBtn').onclick=()=>{ const s=$('#settings'); s.hidden=!s.hidden; $('#setBtn').setAttribute('aria-expanded', !s.hidden); };
 document.addEventListener('click',e=>{ const s=$('#settings'); if(!s.hidden && !e.target.closest('#settings,#setBtn')){ s.hidden=true; $('#setBtn').setAttribute('aria-expanded',false);} });
-$('#optShadows').onchange=e=>{ if(!renderer) return; renderer.shadowMap.enabled=e.target.checked; keyLight.castShadow=e.target.checked; scene.traverse(o=>{ if(o.material) o.material.needsUpdate=true; }); };
+$('#optShadows').onchange=e=>{ if(!renderer) return; renderer.shadowMap.enabled=e.target.checked; renderer.shadowMap.needsUpdate=true; keyLight.castShadow=e.target.checked; scene.traverse(o=>{ if(o.material) o.material.needsUpdate=true; }); };
 $('#optDrift').onchange=e=>{ drift=e.target.checked; };
 $('#optBusy').onchange=e=>{ visitors.forEach((v,i)=>{ v.g.visible = e.target.checked || i%2===0; }); updateStatus(); };
 function updateStatus(){ const n=visitors.filter(v=>v.g.visible).length; $('#statusTxt').textContent = n? `4 modules, ${n} visitors aboard` : '4 modules, many worlds'; }
@@ -2751,6 +2753,8 @@ function frame(now){
   ambientChatter();
   syncWelcome();
   applyCamera(dt);
+  if(((frame.sc=(frame.sc||0)+1)&1)===0) renderer.shadowMap.needsUpdate=true;  // shadows refresh at half rate: same look, half the shadow cost
+  if(!(_pn&&!_pn.hidden)) adaptQuality(dt);
   renderer.render(scene,camera);
   updateBubbles();
   requestAnimationFrame(frame);
@@ -2850,6 +2854,91 @@ function gdraw(){
 function gloop(now){ if(!G.on) return; const dt=Math.min(.05,(now-gl)/1000); gl=now; if(G.run) gupdate(dt); else { G.hist.push({x:G.rx,y:G.ry}); if(G.hist.length>160) G.hist.shift(); } gdraw(); G.raf=requestAnimationFrame(gloop); }
 
 
+/* ================================================================
+   PERFORMANCE: the station is ~1,800 small meshes, which meant ~2,700 draw calls a frame (scene + shadows).
+   At load, every animation is stepped through a few simulated seconds; anything that moves, blinks or is
+   clickable is left alone, and everything else is merged into one mesh per material. Same picture, far fewer
+   draw calls. Originals stay in the scene graph (moved to layer 31, so they are not drawn) so positions and
+   collision lookups still work.
+   ================================================================ */
+function bakeStatic(){
+  const t0=performance.now();
+  scene.updateMatrixWorld(true);
+  const objs=[]; scene.traverse(o=>objs.push(o));
+  const snap=o=>[o.position.x,o.position.y,o.position.z,o.quaternion.x,o.quaternion.y,o.quaternion.z,o.quaternion.w,o.scale.x,o.scale.y,o.scale.z,o.visible?1:0];
+  const before=new Map(objs.map(o=>[o,snap(o)]));
+  const matState=new Map(); objs.forEach(o=>{ if(o.material) [].concat(o.material).forEach(m=>{ if(!matState.has(m)) matState.set(m,[m.opacity,m.emissiveIntensity]); }); });
+  const moving=new Set();
+  const check=()=>{ for(const o of objs){ if(moving.has(o)) continue; const a=before.get(o), b=snap(o); for(let i=0;i<11;i++) if(Math.abs(a[i]-b[i])>1e-6){ moving.add(o); break; } } };
+  for(const t of [.37,1.31,2.93,4.17,6.6,9.9,13.3,21.1]){ for(const f of anim) f(t,.05); dishes.forEach(d=>d.rotation.y=Math.sin(t*.3)*1.2); check(); }
+  for(const o of objs){ const a=before.get(o); o.position.set(a[0],a[1],a[2]); o.quaternion.set(a[3],a[4],a[5],a[6]); o.scale.set(a[7],a[8],a[9]); o.visible=!!a[10]; }
+  matState.forEach((v,m)=>{ m.opacity=v[0]; if(v[1]!==undefined) m.emissiveIntensity=v[1]; });
+  // things moved by code outside the animation list: visitors (whole body + every part in v.P), clickable pets/rocket, dishes
+  visitors.forEach(v=>{ moving.add(v.g); Object.values(v.P||{}).forEach(x=>[].concat(x).forEach(n=>{ if(n&&n.isObject3D) moving.add(n); })); });
+  pickables.forEach(h=>{ if(h.userData && (h.userData.pet||h.userData.game||h.userData.visitor) && h.parent) moving.add(h.parent); });
+  dishes.forEach(d=>moving.add(d)); if(shuttle) moving.add(shuttle);
+  scene.updateMatrixWorld(true);
+  // visitors are small: only their two biggest parts (body, head) need to cast a shadow; thin arms and legs add draw calls but no visible shadow
+  const vs=new THREE.Vector3();
+  visitors.forEach(v=>{ const ms=[]; v.g.traverse(o=>{ if(o.isMesh&&o.castShadow){ o.geometry.computeBoundingSphere(); o.getWorldScale(vs); ms.push([o.geometry.boundingSphere.radius*Math.max(vs.x,vs.y,vs.z),o]); } }); ms.sort((a,b)=>b[0]-a[0]).slice(2).forEach(x=>x[1].castShadow=false); });
+  const sig=g=>Object.keys(g.attributes).sort().map(k=>k+g.attributes[k].itemSize).join(',');
+  const okAttr=g=>Object.values(g.attributes).every(a=>!a.isInterleavedBufferAttribute && a.array instanceof Float32Array) && !g.morphAttributes.position;
+  // each mesh is merged into the space of its nearest moving ancestor (or the world if nothing above it moves)
+  const anchorOf=o=>{ if(moving.has(o)) return undefined; for(let q=o.parent;q;q=q.parent) if(moving.has(q)) return q; return null; };
+  const buckets=new Map(), tmpS=new THREE.Vector3();
+  scene.traverse(o=>{
+    if(!o.isMesh || o.isInstancedMesh || o.isSkinnedMesh || Array.isArray(o.material)) return;
+    const m=o.material; if(m.visible===false) return;
+    let vis=true; for(let q=o;q;q=q.parent) if(!q.visible){ vis=false; break; } if(!vis) return;
+    o.geometry.computeBoundingSphere(); o.getWorldScale(tmpS);
+    if(o.castShadow && o.geometry.boundingSphere.radius*Math.max(tmpS.x,tmpS.y,tmpS.z)<.07) o.castShadow=false;  // shadows too small to see
+    if(m.transparent || !okAttr(o.geometry) || o.layers.mask!==1 || o.renderOrder || o.children.length) return;
+    const anc=anchorOf(o); if(anc===undefined) return;
+    const key=(anc?anc.uuid:'world')+'|'+m.uuid+'|'+o.castShadow+'|'+o.receiveShadow+'|'+sig(o.geometry);
+    let bk=buckets.get(key); if(!bk) buckets.set(key,bk={anc,list:[]}); bk.list.push(o);
+  });
+  let merged=0, into=0;
+  const nm=new THREE.Matrix3(), v=new THREE.Vector3(), M=new THREE.Matrix4(), inv=new THREE.Matrix4();
+  buckets.forEach(({anc,list})=>{
+    if(list.length<2) return;
+    if(anc) inv.copy(anc.matrixWorld).invert(); else inv.identity();
+    const g0=list[0].geometry, names=Object.keys(g0.attributes);
+    let nv=0, ni=0; list.forEach(o=>{ const g=o.geometry; nv+=g.attributes.position.count; ni+=g.index?g.index.count:g.attributes.position.count; });
+    const arrs={}; names.forEach(n=>arrs[n]=new Float32Array(nv*g0.attributes[n].itemSize));
+    const idx=new Uint32Array(ni); let vo=0, io=0;
+    list.forEach(o=>{
+      const g=o.geometry, cnt=g.attributes.position.count; M.multiplyMatrices(inv,o.matrixWorld); nm.getNormalMatrix(M);
+      names.forEach(n=>{ const src=g.attributes[n], sz=src.itemSize, dst=arrs[n];
+        if(n==='position'){ for(let i=0;i<cnt;i++){ v.fromBufferAttribute(src,i).applyMatrix4(M); dst[(vo+i)*3]=v.x; dst[(vo+i)*3+1]=v.y; dst[(vo+i)*3+2]=v.z; } }
+        else if(n==='normal'){ for(let i=0;i<cnt;i++){ v.fromBufferAttribute(src,i).applyMatrix3(nm).normalize(); dst[(vo+i)*3]=v.x; dst[(vo+i)*3+1]=v.y; dst[(vo+i)*3+2]=v.z; } }
+        else dst.set(src.array.subarray(0,cnt*sz),vo*sz);
+      });
+      const flip=M.determinant()<0, ix=g.index?g.index.array:null, n=ix?ix.length:cnt;
+      for(let i=0;i<n;i+=3){ const a=ix?ix[i]:i, b=ix?ix[i+1]:i+1, c=ix?ix[i+2]:i+2; idx[io++]=vo+a; idx[io++]=vo+(flip?c:b); idx[io++]=vo+(flip?b:c); }
+      vo+=cnt;
+    });
+    const mg=new THREE.BufferGeometry(); names.forEach(n=>mg.setAttribute(n,new THREE.BufferAttribute(arrs[n],g0.attributes[n].itemSize))); mg.setIndex(new THREE.BufferAttribute(idx,1));
+    mg.computeBoundingSphere(); mg.computeBoundingBox();
+    const mm=new THREE.Mesh(mg,list[0].material); mm.castShadow=list[0].castShadow; mm.receiveShadow=list[0].receiveShadow; mm.name='baked';
+    if(anc) anc.add(mm); else { mm.matrixAutoUpdate=false; scene.add(mm); }
+    list.forEach(o=>o.layers.set(31)); merged+=list.length; into++;
+  });
+  bakeStatic.stats={merged, into, ms:Math.round(performance.now()-t0)};
+  bakeStatic.anchorOf=o=>{ for(let q=o.parent;q;q=q.parent) if(moving.has(q)) return q; return null; };
+}
+/* render quality adapts to the device: start sharp, step the resolution down if frames are slow, back up if there is headroom */
+const PR_MAX=Math.min(window.devicePixelRatio||1, 1.5);
+const perf={sum:0,n:0,pr:PR_MAX};
+function adaptQuality(dt){
+  perf.sum+=dt; perf.n++;
+  if(perf.n<90) return;
+  const avg=perf.sum/perf.n; perf.sum=0; perf.n=0;
+  let pr=perf.pr;
+  if(avg>1/38 && pr<=1 && !document.body.classList.contains('lowfx')) document.body.classList.add('lowfx');
+  if(avg>1/38 && pr>1) pr=Math.max(1,pr-.25);
+  else if(avg<1/57 && pr<PR_MAX) pr=Math.min(PR_MAX,pr+.25);
+  if(pr!==perf.pr){ perf.pr=pr; renderer.setPixelRatio(pr); renderer.setSize(innerWidth,innerHeight,false); }
+}
 async function boot(){
   try{
     init3D();
@@ -2860,6 +2949,8 @@ async function boot(){
     MODULES.forEach(m=>corridor(EXITS[m.id], 6.45, 11.0, true));
     buildPad(); buildRockets();
     const busy=innerWidth<760? 30 : 46; spawnVisitors(busy); updateStatus();
+    try{ bakeStatic(); }catch(e){ console.warn('bake skipped',e); }
+    renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;
     bindPointer();
     setOverview(); Object.assign(rig, goal, {dist:goal.dist*1.5, el:.8}); if(reduceMotion) Object.assign(rig,goal);
     requestAnimationFrame(frame);
