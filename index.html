@@ -1771,17 +1771,15 @@ function buildSiya(pad, o={}){
   sph(.066,skin,elbow,0,-.29,0,8,6); rbox(.1,.04,.09,.015,skin,elbow,0,-.255,.01); sph(.028,skin,elbow,.055,-.27,.03,6,5,false);
 
   // ---------- head (v3: big round chibi head, white round glasses, centre-parted hair framing the face) ----------
-  const head=new THREE.Group(); head.position.set(0,.955,0); head.scale.setScalar(.86); g.add(head);
+  const head=new THREE.Group(); head.position.set(0,.945,0); head.scale.setScalar(.81); g.add(head);
   sph(.2,skin,head,0,0,0,16,12).scale.set(1.1,1,.95);
   [-1,1].forEach(sx=>{ const e=sph(.042,skin,head,sx*.212,-.01,0,8,6); e.scale.set(.5,1,.8); });                 // ears
   // big dark eyes with sparkles, inside white round glasses
   [-1,1].forEach(sx=>{ const ex=sx*.088;
     const iris=sph(.047,ink,head,ex,.0,.168,12,9,false); iris.scale.set(1,1.05,.45);
     sph(.017,eyeW,head,ex+.017,.019,.19,8,6,false); sph(.008,eyeW,head,ex-.016,-.017,.19,6,5,false);
-    torus(.067,.012,frame,head,ex,.0,.192,null,22);                                                                   // round frame
     const br=rot(rbox(.085,.026,.022,.011,hairM,head,ex+sx*.008,.104,.186,false),0,0,sx*-.16);                         // thick brows above the frames
     const bl=sph(.04,pink,head,sx*.15,-.068,.15,8,6,false); bl.scale.set(1.1,.7,.3); });
-  rot(cyl(.007,.007,.045,6,frame,head,0,.012,.2,false),0,0,Math.PI/2);                                                 // bridge
   const nose=sph(.016,skinD,head,0,-.045,.192,7,5,false); nose.scale.set(1.1,.8,.8);
   const sm=torus(.034,.01,mat(0xc4283e,{flatShading:false}),head,0,-.075,.18,Math.PI,14); sm.rotation.z=Math.PI; sm.rotation.x=-.25;
   // ---------- hair ----------
