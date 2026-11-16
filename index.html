@@ -1731,14 +1731,17 @@ function buildSiya(pad, o={}){
     headYaw=lookYaw.map(y=>Math.max(-1.05,Math.min(1.05,wrapA(y-bodyRy)))); }
   const G=new THREE.Group(); G.position.set(o.x??-1.7,o.y??0,o.z??2.25); G.rotation.y=bodyRy; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
   OBST.push({node:G,lx:0,lz:0,r:.3}); if(withProps) OBST.push({node:G,lx:-.5,lz:.2,r:.24},{node:G,lx:.52,lz:.08,r:.26}); // Siya, her dog and the books/lamp: others walk around them
-  const g=new THREE.Group(); g.position.y=.16; G.add(g); // upper body sits on longer legs
+  const g=new THREE.Group(); g.position.y=.22; G.add(g); // upper body sits on longer legs
   blob(G,0,.02,.6,.4); if(withProps){ blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42); }
 
   // ---------- body ----------
+  const bootM=mat(0x16151a,{roughness:.55}), soleM=mat(0x0b0b0e,{roughness:.9}), laceM=mat(0x3a3942,{roughness:.8});
   [-1,1].forEach(sx=>{
-    rbox(.135,.075,.225,.03,shoe,G,sx*.088,.0375,.04); rbox(.13,.025,.2,.01,mat(0xdcd3c8),G,sx*.088,.012,.04);
-    cyl(.082,.108,.49,8,camo,G,sx*.088,.32,0); cyl(.11,.112,.04,8,camoD,G,sx*.088,.095,0);
-    rbox(.045,.115,.1,.02,camoL,G,sx*.135,.34,.03); rbox(.05,.04,.105,.015,camoD,G,sx*.138,.42,.03); });
+    rbox(.12,.075,.215,.03,bootM,G,sx*.088,.042,.035); rbox(.126,.026,.222,.01,soleM,G,sx*.088,.013,.035);              // boot foot + heavy sole
+    cyl(.064,.07,.26,8,bootM,G,sx*.088,.19,0);                                                                              // tall shaft
+    for(let i=0;i<5;i++) rbox(.05,.008,.012,.003,laceM,G,sx*.088,.1+i*.045,.066,false);                                    // laces up the front
+    cyl(.083,.112,.43,8,camo,G,sx*.088,.47,0); cyl(.104,.098,.06,8,camoD,G,sx*.088,.27,0);                                 // cargo leg, bloused over the boot
+    rbox(.045,.115,.1,.02,camoL,G,sx*.135,.45,.03); rbox(.05,.04,.105,.015,camoD,G,sx*.138,.53,.03); });
   rbox(.33,.09,.19,.03,camo,g,0,.43,0);
   // belt chain + blue tag on her left hip (screen right)
   for(let i=0;i<7;i++){ const t=i/6; sph(.009,silver,g,.04+t*.11,.44-Math.sin(t*Math.PI)*-.03-t*.07,.108,6,5,false); }
@@ -1768,7 +1771,7 @@ function buildSiya(pad, o={}){
   sph(.066,skin,elbow,0,-.29,0,8,6); rbox(.1,.04,.09,.015,skin,elbow,0,-.255,.01); sph(.028,skin,elbow,.055,-.27,.03,6,5,false);
 
   // ---------- head (v3: big round chibi head, white round glasses, centre-parted hair framing the face) ----------
-  const head=new THREE.Group(); head.position.set(0,.985,0); head.scale.setScalar(1.04); g.add(head);
+  const head=new THREE.Group(); head.position.set(0,.955,0); head.scale.setScalar(.86); g.add(head);
   sph(.2,skin,head,0,0,0,16,12).scale.set(1.1,1,.95);
   [-1,1].forEach(sx=>{ const e=sph(.042,skin,head,sx*.212,-.01,0,8,6); e.scale.set(.5,1,.8); });                 // ears
   // big dark eyes with sparkles, inside white round glasses
@@ -1776,7 +1779,6 @@ function buildSiya(pad, o={}){
     const iris=sph(.047,ink,head,ex,.0,.168,12,9,false); iris.scale.set(1,1.05,.45);
     sph(.017,eyeW,head,ex+.017,.019,.19,8,6,false); sph(.008,eyeW,head,ex-.016,-.017,.19,6,5,false);
     torus(.067,.012,frame,head,ex,.0,.192,null,22);                                                                   // round frame
-    rot(rbox(.012,.012,.11,.005,frame,head,sx*.19,.03,.135,false),0,sx*.2,0);                                         // temple arm back to the ear
     const br=rot(rbox(.085,.026,.022,.011,hairM,head,ex+sx*.008,.104,.186,false),0,0,sx*-.16);                         // thick brows above the frames
     const bl=sph(.04,pink,head,sx*.15,-.068,.15,8,6,false); bl.scale.set(1.1,.7,.3); });
   rot(cyl(.007,.007,.045,6,frame,head,0,.012,.2,false),0,0,Math.PI/2);                                                 // bridge
@@ -1788,14 +1790,16 @@ function buildSiya(pad, o={}){
     const f=sph(.13,hairM,head,sx*.105,.178,.05,10,7); f.scale.set(1.02,.42,.66); f.rotation.z=sx*-.45;                  // centre part: two swept fringe lobes
     const fs=sph(.1,hairM,head,sx*.19,-.01,.07,8,6); fs.scale.set(.55,1.25,.6);                                      // hair over the temples, framing the face
     rot(rbox(.13,.4,.15,.05,hairM,head,sx*.24,-.25,-.01),0,0,sx*.07);                                                  // long locks, flaring outward
-    rot(rbox(.15,.3,.14,.05,hairM,head,sx*.275,-.52,-.05),0,0,sx*.1); });
-  rbox(.5,.6,.16,.06,hairM,head,0,-.27,-.16); rot(rbox(.46,.24,.13,.05,hairM,head,0,-.58,-.17),0,0,.03);               // back curtain
+    rot(rbox(.15,.32,.14,.05,hairM,head,sx*.275,-.53,-.05),0,0,sx*.1);
+    rot(rbox(.13,.24,.12,.05,hairM,head,sx*.29,-.8,-.08),0,0,sx*.03); });
+  rbox(.5,.6,.16,.06,hairM,head,0,-.27,-.16); rot(rbox(.46,.45,.13,.05,hairM,head,0,-.68,-.17),0,0,.03);               // back curtain
   // warm sheen strands, teal streak at the part (screen right) running down the side
-    const ts=sph(.05,teal,head,.08,.165,.135,8,6,false); ts.scale.set(.38,1.2,.4); ts.rotation.z=-.7;
-  rot(rbox(.034,.42,.034,.012,teal,head,.245,-.26,.075),0,0,-.07);
+    const ts=sph(.05,teal,head,.115,.13,.128,8,6,false); ts.scale.set(.42,1.7,.28); ts.rotation.set(-.35,.4,.78);
+  rot(rbox(.05,.62,.02,.008,teal,head,.255,-.36,.068),0,0,-.07);
   // bun on top, chopstick through it with golden tips
   sph(.11,hairM,head,0,.29,-.04,9,7); torus(.034,.007,hairM,head,.11,.29,0,Math.PI*1.4,10).rotation.z=.4;
-  const st=cyl(.011,.011,.72,6,wood,head,0,.3,-.02,false); st.rotation.z=1.42; [-1,1].forEach(s=>sph(.018,gold,head,s*-.36*Math.sin(1.42),.3+s*.36*Math.cos(1.42),-.02,6,5,false));
+  { const hs=new THREE.Group(); hs.position.set(0,.3,-.02); hs.rotation.z=1.42; head.add(hs); cyl(.011,.011,.42,6,wood,hs,0,.03,0,false);
+    const tip=new THREE.Mesh(geo('stickTip',()=>new THREE.ConeGeometry(.011,.09,6)),wood); tip.position.y=.285; hs.add(tip); sph(.017,gold,hs,0,-.19,0,6,5,false); }
   // earrings (screen right ear): silver cuffs + white daisy with a gold centre
   [[.03,.0],[.06,-.02]].forEach(([y,z])=>{ const h=torus(.022,.005,silver,head,.222,y,z,null,12); h.rotation.y=Math.PI/2; });
   cyl(.003,.003,.08,4,silver,head,.245,-.09,.04,false);
@@ -1859,7 +1863,7 @@ function buildSiya(pad, o={}){
       wave.rotation.z=-.07+k*.012*Math.sin(t*1.2); elbow.rotation.z=0; armR.rotation.z=.07-k*.012*Math.sin(t*1.2); }
     else { wave.rotation.z=-2.1+k*.06*Math.sin(t*3); elbow.rotation.z=-.84+(reduceMotion?0:.55*Math.sin(t*7));
       head.rotation.y=k*.2*Math.sin(t*.7); head.rotation.z=k*.04*Math.sin(t*1.3); }
-    g.position.y=.16+k*.008*Math.sin(t*2.4);
+    g.position.y=.22+k*.008*Math.sin(t*2.4);
     if(withProps){ const dtj=Math.min(.1,Math.max(0,t0-lastJ)); lastJ=t0;
       if(jumpT>=0){ jumpT+=dtj; const p=jumpT/.62; if(p>=1){ jumpT=-1; d.position.y=0; d.scale.set(1,1,1); }
         else { const a=Math.sin(Math.PI*p); d.position.y=a*.26; d.scale.set(1-.05*a,1+.1*a,1-.05*a); tail.rotation.y=.5+.5*Math.sin(t*30); } } }
