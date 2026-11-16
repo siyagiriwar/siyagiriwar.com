@@ -838,10 +838,12 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .sheet-body .gl-nosig{display:none}
   .sheet-body .gl-chan{left:8px;right:8px;width:auto;bottom:6px;--r:0deg;--px:0px;--py:0px;animation:none}
   .sheet-body .gl-chan .gl-bar{display:none}
-  .sheet-body .gl-chb{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 12px;padding:7px 12px 9px}
-  .sheet-body .gl-num{font-size:22px}
-  .sheet-body .gl-name{margin:0;flex-direction:column;align-items:flex-start;gap:2px}
-  .sheet-body .gl-prog{grid-column:1/-1;margin:2px 0 0}
+  .sheet-body .gl-chb{display:flex;align-items:center;gap:8px;padding:5px 10px}
+  .sheet-body .gl-num{font-size:15px;flex:none}
+  .sheet-body .gl-num small{font-size:9px;margin-left:2px}
+  .sheet-body .gl-name{margin:0;flex:1;min-width:0;flex-direction:row;align-items:center;gap:0;font-size:8.5px;letter-spacing:.14em;white-space:nowrap;overflow:hidden}
+  .sheet-body .gl-st{display:none}
+  .sheet-body .gl-prog{flex:none;width:36px;height:4px;margin:0}
   .sheet-body .gl-hint{display:none}
   /* classic page on phones: portrait stays still and fully visible, the channel card sits under it instead of on top */
   .classic .gl-main{--px:0px;--py:0px}
@@ -2395,7 +2397,7 @@ function glTick(now){
 }
 function glFrame(st, now){
   const sc=st.sc, cr=sc.getBoundingClientRect(); if(!cr.height) return;
-  const narrow=innerWidth<=760, mob=narrow && st.sc.classList.contains('classic'), CH=mob?120:(narrow?64:0);
+  const narrow=innerWidth<=760, mob=narrow && st.sc.classList.contains('classic'), CH=mob?120:(narrow?44:0);
   let top=parseFloat(getComputedStyle(st.stage).top)||0; const sw=st.stage.clientWidth; let H;
   if(mob){
     // phone + classic page: keep the portrait below the sticky header and centred in the space that is left
