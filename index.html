@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://drive.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://mail.google.com mailto:; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Siya Giriwar — Portfolio station</title>
 <meta name="description" content="Siya Giriwar is a communication designer from New Delhi working across UI/UX, brand identity, illustration, photography and wearable interfaces. Explore her work aboard a space station.">
@@ -1069,7 +1071,7 @@ body.lowfx .round,body.lowfx .settings,body.lowfx .dock,body.lowfx .pill,body.lo
 
 <div class="loader" id="loader"><div><div class="ufo" role="img" aria-label="A pixel-art UFO hovering with its tractor beam on"></div><p>Docking</p></div></div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="assets/vendor/three-0.160.0.min.js"></script><!-- self-hosted: no third-party script can run on this site -->
 <script>
 'use strict';
 /* ================================================================
