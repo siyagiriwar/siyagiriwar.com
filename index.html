@@ -1135,16 +1135,18 @@ const EXP = [
 function renderAbout(h='h2'){
   return `${glitchStage()}
   <${h} class="nm" aria-label="Siya Giriwar" ${h==='h2'?'id="panelTitle"':''}><span class="n1" aria-hidden="true">Siya</span><span class="n2" aria-hidden="true">Giriwar</span></${h}>
-  <p class="lead tagline">Waiting for aliens to come visit me so I can finally start my intergalactic friendship club.</p>
+  <p class="lead tagline">I’m Siya — a communication designer, visual thinker and professional question-asker.</p>
     <dl class="facts">
-      <div><dt>Based in</dt><dd>New Delhi, India</dd></div>
-      <div><dt>Trained at</dt><dd>NIFT Delhi, B.Des Fashion Communication, 2022–26</dd></div>
-      <div><dt>Works across</dt><dd>UI/UX, brand identity, wearable interfaces, photography</dd></div>
-      <div><dt>Field notes</dt><dd>Design, music, travel, animals, healing, spirituality, people</dd></div>
-      <div><dt>Status</dt><dd>Still observing</dd></div>
+      <div><dt>Based in</dt><dd>New Delhi, Earth</dd></div>
+      <div><dt>Educated at</dt><dd>NIFT Delhi · B.Des. Fashion Communication · 2022–2026</dd></div>
+      <div><dt>Works across</dt><dd>UI/UX · Brand Identity · Digital Experiences · Visual Design · Photography</dd></div>
+      <div><dt>Current interests</dt><dd>Human behaviour, visual storytelling, technology, music, nature and the occasional existential question.</dd></div>
+      <div><dt>Current status</dt><dd>Curiosity levels: Maximum. Always exploring.</dd></div>
     </dl>
-  <p>I’m a communication designer with a hand in UI/UX, visual design, branding, digital products and content creation. I design user-centric interfaces, websites, wearable product UI, brand systems and marketing creatives.</p>
-  <p>I also enjoy meaningful NGO work and exploring ideas around aliens. I’ve worked with startups, global teams, NGOs and fashion brands, combining strategy, aesthetics and usability into design that actually gets used. Off the clock, I’m behind a camera backstage at fashion week, or writing lines like “everything I’m not, made me who I am.”</p>
+  <p>I work at the intersection of design, technology and storytelling, turning complex ideas into experiences that are intuitive, meaningful and visually engaging. From digital products and user interfaces to brand identities and visual campaigns, I enjoy exploring how things look, feel and work.</p>
+  <p>I’ve collaborated with startups, global teams, fashion brands and creative ventures, moving between strategy, pixels and the occasional happy accident.</p>
+  <p>Beyond the screen, you’ll probably find me behind a camera, exploring somewhere new, making music, observing the little things or wondering if we’re actually alone in this universe.</p>
+  <p>I believe good design starts with curiosity, grows through observation and becomes meaningful when it makes someone’s world a little better.</p>
   <h3>Creative capabilities</h3>
   <ul class="chips">${CAPS.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>
   <h3>Instruments</h3>
@@ -1153,7 +1155,7 @@ function renderAbout(h='h2'){
   <div class="xp">${EXP.map(x=>`<article><time>${esc(x.when)}</time><b>${esc(x.org)}</b><em>${esc(x.role)}</em>${x.pts.length?`<ul>${x.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}</article>`).join('')}</div>
   <h3>Education</h3>
   <div class="edu"><div><b>National Institute of Fashion Technology, New Delhi</b><span>Bachelor of Design, Fashion Communication, 2022–2026. Graduated.</span></div><div><b>Mount Abu Public School, Rohini, Delhi</b><span>Science, 2021</span></div></div>
-  <blockquote>Here for the moment Earth remembers her ancient wisdom.</blockquote>`;
+  <blockquote>Still exploring. Still experimenting. Still observing Earth.</blockquote>`;
 }
 const HUD=`<svg class="hud" viewBox="0 0 400 230" preserveAspectRatio="none" aria-hidden="true"><path class="ol" d="M12 5 H296 L304 0 H374 L380 5 H390 L398 13 V206 L386 224 H14 L2 212 V15 Z"/><rect class="f" x="22" y="9" width="11" height="3"/><rect class="f" x="37" y="9" width="11" height="3"/><rect class="f" x="52" y="9" width="11" height="3"/>${[0,1,2,3,4,5,6].map(k=>`<polygon class="f" points="${309+k*9},5 ${313+k*9},1 ${318+k*9},1 ${314+k*9},5"/>`).join('')}${[0,1,2,3,4,5].map(k=>`<rect class="f" x="${24+k*11}" y="226" width="8" height="3"/>`).join('')}<rect class="f" x="318" y="226" width="46" height="3"/><polygon class="f" points="11,200 11,214 25,214"/></svg>`;
 function projCard(p,i){
