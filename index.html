@@ -2911,7 +2911,7 @@ function gfinish(){ G.run=false; G.mode='end'; G.banners=[]; const sc=Math.round
 function gcrash(){ G.run=false; G.banners=[]; if(G.cpSnap){ G.mode='resume'; gsaveBest(); gshow('Crashed!', `Your last checkpoint was ${G.cpSnap.n}, ${G.cpSnap.name}. Resume from there with fresh hearts, or finish your run.`, 'Resume from checkpoint', 'Finish run'); } else gfinish(); }
 function gresume(){ const c=G.cpSnap; G.ents=[]; G.parts=[]; G.toasts=[]; G.banners=[];
   Object.assign(G,{score:c.score,friends:c.friends,t:c.t,dist:c.dist,coins:c.coins,fol:c.fol.slice(),sector:c.n,nextCp:cpDist(c.n+1),gate:false,lives:maxLives(),shield:3,inv:1.5,spawn:1.2,mode:'play',lostHeart:true});
-  G.run=true; gp.hidden=true; blip(760); }
+  G.shake=0; G.run=true; gp.hidden=true; blip(760); }
 function gcheckpoint(n){ const name=sectorName(n); G.sector=n; G.gate=false; G.nextCp=cpDist(n+1); G.score+=100;
   const heal=G.lives<maxLives(); if(heal) G.lives++; G.shield=Math.max(G.shield,4); G.inv=Math.max(G.inv,.8);
   G.cpSnap={n,name,score:G.score,friends:G.friends,t:G.t,dist:G.dist,coins:G.coins,fol:G.fol.slice()};
@@ -3014,7 +3014,7 @@ function gdraw(){
     gx.fillStyle='rgba(11,16,36,.68)'; gx.beginPath(); gx.moveTo(x+c,y-30); gx.lineTo(x+w-c,y-30); gx.lineTo(x+w,y-30+c); gx.lineTo(x+w,y+26-c); gx.lineTo(x+w-c,y+26); gx.lineTo(x+c,y+26); gx.lineTo(x,y+26-c); gx.lineTo(x,y-30+c); gx.closePath(); gx.fill(); gx.strokeStyle='rgba(248,201,60,.7)'; gx.lineWidth=1.5; gx.stroke();
     gx.fillStyle='#f8c93c'; gx.font='800 24px Syne, sans-serif'; gx.fillText(b.h,GW/2,y-4); gx.fillStyle='#f6f1e4'; gx.font='700 15px Manrope, sans-serif'; gx.fillText(b.s,GW/2,y+17); gx.restore(); });
 }
-function gloop(now){ if(!G.on) return; const dt=Math.min(.05,(now-gl)/1000); gl=now; if(G.run) gupdate(dt); else { G.hist.push({x:G.rx,y:G.ry}); if(G.hist.length>160) G.hist.shift(); } gdraw(); G.raf=requestAnimationFrame(gloop); }
+function gloop(now){ if(!G.on) return; const dt=Math.min(.05,(now-gl)/1000); gl=now; if(G.run) gupdate(dt); else { G.shake=Math.max(0,G.shake-dt); G.hist.push({x:G.rx,y:G.ry}); if(G.hist.length>160) G.hist.shift(); } gdraw(); G.raf=requestAnimationFrame(gloop); }
 
 
 /* ================================================================
