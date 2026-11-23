@@ -1291,7 +1291,6 @@ function projCard(p,i){
 }
 function renderWork(h='h2'){
   return `<${h} ${h==='h2'?'id="panelTitle"':''}>Field expeditions</${h}>
-  <p class="lead">Projects sorted by territory. Most entries link to the full case study on Behance.</p>
   <div class="filters" role="group" aria-label="Filter projects by territory">${Object.entries(CATS).map(([k,v])=>`<button type="button" data-f="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('')}</div>
   <div class="projects">${PROJECTS.map((p,i)=>projCard(p,i)).join('')}</div>
   <p class="pempty" hidden>Nothing in this category just yet. New projects are on the way.</p>`;
