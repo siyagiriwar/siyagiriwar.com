@@ -911,7 +911,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .gl-view::before{content:"";position:absolute;left:0;right:0;top:0;height:22%;z-index:1;pointer-events:none;background:linear-gradient(transparent,rgba(185,243,59,.13),transparent);animation:glsweep 5.5s linear infinite}
 @keyframes glsweep{from{transform:translateY(-110%)}to{transform:translateY(480%)}}
 @keyframes glfloat{50%{translate:0 -6px}}
-.gl-data{z-index:1;--r:-4deg;--px:34px;--py:-14px;left:calc(50% - var(--mw)/2 - 175px);top:36%;width:220px;animation:glfloat 7s ease-in-out infinite}
+.gl-data{z-index:1;--r:-4deg;--px:34px;--py:-14px;left:calc(50% - var(--mw)/2 - 175px);top:min(36%,calc(100% - 290px));width:220px;animation:glfloat 7s ease-in-out infinite}
 .gl-data pre{margin:0;padding:12px 12px 14px;font:700 12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em;color:var(--lime);height:calc(11*1.55*12px + 26px);overflow:hidden;white-space:pre;text-shadow:0 0 8px rgba(185,243,59,.5)}
 .gl-nosig{z-index:1;--r:3deg;--px:-30px;--py:18px;left:calc(50% + var(--mw)/2 - 74px);top:5%;width:190px;animation:glfloat 8.5s ease-in-out -2s infinite}
 .gl-nosig canvas{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;background:#222}
@@ -935,7 +935,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .ab-intro h2,.ab-intro .lead{max-width:none}
 .ab-intro h2.nm{margin-top:34px}
 /* About hero: stacked by default (photos first, then name), side by side in the full-screen panel */
-.ab-hero{display:flex;flex-direction:column}
+.ab-hero{display:flex;flex-direction:column;margin-bottom:28px}
 .ab-hero>.gl{order:-1;width:100%;box-sizing:border-box}
 @media (min-width:1000px){
   .hatch.full .ab-hero{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr);gap:clamp(24px,3vw,56px);align-items:start}
