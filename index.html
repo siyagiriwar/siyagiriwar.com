@@ -114,6 +114,19 @@ a{color:inherit}
 .bubble{position:absolute;left:0;top:0;max-width:220px;padding:9px 13px;border-radius:14px 14px 14px 4px;background:var(--cream);color:var(--ink);font:600 13px/1.35 var(--body);box-shadow:0 8px 24px rgba(0,0,0,.35);transform-origin:0 100%;transition:opacity .25s}
 .bubble b{display:block;font:700 10.5px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
 .tip{position:absolute;left:0;top:0;padding:8px 14px;border-radius:999px;background:var(--sun);color:var(--ink);font:700 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+/* floating "play" cue above the launch-pad shuttle so people find the rocket game */
+.gcue{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:40px;padding:9px 16px 9px 12px;border:0;border-radius:999px;background:var(--sun);color:var(--ink);font:800 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;box-shadow:0 0 0 0 rgba(248,201,60,.55),0 8px 22px rgba(0,0,0,.35);opacity:0;transition:opacity .35s;animation:gcuePulse 2.2s ease-out infinite}
+.gcue[hidden]{display:none}
+.gcue.on{opacity:1}
+.gcue .gi{font-size:17px;line-height:1;display:inline-block;animation:gcueBob 1.6s ease-in-out infinite}
+.gcue small{display:block;margin-top:3px;font:600 10px/1 var(--body);letter-spacing:.08em;text-transform:none;opacity:.75}
+.gcue::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;background:var(--sun);transform:rotate(45deg);border-radius:2px;z-index:-1}
+.gcue:hover,.gcue:focus-visible{filter:brightness(1.08);outline:2px solid #fff;outline-offset:3px}
+.gcue.mini{padding:8px 13px 8px 10px;min-height:36px;font-size:11px;animation:none;box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.gcue.mini small{display:none}
+@keyframes gcuePulse{0%{box-shadow:0 0 0 0 rgba(248,201,60,.55),0 8px 22px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 14px rgba(248,201,60,0),0 8px 22px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(248,201,60,0),0 8px 22px rgba(0,0,0,.35)}}
+@keyframes gcueBob{0%,100%{transform:translateY(0) rotate(-12deg)}50%{transform:translateY(-3px) rotate(-12deg)}}
+@media (prefers-reduced-motion:reduce){ .gcue,.gcue .gi{animation:none} }
 .tip.long{white-space:normal;width:max-content;max-width:230px;text-transform:none;letter-spacing:.01em;line-height:1.4;font-size:13px;border-radius:16px;padding:10px 15px}
 
 /* ---------- hatch panel ---------- */
@@ -1100,13 +1113,13 @@ body.lowfx .round,body.lowfx .settings,body.lowfx .dock,body.lowfx .pill,body.lo
   <label>Soft shadows <input type="checkbox" id="optShadows" checked></label>
   <label>Busy station <input type="checkbox" id="optBusy" checked></label>
   <label>Gentle camera drift <input type="checkbox" id="optDrift" checked></label>
-  <p>Drag to look around. Scroll or pinch to zoom. Tap a visitor to say hi.</p>
+  <p>Drag to look around. Scroll or pinch to zoom. Tap a visitor to say hi. Tap the shuttle on the launch pad to play Rocket Run.</p>
 </div>
 
 <aside class="welcome" id="welcome" aria-labelledby="wTitle" hidden>
   <svg class="al" viewBox="0 0 62 110" aria-hidden="true"><ellipse cx="31" cy="30" rx="22" ry="25" fill="#a6d27f"/><ellipse cx="21" cy="32" rx="7" ry="10.5" fill="#1b2140" transform="rotate(-22 21 32)"/><ellipse cx="41" cy="32" rx="7" ry="10.5" fill="#1b2140" transform="rotate(22 41 32)"/><circle cx="19" cy="28" r="2" fill="#fff"/><circle cx="39" cy="28" r="2" fill="#fff"/><path d="M27 46q4 3 8 0" stroke="#1b2140" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="18" y="56" width="26" height="30" rx="11" fill="#e9e7e1"/><rect x="25" y="62" width="12" height="8" rx="2" fill="#f8c93c"/><rect x="20" y="84" width="8" height="20" rx="4" fill="#d6d4cd"/><rect x="34" y="84" width="8" height="20" rx="4" fill="#d6d4cd"/><rect x="9" y="60" width="8" height="22" rx="4" fill="#d6d4cd" transform="rotate(14 13 60)"/><rect x="45" y="60" width="8" height="22" rx="4" fill="#d6d4cd" transform="rotate(-14 49 60)"/></svg>
   <h2 id="wTitle">Welcome aboard!</h2>
-  <p>Explore the station. Each module holds a part of Siya’s creative universe, and everyone walking around is a visitor like you.</p>
+  <p>Explore the station. Each module holds a part of Siya’s creative universe, and everyone walking around is a visitor like you. Psst: the shuttle on the launch pad is a game. 🚀</p>
   <div class="acts">
     <button class="btn-sun" id="tourBtn" type="button">Take a tour <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     <button class="link-btn" id="notNow" type="button">Not now</button>
@@ -2067,10 +2080,10 @@ const NAMES = {
 };
 const ORIGINS = {alien:'visiting from Kepler-442b', human:'commuting up from New Delhi', elf:'here from the Silver Woods', robot:'on loan from the cargo bay', blob:'no fixed address', floater:'drifting in from Europa'};
 const CHATTER = {
-  alien:['I came for the Layers smartwatch faces.','Earth design is so… earthy. I love it.','She wants to start an intergalactic friendship club. I’m member number one.','Have you tried the BreakLoop app? My doomscroll is cured.'],
-  human:['The Haute Couture documentary is in the Work module.','Siya shoots backstage at fashion week. Wild.','NexGen Hub would’ve saved me months of finding a studio.','The Contact hub is where you say hello.'],
+  alien:['I came for the Layers smartwatch faces.','Earth design is so… earthy. I love it.','She wants to start an intergalactic friendship club. I’m member number one.','Have you tried the BreakLoop app? My doomscroll is cured.','Psst. Tap the shuttle on the launch pad. There’s a rocket game!'],
+  human:['The Haute Couture documentary is in the Work module.','Siya shoots backstage at fashion week. Wild.','NexGen Hub would’ve saved me months of finding a studio.','The Contact hub is where you say hello.','I just beat my Rocket Run score. The shuttle on the launch pad is a game!'],
   elf:['The photobook in Off the clock is my favourite stop.','“Everything I’m not, made me who I am.” I think about that a lot.','The scarf print in the lab took my breath away.'],
-  robot:['BEEP. NEXGEN HUB: UNIFIED PLATFORM DETECTED.','CALCULATING… RESULT: HIRE THIS DESIGNER.','SCANNING CRM DASHBOARD. LAYOUT: TIDY.'],
+  robot:['BEEP. NEXGEN HUB: UNIFIED PLATFORM DETECTED.','CALCULATING… RESULT: HIRE THIS DESIGNER.','SCANNING CRM DASHBOARD. LAYOUT: TIDY.','HINT: LAUNCH-PAD SHUTTLE = ROCKET GAME. PLAY IT.'],
   blob:['blorp ✦','*happy wobble*','glorp glorp (the Mango Heist was hilarious)'],
   floater:['I float between modules. The Off the clock lab glows nicest.','Sher-o-shakkar! Akbar and Birbal in space!','The about room has a very comfy chair.']
 };
@@ -2885,6 +2898,7 @@ function frame(now){
   if(!(_pn&&!_pn.hidden)) adaptQuality(dt);
   renderer.render(scene,camera);
   updateBubbles();
+  updateGameCue();
   requestAnimationFrame(frame);
 }
 function onResize(){
@@ -2946,10 +2960,29 @@ function gcheckpoint(n){ const name=sectorName(n); G.sector=n; G.gate=false; G.n
   gbanner('Checkpoint '+n, name+' · +100'+(heal?' and a heart':' and a shield'),3);
   gburst(G.rx,G.ry,'#7fe9ff',18); gburst(G.rx,G.ry,'#f8c93c',14); gburst(G.rx,G.ry,'#ff8fb1',8,'♥'); blip(980); setTimeout(()=>blip(1240),120);
   if(n>=2) badge('cp2'); if(n===2&&!G.lostHeart) badge('flawless'); if(n>=4) badge('cp4'); if(n>=6) badge('cp6'); gsaveBest(); }
-function openGame(){ if(G.on) return; G.on=true; G.back=document.activeElement; gameEl.hidden=false; setHover(null); gsize(); greset();
+function openGame(){ if(G.on) return; G.on=true; if(!gPlayed){ gPlayed=true; try{ localStorage.setItem('rocketPlayed','1'); }catch(e){} if(typeof setCueText==='function') setCueText(); } G.back=document.activeElement; gameEl.hidden=false; setHover(null); gsize(); greset();
   gshow('Rocket run','Dodge the meteors and glowing rocks. Fly into friendly aliens and space creatures to make friends. Grab stars, hearts and shields, and fly through checkpoint gates to save your progress. Move with your mouse, finger, arrow keys or WASD.','Play'); gl=performance.now(); G.raf=requestAnimationFrame(gloop); blip(660); }
 function closeGame(){ if(!G.on) return; if(G.run) gsaveBest(); G.on=false; G.run=false; cancelAnimationFrame(G.raf); gameEl.hidden=true; try{ G.back&&G.back.focus&&G.back.focus({preventScroll:true}); }catch(e){} }
 gpb.onclick=()=>{ if(G.mode==='resume') gresume(); else gstart(); }; gpb2.onclick=gfinish; gameEl.querySelector('.gx').onclick=closeGame;
+/* "Play Rocket Run" cue: floats above the launch-pad shuttle so visitors can find the game; shrinks to a small pill once they have played */
+const gameCue=document.createElement('button'); gameCue.type='button'; gameCue.className='gcue'; gameCue.hidden=true;
+let gPlayed=false; try{ gPlayed=!!localStorage.getItem('rocketPlayed') || (+localStorage.getItem('rocketBest')||0)>0; }catch(e){}
+function setCueText(){ gameCue.classList.toggle('mini',gPlayed); gameCue.innerHTML=gPlayed?'<span class="gi" aria-hidden="true">🚀</span>Play again':'<span class="gi" aria-hidden="true">🚀</span><span>Play Rocket Run<small>Mini game: tap the shuttle</small></span>'; gameCue.setAttribute('aria-label','Play Rocket Run, the rocket mini game'); }
+setCueText(); $('#labels').append(gameCue);
+gameCue.onclick=e=>{ e.stopPropagation(); openGame(); };
+gameCue.addEventListener('pointerdown',e=>e.stopPropagation());
+const cueV=new THREE.Vector3();
+function updateGameCue(){
+  const pn=document.getElementById('panel');
+  const want = !!shuttle && !G.on && (view==='station'||view==='dome') && !(pn&&!pn.hidden) && performance.now()-(updateGameCue.t0||(updateGameCue.t0=performance.now()))>2200;
+  if(!want){ if(!gameCue.hidden){ gameCue.classList.remove('on'); gameCue.hidden=true; } return; }
+  shuttle.getWorldPosition(cueV); cueV.y+=2.1; cueV.project(camera);
+  const vis = cueV.z<1 && Math.abs(cueV.x)<.95 && Math.abs(cueV.y)<.92;
+  if(gameCue.hidden) gameCue.hidden=false;
+  gameCue.classList.toggle('on',vis); gameCue.style.pointerEvents=vis?'auto':'none';
+  const x=(cueV.x*.5+.5)*innerWidth, y=(-cueV.y*.5+.5)*innerHeight;
+  gameCue.style.transform=`translate(${Math.round(x-gameCue.offsetWidth/2)}px,${Math.round(y-gameCue.offsetHeight-8)}px)`;
+}
 document.addEventListener('keydown',e=>{ if(!G.on) return; const k=e.key.toLowerCase();
   if(k==='escape'){ e.preventDefault(); e.stopPropagation(); closeGame(); return; }
   if(['arrowleft','arrowright','arrowup','arrowdown','a','d','w','s'].includes(k)){ G.keys[k]=1; if(k.startsWith('arrow')) e.preventDefault(); } },true);
