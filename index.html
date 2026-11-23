@@ -1165,6 +1165,9 @@ form.hello input,form.hello textarea,
 .gl-stage{border-radius:0}
 }
 body.lowfx .round,body.lowfx .settings,body.lowfx .dock,body.lowfx .pill,body.lowfx .status,body.lowfx .welcome{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(18,22,44,.95)}
+.c blockquote.closing-quote,.classic .c blockquote.closing-quote{background:none!important;border:0!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;text-align:center;max-width:30em;margin:56px auto 12px;padding:0 12px;color:var(--ink)!important;font:italic 600 clamp(20px,2.6vw,28px)/1.45 var(--display)}
+.c blockquote.closing-quote::before{content:"\201C";margin-right:.1em}
+.c blockquote.closing-quote::after{content:"\201D";margin-left:.05em}
 </style>
 </head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="gl-outline" x="-2%" y="-5%" width="104%" height="110%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="erode" radius="1.1" result="in"/><feComposite in="SourceGraphic" in2="in" operator="out"/></filter></svg>
@@ -1351,7 +1354,7 @@ function renderAbout(h='h2'){
   <div class="xp">${EXP.map(x=>`<article><time>${esc(x.when)}</time><b>${esc(x.org)}</b><em>${esc(x.role)}</em>${x.pts.length?`<ul>${x.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}</article>`).join('')}</div>
   <h3>Education</h3>
   <div class="edu"><div><b>National Institute of Fashion Technology, New Delhi</b><span>Bachelor of Design, Fashion Communication, 2022–2026. Graduated.</span></div><div><b>Mount Abu Public School, Rohini, Delhi</b><span>Science, 2021</span></div></div>
-  <blockquote>Here for the moment Earth remembers her ancient wisdom.</blockquote>`;
+  <blockquote class="closing-quote">Here for the moment Earth remembers her ancient wisdom.</blockquote>`;
 }
 const HUD=`<svg class="hud" viewBox="0 0 400 230" preserveAspectRatio="none" aria-hidden="true"><path class="ol" d="M12 5 H296 L304 0 H374 L380 5 H390 L398 13 V206 L386 224 H14 L2 212 V15 Z"/><rect class="f" x="22" y="9" width="11" height="3"/><rect class="f" x="37" y="9" width="11" height="3"/><rect class="f" x="52" y="9" width="11" height="3"/>${[0,1,2,3,4,5,6].map(k=>`<polygon class="f" points="${309+k*9},5 ${313+k*9},1 ${318+k*9},1 ${314+k*9},5"/>`).join('')}${[0,1,2,3,4,5].map(k=>`<rect class="f" x="${24+k*11}" y="226" width="8" height="3"/>`).join('')}<rect class="f" x="318" y="226" width="46" height="3"/><polygon class="f" points="11,200 11,214 25,214"/></svg>`;
 function projCard(p,i){
