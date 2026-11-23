@@ -1388,7 +1388,7 @@ function armReel(scope){
     t.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse') setSound(t,false); });
     t.addEventListener('click',()=>setSound(t,!t.classList.contains('on')));
   });
-  const vis=new Set(), MAXP=6;
+  const vis=new Set(), MAXP=4;
   const refresh=()=>{ const mid=innerHeight/2;
     [...vis].map(t=>{ const r=t.getBoundingClientRect(); return {t,d:Math.abs(r.top+r.height/2-mid)}; }).sort((a,b)=>a.d-b.d).forEach(({t},i)=>{
       const v=t.querySelector('video'), on=t.classList.contains('on');
@@ -1396,6 +1396,9 @@ function armReel(scope){
   const io=new IntersectionObserver(es=>{ es.forEach(en=>{ const t=en.target, v=t.querySelector('video');
     if(en.isIntersecting) vis.add(t); else { vis.delete(t); v.pause(); if(t.classList.contains('on')) setSound(t,false); } }); refresh(); },{threshold:.25});
   tiles.forEach(t=>io.observe(t));
+  const pre=new IntersectionObserver(es=>es.forEach(en=>{ if(!en.isIntersecting) return; const v=en.target.querySelector('video');
+    if(!v.getAttribute('src')){ v.preload='auto'; v.src=v.dataset.src; } pre.unobserve(en.target); }),{rootMargin:'300px 0px'});
+  tiles.forEach(t=>pre.observe(t));
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) vis.forEach(t=>t.querySelector('video').pause()); else refresh(); });
 }
 function renderStory(){
@@ -2539,7 +2542,10 @@ function glTick(now){
   glRAF=0; let any=false;
   for(const st of glStages){
     if(!st.el.isConnected || !st.stage.offsetParent) continue;
-    any=true; glFrame(st, now);
+    any=true;
+    /* off screen (e.g. scrolled down to the Off the clock reels on the classic page): skip the drawing and layout work */
+    const tr=st.track.getBoundingClientRect(); if(tr.bottom<-50 || tr.top>innerHeight+50) continue;
+    glFrame(st, now);
   }
   if(any) glRAF=requestAnimationFrame(glTick);
 }
@@ -2929,6 +2935,8 @@ function frame(now){
   /* a panel hides most of the scene: draw it at full speed only during the opening camera move, then at a low rate */
   if(_pn&&!_pn.hidden){
     if(!frame.pw) frame.pw=now;
+    /* full-screen panels hide the station entirely: after the camera move, stop drawing it (keeps videos and scrolling smooth) */
+    if(_pn.classList.contains('full') && (now-frame.pw)>1500){ last=now; requestAnimationFrame(frame); return; }
     const gap = (now-frame.pw)<1500 ? 33 : (_pn.classList.contains('wide') ? 125 : 66);
     if(now-(frame.lr||0)<gap){ requestAnimationFrame(frame); return; }
     frame.lr=now;
