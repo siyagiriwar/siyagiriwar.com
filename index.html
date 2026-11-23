@@ -2433,7 +2433,7 @@ function openModule(id, fromHash=false){
   $('#panelNext').hidden = (id!=='about');
   $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
-  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'||id==='about'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
+  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
   setTimeout(()=>{ const t=$('#panelTitle'); t&&t.setAttribute('tabindex','-1'); t&&t.focus({preventScroll:true}); }, 60);
   blip(880); updateEnter();
