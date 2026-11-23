@@ -1481,8 +1481,13 @@ function startAudio(){
 }
 function setSound(on){
   soundOn=on; $('#soundBtn').setAttribute('aria-pressed', on); $('#sndWave').style.opacity = on?1:.25;
-  if(on){ startAudio(); if(!ac) return; ac.resume(); master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(.32, ac.currentTime+1.5); }
+  if(on){ startAudio(); if(!ac) return; ac.resume(); master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(panel.hidden?.32:0, ac.currentTime+1.5); }
   else if(ac){ master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(0, ac.currentTime+.6); }
+}
+/* background hum fades out while a module is open, and returns on close if sound is on */
+function bgDuck(open){
+  if(!ac||!master) return; const t=ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t);
+  master.gain.linearRampToValueAtTime(open||!soundOn?0:.32, t+(open?.5:1.5));
 }
 function blip(f=880){
   if(!soundOn||!ac) return; const t=ac.currentTime; const o=ac.createOscillator(); const g=ac.createGain(); o.type='sine'; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*1.5,t+.09); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.12,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+.25); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+.3);
@@ -2436,11 +2441,12 @@ function openModule(id, fromHash=false){
   panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
   setTimeout(()=>{ const t=$('#panelTitle'); t&&t.setAttribute('tabindex','-1'); t&&t.focus({preventScroll:true}); }, 60);
-  blip(880); updateEnter();
+  bgDuck(true); blip(880); updateEnter();
 }
 function closePanel(toHash=true){
   if(panel.hidden) return;
   panel.hidden=true; view='station'; setDockCurrent(null);
+  bgDuck(false);
   if(scene){ setOverview(); panelOffset(false); }
   if(toHash && location.hash && location.hash!=='#station') history.pushState(null,'','#station');
   if(lastFocus && lastFocus.focus){ lastFocus.focus({preventScroll:true}); } lastFocus=null; updateEnter();
