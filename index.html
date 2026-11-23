@@ -1480,7 +1480,7 @@ function init3D(){
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.12;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, .1, 2000);
+  camera = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, 1, 2000); // near=1 (was .1): ~10x finer depth precision, stops coplanar surfaces flickering at distance
 }
 
 /* ---------- materials & helpers ---------- */
@@ -1781,11 +1781,11 @@ function buildModule(def){
   [-1,1].forEach(s=>{
     const x=s*(W/2-T/2), xi=s*(W/2-T-.02);
     if(s===def.door){
-      box(T,H,2.2,hull,g,x,H/2,-1.9); box(T,H,2.2,hull,g,x,H/2,1.9); box(T,H-2.4,1.6,hull,g,x,2.4+(H-2.4)/2,0);
+      box(T,H,1.9,hull,g,x,H/2,-1.75); box(T,H,2.2,hull,g,x,H/2,1.9); box(T,H-2.4,1.6,hull,g,x,2.4+(H-2.4)/2,0);
       box(.04,H,2.2,wallIn,g,xi,H/2,-1.9); box(.04,H,2.2,wallIn,g,xi,H/2,1.9);
       box(.06,.08,1.6,glow(C.sun,1.4),g,s*(W/2+.02),2.3,0,false);
     } else {
-      box(T,H,D,hull,g,x,H/2,0); box(.04,H,D-T,wallIn,g,xi,H/2,T/2);
+      box(T,H,D-T,hull,g,x,H/2,T/2); box(.04,H,D-T,wallIn,g,xi,H/2,T/2);
       [-1.6,-.6].forEach(z=>{ box(.06,.95,.6,trim,g,s*(W/2+.02),2.0,z,false); box(.07,.8,.45,glow(C.warm,1.1),g,s*(W/2+.03),2.0,z,false); });
       box(.06,.5,2.2,dark,g,s*(W/2+.02),.7,1.2,false); box(.05,.12,D-.6,dark,g,s*(W/2+.02),3.0,0,false); box(.05,.12,D-.6,dark,g,s*(W/2+.02),1.25,0,false);
     }
@@ -1794,8 +1794,8 @@ function buildModule(def){
   box(W+.2,.45,D+.2,hull,g,0,H+.22,0);
   box(W-.8,.25,D-.8,hull2(),g,0,H+.55,-.2);
   // front bezel
-  box(W,.5,.4,trim,g,0,H-.2,D/2-.2);
-  [-1,1].forEach(s=>box(.42,H,.42,hull,g,s*(W/2-.21),H/2,D/2-.21));
+  box(W-.02,.5,.38,trim,g,0,H-.2,D/2-.21);
+  [-1,1].forEach(s=>box(.46,H+.04,.46,hull,g,s*(W/2-.21),H/2,D/2-.21)); // a hair larger than the walls so faces are not coplanar (z-fighting at the top corners)
   box(W-.9,.08,.06,glow(C.sun,1.2),g,0,H-.48,D/2-.02,false);
   // sign
   const sg=new THREE.Group(); sg.position.set(0,H+.35,D/2+.08); sg.rotation.x=-.12; g.add(sg);
