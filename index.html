@@ -972,6 +972,8 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .c h2.nm .n1{color:var(--ink)}
 .c h2.nm .n2{color:var(--ink);filter:url(#gl-outline)}
 .c .tagline{font:600 clamp(18px,1.9vw,24px)/1.4 var(--body);max-width:30em;margin:0 0 6px;color:var(--ink)}
+.c .alien-line{margin:2px 0 14px;max-width:34em;font:600 italic clamp(15px,1.5vw,18px)/1.45 var(--body);color:var(--ink-soft)}
+.c .alien-line::before{content:"👽";font-style:normal;margin-right:8px}
 
 /* sharp cut corners everywhere (circles like lamps and dots stay round). Browsers with corner-shape get true bevels, others a clip-path equivalent. Undo = revert the 'sharp corners' commit */
 @supports (corner-shape:bevel){
@@ -1264,6 +1266,7 @@ function renderAbout(h='h2'){
   return `${glitchStage()}
   <${h} class="nm" aria-label="Siya Giriwar" ${h==='h2'?'id="panelTitle"':''}><span class="n1" aria-hidden="true">Siya</span><span class="n2" aria-hidden="true">Giriwar</span></${h}>
   <p class="lead tagline">I’m Siya — a communication designer, visual thinker and professional question-asker.</p>
+  <p class="alien-line">“Waiting for aliens to come visit me so I can finally start my intergalactic friendship club.”</p>
     <dl class="facts">
       <div><dt>Based in</dt><dd>New Delhi, Earth</dd></div>
       <div><dt>Educated at</dt><dd>NIFT Delhi · B.Des. Fashion Communication · 2022–2026</dd></div>
