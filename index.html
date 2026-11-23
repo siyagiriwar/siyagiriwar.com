@@ -943,8 +943,7 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .hatch.full .ab-intro h2.nm{margin-top:0;font-size:clamp(44px,5.4vw,96px)}
   .hatch.full .ab-intro .facts{grid-template-columns:1fr 1fr}
 }
-/* tall screens: the name and facts stay beside the photos while they tune */
-@media (min-width:1000px) and (min-height:860px){ .hatch.full .ab-intro{position:sticky;top:10px} }
+
 .classic .gl-stage{--gl-top:76px}
 @media (max-width:760px){
   .gl-data{display:none}
@@ -1288,11 +1287,11 @@ function renderAbout(h='h2'){
       <div><dt>Current interests</dt><dd>Human behaviour, visual storytelling, technology, music, nature and the occasional existential question.</dd></div>
       <div><dt>Current status</dt><dd>Curiosity levels: Maximum. Always exploring.</dd></div>
     </dl>
-  </div>${glitchStage()}</div>
   <p>I work at the intersection of design, technology and storytelling, turning complex ideas into experiences that are intuitive, meaningful and visually engaging. From digital products and user interfaces to brand identities and visual campaigns, I enjoy exploring how things look, feel and work.</p>
   <p>I’ve collaborated with startups, global teams, fashion brands and creative ventures, moving between strategy, pixels and the occasional happy accident.</p>
   <p>Beyond the screen, you’ll probably find me behind a camera, exploring somewhere new, making music, observing the little things or wondering if we’re actually alone in this universe.</p>
   <p>I believe good design starts with curiosity, grows through observation and becomes meaningful when it makes someone’s world a little better.</p>
+  </div>${glitchStage()}</div>
   <div class="skillcols">
     <div><h3>Creative capabilities</h3><ul class="chips">${CAPS.map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>
     <div><h3>Instruments</h3><ul class="chips">${TOOLS.map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>
@@ -2544,7 +2543,7 @@ function glFrame(st, now){
     H=Math.round(glClamp(cr.height-top-16-CH,narrow?220:320,Math.min(660,sw*1.02+54)));
   }
   /* side-by-side About (full-screen panel): the scroll track ends level with the bottom of the left column,
-     so all four photos have played by the time the reader reaches the last fact (Current status) */
+     so all four photos have played by the end of the last intro paragraph (‘I believe good design…’) */
   const hero=st.el.parentElement, side=!!(hero&&hero.classList.contains('ab-hero')&&getComputedStyle(hero).display==='grid');
   const intro=side&&hero.querySelector('.ab-intro'), IH=intro?intro.offsetHeight:0;
   const GH=H+CH, hk=H+'|'+CH+'|'+IH;
