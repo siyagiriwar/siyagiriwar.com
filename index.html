@@ -2048,7 +2048,7 @@ function buildPad(){
   anim.push(t=>{ shuttle.position.y=.55+(reduceMotion?0:Math.sin(t*1.2)*.06); eg.material.opacity=.6+.25*Math.sin(t*9); });
   buildSiya(g);
 }
-/* Siya v2: art-directed low-poly designer avatar with her dog, books, UFO lamp and plant, waving beside the shuttle on the launch pad.
+/* Siya v2: art-directed low-poly designer avatar with her dog, waving beside the shuttle on the launch pad.
    Bevelled low-poly forms, warm lamp glow, soft contact shadows. Palette: midnight navy, muted lavender, warm cream, golden yellow. */
 function buildSiya(pad, o={}){
   const withProps=o.props!==false, withBubble=o.bubble!==false, ph=o.phase||0; // rooms get a lighter version: just Siya, no dog/books/extra lights
@@ -2087,9 +2087,9 @@ function buildSiya(pad, o={}){
     bodyRy=Math.max(-.85,Math.min(.85,.2+.42*wrapA(m-.2)));
     headYaw=lookYaw.map(y=>Math.max(-1.05,Math.min(1.05,wrapA(y-bodyRy)))); }
   const G=new THREE.Group(); G.position.set(o.x??-1.7,o.y??0,o.z??2.25); G.rotation.y=bodyRy; G.scale.setScalar(.98); pad.add(G); // same height as the other station characters
-  OBST.push({node:G,lx:0,lz:0,r:.3}); if(withProps) OBST.push({node:G,lx:-.5,lz:.2,r:.24},{node:G,lx:.52,lz:.08,r:.26}); // Siya, her dog and the books/lamp: others walk around them
+  OBST.push({node:G,lx:0,lz:0,r:.3}); if(withProps) OBST.push({node:G,lx:-.5,lz:.2,r:.24}); // Siya, her dog: others walk around them
   const g=new THREE.Group(); g.position.y=.22; G.add(g); // upper body sits on longer legs
-  blob(G,0,.02,.6,.4); if(withProps){ blob(G,-.46,.2,.4,.3); blob(G,.5,.1,.62,.42); }
+  blob(G,0,.02,.6,.4); if(withProps){ blob(G,-.46,.2,.4,.3); }
 
   // ---------- body ----------
   const bootM=mat(0x16151a,{roughness:.55}), soleM=mat(0x0b0b0e,{roughness:.9}), laceM=mat(0x3a3942,{roughness:.8});
@@ -2183,23 +2183,6 @@ function buildSiya(pad, o={}){
   dogHit.userData={pet:true,node:d,text:"I’m Ceaser. I am 12 years young. My sister loves me.",bounce:()=>{ if(!reduceMotion && jumpT<0) jumpT=0; }}; d.add(dogHit); pickables.push(dogHit);
   tail=new THREE.Group(); tail.position.set(.06,.1,-.12); tail.rotation.order='XYZ'; tail.rotation.x=1.05; d.add(tail); rbox(.075,.075,.17,.035,dt,tail,0,0,-.07); const tf=sph(.05,dc,tail,0,0,-.17,7,5); tf.scale.set(1,1,1.3); tail.rotation.y=.5;
 
-  // ---------- books + UFO lamp + plant (screen right) ----------
-  const b=new THREE.Group(); b.position.set(.52,0,.08); G.add(b);
-  const book=(w,h,dp,c,y,ry)=>{ const k=new THREE.Group(); k.position.y=y; k.rotation.y=ry; b.add(k); rbox(w,h,dp,.012,mat(c,{roughness:.7}),k,0,0,0); rbox(.03,h-.02,dp-.025,.006,mat(0xeadcc4),k,w/2-.004,0,0,false); return k; };
-  book(.35,.06,.23,0xe0c9a0,.03,.08);
-  const k2=book(.33,.075,.22,0x252b57,.0975,-.07); const em=sph(.016,gold,k2,0,0,.112,8,6,false); const er=torus(.034,.0045,gold,k2,0,0,.112,null,18); er.scale.y=.32; er.rotation.z=-.3;
-  book(.28,.06,.2,0x2f3566,.165,.14);
-  cyl(.04,.046,.018,10,gold,b,0,.204,0); cyl(.011,.013,.09,6,gold,b,0,.256,0);
-  const ufo=sph(.088,mat(0xbab5dc,{flatShading:false,roughness:.35,metalness:.3}),b,0,.318,0,14,8); ufo.scale.y=.32;
-  torus(.088,.009,gold,b,0,.312,0,null,18).rotation.x=Math.PI/2; const dome=sph(.046,mat(0xd9d6ef,{flatShading:false,roughness:.25,metalness:.2}),b,0,.338,0,10,7); dome.scale.y=.85;
-  const winM=glow(0xffe3a0,1.8); const wins=[-.042,0,.042].map(x=>sph(.012,winM,b,x,.322,.076-Math.abs(x)*.4,6,5,false));
-  lamp=new THREE.PointLight(0xffd58a,.8,3.2,1.6); lamp.position.set(0,.34,.12); b.add(lamp);
-  lg=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexL,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.55})); lg.scale.set(.5,.5,1); lg.position.set(0,.31,.04); b.add(lg);
-  // glossy trailing plant
-  const leafM=[mat(0x6fb350,{flatShading:false,roughness:.35}),mat(0x8cc65f,{flatShading:false,roughness:.35})];
-  [[-.03,.215,.115,.5],[-.09,.19,.125,-.5],[-.13,.15,.13,.6],[-.1,.1,.14,-.3],[-.14,.06,.14,.5],[-.06,.23,.12,.2],[-.04,.12,.13,-.7]].forEach(([x,y,z,r],i)=>{ const lf=sph(.036,leafM[i%2],b,x,y,z,7,5); lf.scale.set(.72,1.2,.22); lf.rotation.z=r; lf.rotation.x=-.3; });
-  cyl(.004,.004,.2,4,mat(0x4d7a3a),b,-.08,.13,.12,false).rotation.z=.25;
-
   // ---------- sparkles ----------
   sparks=[[-.56,.98,.18,.2],[-.62,.6,.12,.14]].map(([x,y,z,s])=>{ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:starTex,transparent:true,depthWrite:false})); sp.scale.set(s,s,1); sp.position.set(x,y,z); sp.userData.s=s; G.add(sp); return sp; });
 
@@ -2223,7 +2206,6 @@ function buildSiya(pad, o={}){
       if(jumpT>=0){ jumpT+=dtj; const p=jumpT/.62; if(p>=1){ jumpT=-1; d.position.y=0; d.scale.set(1,1,1); }
         else { const a=Math.sin(Math.PI*p); d.position.y=a*.26; d.scale.set(1-.05*a,1+.1*a,1-.05*a); tail.rotation.y=.5+.5*Math.sin(t*30); } } }
     if(withProps){ tail.rotation.y=.5+k*.35*Math.sin(t*8); dh.rotation.z=k*.05*Math.sin(t*1.6); ears.forEach((e,i)=>e.rotation.z=k*.06*Math.sin(t*2.2+i));
-      lamp.intensity=.8+k*.08*Math.sin(t*2.6); lg.material.opacity=.55+k*.08*Math.sin(t*2.6);
       sparks.forEach((sp,i)=>{ const s=sp.userData.s*(1+k*.25*Math.sin(t*2.4+i*2)); sp.scale.set(s,s,1); sp.material.rotation=k*.25*Math.sin(t*1.1+i); }); }
     if(bub) bub.position.y=1.9+k*.04*Math.sin(t*2); });
 }
