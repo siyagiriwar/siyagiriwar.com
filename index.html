@@ -805,11 +805,11 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .tale .hero img{display:block;width:100%;height:auto;aspect-ratio:1400/875;object-fit:cover}
 .tale .bio,.tale .tale-hl,.tale .vow{max-width:760px}
 .tale .bio{margin-top:26px}
-/* illustration on the left, bio text on the right (stacked on narrow screens) */
+/* Off the clock module only: illustration on the left, bio text on the right (the classic page keeps the text below the illustration) */
 @media (min-width:900px){
-  .tale .tale-row{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:clamp(24px,3.5vw,56px);align-items:center;margin-top:20px}
-  .tale .tale-row .hero{margin:0;max-width:none}
-  .tale .tale-row .bio{margin-top:0}
+  #panel .tale .tale-row{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:clamp(24px,3.5vw,56px);align-items:center;margin-top:20px}
+  #panel .tale .tale-row .hero{margin:0;max-width:none}
+  #panel .tale .tale-row .bio{margin-top:0}
 }
 .tale .bio .lead{margin:0 0 18px!important;font:800 clamp(22px,3.4vw,32px)/1.25 var(--display);color:var(--ink)!important}
 .tale .bio p{margin:0 0 14px!important;font-size:clamp(15.5px,1.9vw,17px);line-height:1.75;color:var(--ink-soft)}
