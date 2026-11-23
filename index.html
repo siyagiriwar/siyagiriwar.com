@@ -314,8 +314,23 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .hatch.wide .filters{margin-bottom:16px}
   /* Work module: full-screen so every project is easy to see (dock stays reachable below) */
   .hatch.full{left:max(20px,calc(20px + var(--sa-l)));right:max(20px,calc(20px + var(--sa-r)));top:calc(84px + var(--sa-t));bottom:calc(108px + var(--sa-b));width:auto}
-  .hatch.full .projects{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:22px}
+  .hatch.full .projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .hatch.full .proj .bd{padding:10px 12px 12px;gap:4px}
+  .hatch.full .proj .meta{font-size:9.5px}
+  .hatch.full .proj h4{font-size:14.5px}
+  .hatch.full .proj p{font-size:12px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .hatch.full .proj .lk a,.hatch.full .proj .lkrow a{font-size:11.5px}
+  .hatch.full .proj .lkrow{padding:0 12px 12px}
+  .hatch.full .proj .badge{font-size:10px;padding:5px 9px;left:8px;top:8px}
   .hatch.full .sheet-body{padding:10px 44px 36px 36px}
+}
+@media (min-width:900px){
+  .hatch.full .projects{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:1150px){
+  .hatch.full .projects{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (min-width:761px){
 }
 .proj .case-link{text-decoration:none;color:inherit;display:flex;flex-direction:column;flex:1}
 .proj .case-link:hover h4{text-decoration:underline;text-decoration-color:var(--sun);text-decoration-thickness:3px;text-underline-offset:4px}
