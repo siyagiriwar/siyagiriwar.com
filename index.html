@@ -1345,7 +1345,7 @@ function armReel(scope){
   const tiles=[...scope.querySelectorAll('.gt[data-v]')]; if(!tiles.length) return;
   let live=null;
   const setSound=(t,on)=>{ const v=t.querySelector('video');
-    if(on){ if(live&&live!==t) setSound(live,false); v.muted=false; v.currentTime=0; live=t;
+    if(on){ if(live&&live!==t) setSound(live,false); v.muted=false; v.volume=0.3; v.currentTime=0; live=t;
       const p=v.play(); if(p&&p.catch) p.catch(()=>{ v.muted=true; v.play().catch(()=>{}); t.classList.remove('on'); t.setAttribute('aria-pressed','false'); if(live===t) live=null; }); }
     else { v.muted=true; if(live===t) live=null; }
     t.classList.toggle('on',on); t.setAttribute('aria-pressed',on?'true':'false'); };
