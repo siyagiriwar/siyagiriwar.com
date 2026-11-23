@@ -987,9 +987,8 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .c h2.nm .n1{color:var(--ink)}
 .c h2.nm .n2{color:var(--ink);filter:url(#gl-outline)}
 .c .tagline{font:600 clamp(18px,1.9vw,24px)/1.4 var(--body);max-width:30em;margin:0 0 6px;color:var(--ink)}
-.c .alien-line{margin:4px 0 16px;max-width:none;font:600 italic clamp(15px,1.5vw,18px)/1.45 var(--body);color:var(--ink)}
-@media (min-width:761px){.c .alien-line{white-space:nowrap;font-size:clamp(10px,1.2vw,17px)}}
-.c .alien-line::before{content:"👽";font-style:normal;margin-right:8px}
+.c .alien-line{margin:4px 0 16px;max-width:27em;font:600 italic clamp(15px,1.5vw,18px)/1.45 var(--body);color:var(--ink);text-wrap:balance}
+.c .alien-line::after{content:"👽";font-style:normal;margin-left:8px}
 
 /* sharp cut corners everywhere (circles like lamps and dots stay round). Browsers with corner-shape get true bevels, others a clip-path equivalent. Undo = revert the 'sharp corners' commit */
 @supports (corner-shape:bevel){
