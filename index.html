@@ -312,6 +312,10 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
   .hatch.wide .c h2{font-size:clamp(30px,2.8vw,40px);margin:0 0 10px;padding-bottom:12px}
   .hatch.wide .c .lead{font-size:16.5px;margin-bottom:12px}
   .hatch.wide .filters{margin-bottom:16px}
+  /* Work module: full-screen so every project is easy to see (dock stays reachable below) */
+  .hatch.full{left:max(20px,calc(20px + var(--sa-l)));right:max(20px,calc(20px + var(--sa-r)));top:calc(84px + var(--sa-t));bottom:calc(108px + var(--sa-b));width:auto}
+  .hatch.full .projects{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:22px}
+  .hatch.full .sheet-body{padding:10px 44px 36px 36px}
 }
 .proj .case-link{text-decoration:none;color:inherit;display:flex;flex-direction:column;flex:1}
 .proj .case-link:hover h4{text-decoration:underline;text-decoration-color:var(--sun);text-decoration-thickness:3px;text-underline-offset:4px}
@@ -2373,7 +2377,7 @@ function openModule(id, fromHash=false){
   $('#panelNext').hidden = (id!=='about');
   $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
-  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
+  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
   setTimeout(()=>{ const t=$('#panelTitle'); t&&t.setAttribute('tabindex','-1'); t&&t.focus({preventScroll:true}); }, 60);
   blip(880); updateEnter();
