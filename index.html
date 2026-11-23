@@ -772,7 +772,8 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .flats-row img{cursor:zoom-in}
 .flats-cap{margin:0;padding:12px clamp(18px,2vw,24px) 0;font-size:14px;line-height:1.5;color:#a7a5b8}
 
-.xp{display:grid;gap:12px}
+.xp{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px} /* two half-width columns, newest first, reading left to right */
+@media (max-width:760px){ .xp{grid-template-columns:1fr} }
 .xp article{padding:14px 16px;background:#fff;border-radius:14px;border:1px solid rgba(27,33,64,.1)}
 .xp time{font:700 11.5px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
 .xp b{display:block;margin:7px 0 2px;font:700 15.5px/1.35 var(--body)}
