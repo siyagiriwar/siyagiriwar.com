@@ -2330,7 +2330,8 @@ function makeVisitor(type){
 }
 
 /* navigation: waypoints are {p:'polar',cx,cz,a,r} or {p:'pt',x,z} or {wait:s} */
-const EXITS = {about:Math.PI, work:-Math.PI/2, experiments:Math.PI/2, contact:0};
+/* each module's bridge direction, worked out from where the module actually sits (so moving a module never sends visitors off into space) */
+const EXITS = Object.fromEntries(MODULES.map(m=>[m.id, Math.atan2(m.pos[2], m.pos[0])]));
 const randDeck = ()=>({p:'polar',cx:0,cz:0,a:rand(0,Math.PI*2),r:rand(2.45,5.0)});
 function moduleLocal(id,lx,lz){ const m=modules[id]; const v=new THREE.Vector3(lx,0,lz).applyAxisAngle(new THREE.Vector3(0,1,0),m.def.rot).add(m.center); return {p:'pt',x:v.x,z:v.z}; }
 function obstXZ(o){ if(!o.ready){ o.node.updateWorldMatrix(true,false); const w=o.node.localToWorld(new THREE.Vector3(o.lx,0,o.lz)); o.x=w.x; o.z=w.z; o.y=w.y; o.ready=true; } return o; }
