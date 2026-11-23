@@ -130,7 +130,7 @@ a{color:inherit}
 .tip.long{white-space:normal;width:max-content;max-width:230px;text-transform:none;letter-spacing:.01em;line-height:1.4;font-size:13px;border-radius:16px;padding:10px 15px}
 
 /* ---------- hatch panel ---------- */
-.hatch{position:fixed;z-index:8;top:calc(96px + var(--sa-t));bottom:calc(112px + var(--sa-b));right:max(3vw,calc(20px + var(--sa-r)));width:min(620px,47vw);display:flex;padding:14px 14px 14px 0;isolation:isolate;--c:22px;--sc:16px;--n1:18%;--n1w:130px;--n2:72%;--n2w:120px;--nd:6px;animation:hatch .55s cubic-bezier(.2,.8,.2,1)}
+.hatch{position:fixed;z-index:8;top:calc(96px + var(--sa-t));bottom:calc(112px + var(--sa-b));left:var(--sa-l);right:var(--sa-r);margin-inline:auto;width:min(620px,47vw);display:flex;padding:14px 14px 14px 0;isolation:isolate;--c:22px;--sc:16px;--n1:18%;--n1w:130px;--n2:72%;--n2w:120px;--nd:6px;animation:hatch .55s cubic-bezier(.2,.8,.2,1)}
 .hatch[hidden]{display:none}
 @keyframes hatch{from{opacity:0;transform:translateX(24px) scale(.98)}}
 /* boxy bezel: chamfered corners, notched top and bottom edges, corner bolts. Shared by every module panel (About, Work, Off the clock, Contact) */
