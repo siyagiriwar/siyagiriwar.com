@@ -928,8 +928,20 @@ form.hello [aria-invalid="true"]{border-color:#c2410c}
 .gl-chan .gl-hint{color:#a9bf7a}
 .c p.gl-hint{color:#a9bf7a}
 .c .facts{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 26px;margin:22px 0 26px}
-.gl+h2,.gl+h2+.lead{max-width:none}
-.gl+h2{margin-top:34px}
+.ab-intro h2,.ab-intro .lead{max-width:none}
+.ab-intro h2.nm{margin-top:34px}
+/* About hero: stacked by default (photos first, then name), side by side in the full-screen panel */
+.ab-hero{display:flex;flex-direction:column}
+.ab-hero>.gl{order:-1;width:100%;box-sizing:border-box}
+@media (min-width:1000px){
+  .hatch.full .ab-hero{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr);gap:clamp(24px,3vw,56px);align-items:start}
+  .hatch.full .ab-hero>.gl{order:0;margin:0}
+  .hatch.full .ab-intro{padding-top:3vh}
+  .hatch.full .ab-intro h2.nm{margin-top:0;font-size:clamp(44px,5.4vw,96px)}
+  .hatch.full .ab-intro .facts{grid-template-columns:1fr 1fr}
+}
+/* tall screens: the name and facts stay beside the photos while they tune */
+@media (min-width:1000px) and (min-height:860px){ .hatch.full .ab-intro{position:sticky;top:10px} }
 .classic .gl-stage{--gl-top:76px}
 @media (max-width:760px){
   .gl-data{display:none}
@@ -1263,7 +1275,7 @@ const EXP = [
   {when:'2024', org:'Travdor', role:'Design Intern', pts:[]}
 ];
 function renderAbout(h='h2'){
-  return `${glitchStage()}
+  return `<div class="ab-hero"><div class="ab-intro">
   <${h} class="nm" aria-label="Siya Giriwar" ${h==='h2'?'id="panelTitle"':''}><span class="n1" aria-hidden="true">Siya</span><span class="n2" aria-hidden="true">Giriwar</span></${h}>
   <p class="lead tagline">I’m Siya — a communication designer, visual thinker and professional question-asker.</p>
   <p class="alien-line">“Waiting for aliens to come visit me so I can finally start my intergalactic friendship club.”</p>
@@ -1274,6 +1286,7 @@ function renderAbout(h='h2'){
       <div><dt>Current interests</dt><dd>Human behaviour, visual storytelling, technology, music, nature and the occasional existential question.</dd></div>
       <div><dt>Current status</dt><dd>Curiosity levels: Maximum. Always exploring.</dd></div>
     </dl>
+  </div>${glitchStage()}</div>
   <p>I work at the intersection of design, technology and storytelling, turning complex ideas into experiences that are intuitive, meaningful and visually engaging. From digital products and user interfaces to brand identities and visual campaigns, I enjoy exploring how things look, feel and work.</p>
   <p>I’ve collaborated with startups, global teams, fashion brands and creative ventures, moving between strategy, pixels and the occasional happy accident.</p>
   <p>Beyond the screen, you’ll probably find me behind a camera, exploring somewhere new, making music, observing the little things or wondering if we’re actually alone in this universe.</p>
@@ -2418,7 +2431,7 @@ function openModule(id, fromHash=false){
   $('#panelNext').hidden = (id!=='about');
   $('#panelFoot').textContent = {about:'Still observing', work:'', experiments:'', contact:'Listening on all frequencies'}[id];
   pBody.innerHTML = RENDER[id]('h2','p'); pBody.scrollTop=0; armVideos(pBody); armReel(pBody); glInit(pBody);
-  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
+  panel.hidden=false; panel.classList.toggle('wide', id==='work'||id==='about'||id==='experiments'); panel.classList.toggle('full', id==='work'||id==='about'); panel.classList.toggle('no-foot', id==='about'); panel.style.animation='none'; panel.offsetHeight; panel.style.animation='';
   if(scene){ setModuleView(id); panelOffset(true); }
   setTimeout(()=>{ const t=$('#panelTitle'); t&&t.setAttribute('tabindex','-1'); t&&t.focus({preventScroll:true}); }, 60);
   blip(880); updateEnter();
