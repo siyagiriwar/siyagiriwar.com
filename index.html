@@ -127,6 +127,7 @@ a{color:inherit}
 .gcue:hover,.gcue:focus-visible{filter:brightness(1.08);outline:2px solid #fff;outline-offset:3px}
 .gcue.mini{padding:8px 13px 8px 10px;min-height:36px;font-size:11px;animation:none;box-shadow:0 8px 22px rgba(0,0,0,.35)}
 .gcue.mini small{display:none}
+@media (max-width:760px){.gcue.mini{padding:6px 11px 6px 8px;min-height:30px;gap:6px;font-size:10px;letter-spacing:.12em;box-shadow:0 4px 12px rgba(0,0,0,.3)}.gcue.mini .gi{font-size:13px}.gcue.mini::after{width:9px;height:9px;margin-left:-4.5px;bottom:-4px}}
 @keyframes gcuePulse{0%{box-shadow:0 0 0 0 rgba(248,201,60,.55),0 8px 22px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 14px rgba(248,201,60,0),0 8px 22px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(248,201,60,0),0 8px 22px rgba(0,0,0,.35)}}
 @keyframes gcueBob{0%,100%{transform:translateY(0) rotate(-12deg)}50%{transform:translateY(-3px) rotate(-12deg)}}
 @media (prefers-reduced-motion:reduce){ .gcue,.gcue .gi{animation:none} }
@@ -3169,8 +3170,10 @@ gpb.onclick=()=>{ if(G.mode==='resume') gresume(); else gstart(); }; gpb2.onclic
 /* "Play Rocket Run" cue: floats above the launch-pad shuttle so visitors can find the game; shrinks to a small pill once they have played */
 const gameCue=document.createElement('button'); gameCue.type='button'; gameCue.className='gcue'; gameCue.hidden=true;
 let gPlayed=false; try{ gPlayed=!!localStorage.getItem('rocketPlayed') || (+localStorage.getItem('rocketBest')||0)>0; }catch(e){}
-function setCueText(){ gameCue.classList.toggle('mini',gPlayed); gameCue.innerHTML=gPlayed?'<span class="gi" aria-hidden="true">🚀</span>Play':'<span class="gi" aria-hidden="true">🚀</span><span>Play Rocket Run<small>Mini game: tap the shuttle</small></span>'; gameCue.setAttribute('aria-label','Play Rocket Run, the rocket mini game'); }
+const cueSmall=()=>gPlayed||matchMedia('(max-width:760px)').matches;
+function setCueText(){ gameCue.classList.toggle('mini',cueSmall()); gameCue.innerHTML=cueSmall()?'<span class="gi" aria-hidden="true">🚀</span>Play':'<span class="gi" aria-hidden="true">🚀</span><span>Play Rocket Run<small>Mini game: tap the shuttle</small></span>'; gameCue.setAttribute('aria-label','Play Rocket Run, the rocket mini game'); }
 setCueText(); $('#labels').append(gameCue);
+addEventListener('resize',()=>{ const sm=cueSmall(); if(sm!==gameCue.classList.contains('mini')) setCueText(); });
 gameCue.onclick=e=>{ e.stopPropagation(); openGame(); };
 gameCue.addEventListener('pointerdown',e=>e.stopPropagation());
 const cueV=new THREE.Vector3();
