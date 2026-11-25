@@ -1568,7 +1568,7 @@ const rand=(a,b)=>a+Math.random()*(b-a), pick=a=>a[Math.floor(Math.random()*a.le
 function init3D(){
   if(typeof THREE==='undefined') throw new Error('three.js did not load');
   renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.useLegacyLights = true;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.12;
@@ -3356,7 +3356,7 @@ function bakeStatic(){
   bakeStatic.anchorOf=o=>{ for(let q=o.parent;q;q=q.parent) if(moving.has(q)) return q; return null; };
 }
 /* render quality adapts to the device: start sharp, step the resolution down if frames are slow, back up if there is headroom */
-const PR_MAX=Math.min(window.devicePixelRatio||1, 1.5);
+const PR_MAX=Math.min(window.devicePixelRatio||1, 2);
 const perf={sum:0,n:0,pr:PR_MAX};
 function adaptQuality(dt){
   perf.sum+=dt; perf.n++;
