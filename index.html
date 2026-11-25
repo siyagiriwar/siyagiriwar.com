@@ -1672,7 +1672,7 @@ function imgTex(k){ const t=new THREE.Texture(); const im=new Image(); im.onload
 
 /* ---------- world ---------- */
 const OBST=[]; // fixed things the characters walk around: {node,lx,lz,r}; world position is resolved on first use
-const pickables=[]; const modules={}; const anim=[]; let orb, beacon, dishes=[], shuttle, keyLight;
+const pickables=[]; const modules={}; const anim=[]; let orb, beacon, dishes=[], shuttle, keyLight, shuttleHL=null;
 let solarMat;
 
 function placeInView(o,sx,sy,D){ // position an object at a screen-relative spot of the default overview
@@ -2060,6 +2060,10 @@ function buildPad(){
   const eg=glowSprite(0xffc35a,1.8,.8); eg.position.y=-2.2; body.add(eg);
   [[-.8,.5],[.8,.5],[0,-.6]].forEach(([y,z],i)=>{ cyl(.04,.04,.5,5,mat(C.hullDark),shuttle,y,-.3,i==2?0:(i? .5:-.5)); });
   const gh=new THREE.Mesh(new THREE.SphereGeometry(2.4,8,6), new THREE.MeshBasicMaterial({visible:false})); gh.position.set(-.2,.5,0); gh.userData={game:true}; shuttle.add(gh); pickables.push(gh);
+  // hover highlight: the rocket warms up and gets a soft halo (own material copies so nothing else lights up)
+  shuttleHL={t:0,v:0,mats:[],halo:null};
+  shuttle.traverse(o=>{ if(o.isMesh && o!==gh && o.material && o.material.emissive){ o.material=o.material.clone(); shuttleHL.mats.push({m:o.material,c:o.material.emissive.clone(),i:o.material.emissiveIntensity||0}); } });
+  const hHalo=glowSprite(0xffd75a,7.5,0); hHalo.position.copy(gh.position); shuttle.add(hHalo); shuttleHL.halo=hHalo;
   anim.push(t=>{ shuttle.position.y=.55+(reduceMotion?0:Math.sin(t*1.2)*.06); eg.material.opacity=.6+.25*Math.sin(t*9); });
   buildSiya(g);
 }
@@ -2526,8 +2530,9 @@ function setHover(u){
   const key = u? (u.module||u.visitor||(u.game&&'game')||(u.pet&&'pet')) : null;
   if(hovered && hovered!==key && typeof hovered==='string' && modules[hovered]){ modules[hovered].light.intensity=1.0; }
   hovered=key; canvas.classList.toggle('hover', !!key);
+  if(shuttleHL) shuttleHL.t=(u&&u.game)?1:0;
   if(u&&u.module){ modules[u.module].light.intensity=1.8; tipEl.textContent='Open '+MODULE_BY_ID[u.module].title; tipEl.hidden=false; }
-  else if(u&&u.game){ tipEl.textContent='Play rocket game ▸'; tipEl.hidden=false; }
+  else if(u&&u.game){ tipEl.hidden=true; }
   else if(u&&u.visitor){ tipEl.textContent=u.visitor.name; tipEl.hidden=false; }
   else if(u&&u.pet){ tipEl.textContent=u.text; tipEl.hidden=false; }
   else tipEl.hidden=true;
@@ -3094,6 +3099,12 @@ function frame(now){
   for(const v of visitors) if(v.g.visible) updateVisitor(v,dt,clock.t);
   detectBumps(dt);
   dishes.forEach(d=>d.rotation.y=Math.sin(clock.t*.3)*1.2);
+  if(shuttleHL && (shuttleHL.v!==shuttleHL.t)){
+    shuttleHL.v+=(shuttleHL.t-shuttleHL.v)*Math.min(1,dt*9); if(Math.abs(shuttleHL.t-shuttleHL.v)<.01) shuttleHL.v=shuttleHL.t;
+    const k=shuttleHL.v, warm=new THREE.Color(0xffc23a);
+    shuttleHL.mats.forEach(o=>{ o.m.emissive.copy(o.c).lerp(warm,k*.9); o.m.emissiveIntensity=o.i+k*.75; });
+    shuttleHL.halo.material.opacity=.7*k;
+  }
   ambientChatter();
   syncWelcome();
   applyCamera(dt);
