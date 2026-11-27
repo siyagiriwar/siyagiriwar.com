@@ -3103,8 +3103,8 @@ function frame(now){
   if(shuttleHL && (shuttleHL.v!==shuttleHL.t)){
     shuttleHL.v+=(shuttleHL.t-shuttleHL.v)*Math.min(1,dt*9); if(Math.abs(shuttleHL.t-shuttleHL.v)<.01) shuttleHL.v=shuttleHL.t;
     const k=shuttleHL.v, warm=new THREE.Color(0xffc23a);
-    shuttleHL.mats.forEach(o=>{ o.m.emissive.copy(o.c).lerp(warm,k*.9); o.m.emissiveIntensity=o.i+k*.75; });
-    shuttleHL.halo.material.opacity=.7*k;
+    shuttleHL.mats.forEach(o=>{ o.m.emissive.copy(o.c).lerp(warm,k*.3); o.m.emissiveIntensity=o.i+k*.18; });
+    shuttleHL.halo.material.opacity=.1*k;
   }
   ambientChatter();
   syncWelcome();
