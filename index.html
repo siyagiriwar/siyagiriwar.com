@@ -1291,6 +1291,7 @@ IMG.docThumb={"src":"assets/doc/card.webp","w":800,"h":450};
 /* project 10: Photobook */
 PROJECTS.push({cat:'doc', page:'photobook', tagText:'Photobook', linkText:'Open the photobook', year:'2025–26', title:'Photobook: a photography portfolio', img:'pbThumb', desc:'Fashion weeks, test shoots, brand work, events and travel, edited into a 58-spread photobook. Lakmé Fashion Week, Raymond, KITH Talents and more.', links:[['Full photobook (PDF)','assets/photobook/siya-giriwar-photobook.pdf']]});
 IMG.pbThumb={"src":"assets/photobook/card.webp","w":720,"h":405};
+PROJECTS.unshift(PROJECTS.splice(PROJECTS.findIndex(p=>p.page==='photobook'),1)[0]); // photobook leads the Work module
 /* project 11: BRCH brand identity */
 PROJECTS.push({cat:'vis', also:['exp'], page:'brch', tagText:'Brand identity', year:'2026', title:'BRCH: brand identity for a brioche sando kitchen', img:'brchThumb', desc:'Logo, emblem, a custom display typeface, colour, patterns, characters and a full packaging system for BRCH, a food brand built around soft brioche and bold flavours.'});
 IMG.brchThumb={"src":"assets/brch/card.webp","w":720,"h":405};
